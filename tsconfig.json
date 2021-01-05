@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "lib": [
+            "esnext",
+            "dom"
+        ],
+        "jsx": "react",
+        "declaration": true,
+        "moduleResolution": "node",
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "experimentalDecorators": true,
+        "baseUrl": "./",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "downlevelIteration": true,
+        "types": [
+            "node",
+            "react",
+            "react-dom"
+        ]
+    },
+    "exclude": [
+        "**/dist",
+        "**/build",
+        "**/node_modules"
+    ]
+}
