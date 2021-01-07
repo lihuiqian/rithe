@@ -36,7 +36,7 @@ function pairwise<T>(arr: T[]): [T, T][] {
 }
 
 function scan<T>(arr: T[], accumulator: (acc: T, value: T, index: number) => T, initial?: T): T[]
-function scan<T, R>(arr: T[], accumulator: (acc: R, value: T, index: number) => R, initial: R): T[]
+function scan<T, R>(arr: T[], accumulator: (acc: R, value: T, index: number) => R, initial: R): R[]
 function scan(arr: unknown[], accumulator: (acc: unknown, value: unknown, index: number) => unknown, initial?: unknown): unknown[] {
     return from(Iterables.scan(arr, accumulator, initial))
 }
@@ -149,7 +149,7 @@ function push<T>(arr: T[], ...items: T[]): T[] {
     return result
 }
 
-function pop<T>(arr: T[], size: number): T[] {
+function pop<T>(arr: T[], size = 1): T[] {
     const result = arr.slice()
     for (let i = 0; i < size; i++) result.pop()
     return result
@@ -161,7 +161,7 @@ function unshift<T>(arr: T[], ...items: T[]): T[] {
     return result
 }
 
-function shift<T>(arr: T[], size: number): T[] {
+function shift<T>(arr: T[], size = 1): T[] {
     const result = arr.slice()
     for (let i = 0; i < size; i++) result.shift()
     return result
@@ -173,7 +173,7 @@ function slice<T>(arr: T[], start?: number, end?: number): T[] {
 
 function splice<T>(arr: T[], start: number, deleteCount?: number): T[]
 function splice<T>(arr: T[], start: number, deleteCount: number, ...items: T[]): T[]
-function splice<T>(arr: T[], start: number, deleteCount: number | undefined = 0, ...items: T[]): T[] {
+function splice<T>(arr: T[], start: number, deleteCount = 0, ...items: T[]): T[] {
     const result = arr.slice()
     result.splice(start, deleteCount, ...items)
     return result
