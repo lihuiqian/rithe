@@ -41,7 +41,7 @@ function symmetricDifference<T>(set1: Set<T>, set2: Set<T>): Set<T> {
     return result
 }
 
-function map<T, R>(set: Set<T>, project: (value: T) => R): Iterable<R> {
+function map<T, R>(set: Set<T>, project: (value: T) => R): Set<R> {
     return new Set(Iterables.map(set, project))
 }
 

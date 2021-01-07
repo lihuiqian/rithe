@@ -2,7 +2,6 @@
   "name": "rithe",
   "version": "1.0.0",
   "license": "MIT",
-  "dependencies": {},
   "scripts": {
     "build": "cd ./packages/rithe-utils & yarn build & cd ../rithe-plugin & yarn build",
     "start": "cd ./packages/rithe-practice & yarn start"

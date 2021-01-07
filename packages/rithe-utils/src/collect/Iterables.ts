@@ -77,7 +77,7 @@ function pairwise<T>(iterable: Iterable<T>): Iterable<[T, T]> {
 }
 
 function scan<T>(iterable: Iterable<T>, accumulator: (acc: T, value: T, index: number) => T, initial?: T): Iterable<T>
-function scan<T, R>(iterable: Iterable<T>, accumulator: (acc: R, value: T, index: number) => R, initial: R): Iterable<T>
+function scan<T, R>(iterable: Iterable<T>, accumulator: (acc: R, value: T, index: number) => R, initial: R): Iterable<R>
 function scan(iterable: Iterable<unknown>, accumulator: (acc: unknown, value: unknown, index: number) => unknown, initial?: unknown): Iterable<unknown> {
     return {
         *[Symbol.iterator](): Iterator<unknown, any, undefined> {

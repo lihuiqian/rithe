@@ -16,11 +16,6 @@
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "downlevelIteration": true,
-        "types": [
-            "node",
-            "react",
-            "react-dom"
-        ]
     },
     "exclude": [
         "**/dist",
