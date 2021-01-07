@@ -41,66 +41,70 @@ class FluentIterable<T> {
         this.value = iterable
     }
 
+    private _call<A extends unknown[], R>(func: (value: Iterable<T>, ...args: A) => Iterable<R>, ...args: A): FluentIterable<R> {
+        return new FluentIterable(func(this.value, ...args))
+    }
+
     concat(...iterables: Iterable<T>[]): FluentIterable<T> {
-        return new FluentIterable(Iterables.concat(this.value, ...iterables))
+        return this._call(Iterables.concat, ...iterables)
     }
 
     zip(...iterables: Iterable<T>[]): FluentIterable<T[]> {
-        return new FluentIterable(Iterables.zip(this.value, ...iterables))
+        return this._call(Iterables.zip, ...iterables)
     }
 
     map<R>(project: (value: T, index: number) => R): FluentIterable<R> {
-        return new FluentIterable(Iterables.map(this.value, project))
+        return this._call(Iterables.map, project)
     }
 
     pairwise(): FluentIterable<[T, T]> {
-        return new FluentIterable(Iterables.pairwise(this.value))
+        return this._call(Iterables.pairwise)
     }
 
     scan(accumulator: (acc: T, value: T, index: number) => T, initial?: T): FluentIterable<T>
     scan<R>(accumulator: (acc: R, value: T, index: number) => R, initial: R): FluentIterable<R>
     scan(accumulator: (acc: any, value: any, index: number) => T, initial?: unknown): FluentIterable<unknown> {
-        return new FluentIterable(Iterables.scan(this.value, accumulator, initial))
+        return this._call(Iterables.scan, accumulator, initial)
     }
 
     buffer(count: number, step = count): FluentIterable<T[]> {
-        return new FluentIterable(Iterables.buffer(this.value, count, step))
+        return this._call(Iterables.buffer, count, step)
     }
 
     flatMap<R>(project: (value: T, index: number) => R[]): FluentIterable<R> {
-        return new FluentIterable(Iterables.flatMap(this.value, project))
+        return this._call(Iterables.flatMap, project)
     }
 
     skip(count: number): FluentIterable<T> {
-        return new FluentIterable(Iterables.skip(this.value, count))
+        return this._call(Iterables.skip, count)
     }
 
     skipLast(count: number): FluentIterable<T> {
-        return new FluentIterable(Iterables.skipLast(this.value, count))
+        return this._call(Iterables.skipLast, count)
     }
 
     take(count: number): FluentIterable<T> {
-        return new FluentIterable(Iterables.take(this.value, count))
+        return this._call(Iterables.take, count)
     }
 
     takeLast(count: number): FluentIterable<T> {
-        return new FluentIterable(Iterables.takeLast(this.value, count))
+        return this._call(Iterables.takeLast, count)
     }
 
     filter(predicate: (value: T, index: number) => boolean): FluentIterable<T> {
-        return new FluentIterable(Iterables.filter(this.value, predicate))
+        return this._call(Iterables.filter, predicate)
     }
 
     reverse(): FluentIterable<T> {
-        return new FluentIterable(Iterables.reverse(this.value))
+        return this._call(Iterables.reverse)
     }
 
     sort(comparator: Comparator<T>): FluentIterable<T> {
-        return new FluentIterable(Iterables.sort(this.value, comparator))
+        return this._call(Iterables.sort, comparator)
     }
 
     distinct(): FluentIterable<T> {
-        return new FluentIterable(Iterables.distinct(this.value))
+        return this._call(Iterables.distinct)
     }
 
     partition(size: number): FluentIterable<T>[] {
@@ -120,16 +124,22 @@ class FluentIterable<T> {
         return initial === undefined ? Iterables.reduce(this.value, accumulator) : Iterables.reduce(this.value, accumulator, initial)
     }
 
-    asArray(): FluentArray<T> {
-        return new FluentArray(Arrays.from(this.value))
+    asArray(): FluentArray<T>
+    asArray<R>(project: (value: T, index: number) => R): FluentArray<R>
+    asArray(project?: (value: T, index: number) => unknown): FluentArray<unknown> {
+        return new FluentArray(Arrays.from(project ? Iterables.map(this.value, project) : this.value))
     }
 
-    asSet(): FluentSet<T> {
-        return new FluentSet(Sets.from(this.value))
+    asSet(): FluentSet<T>
+    asSet<R>(project: (value: T, index: number) => R): FluentSet<R>
+    asSet(project?: (value: T, index: number) => unknown): FluentSet<unknown> {
+        return new FluentSet(Sets.from(project ? Iterables.map(this.value, project) : this.value))
     }
 
-    asMultiset(): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.from(this.value))
+    asMultiset(): FluentMultiset<T>
+    asMultiset<R>(project: (value: T, index: number) => R): FluentMultiset<R>
+    asMultiset(project?: (value: T, index: number) => unknown): FluentMultiset<unknown> {
+        return new FluentMultiset(Multisets.from(project ? Iterables.map(this.value, project) : this.value))
     }
 
     asMap<K, V>(project: (value: T, index: number) => [K, V]): FluentMap<K, V> {
@@ -152,66 +162,70 @@ class FluentArray<T> {
         this.value = array
     }
 
+    private _call<A extends unknown[], R>(func: (value: T[], ...args: A) => R[], ...args: A): FluentArray<R> {
+        return new FluentArray(func(this.value, ...args))
+    }
+
     concat(...arrays: T[][]): FluentArray<T> {
-        return new FluentArray(Arrays.concat(this.value, ...arrays))
+        return this._call(Arrays.concat, ...arrays)
     }
 
     zip(...arrays: T[][]): FluentArray<T[]> {
-        return new FluentArray(Arrays.zip(this.value, ...arrays))
+        return this._call(Arrays.zip, ...arrays)
     }
 
     map<R>(project: (value: T, index: number) => R): FluentArray<R> {
-        return new FluentArray(Arrays.map(this.value, project))
+        return this._call(Arrays.map, project)
     }
 
     pairwise(): FluentArray<[T, T]> {
-        return new FluentArray(Arrays.pairwise(this.value))
+        return this._call(Arrays.pairwise)
     }
 
     scan(accumulator: (acc: T, value: T, index: number) => T, initial?: T): FluentArray<T>
     scan<R>(accumulator: (acc: R, value: T, index: number) => R, initial: R): FluentArray<R>
     scan(accumulator: (acc: any, value: any, index: number) => T, initial?: unknown): FluentArray<unknown> {
-        return new FluentArray(Arrays.scan(this.value, accumulator, initial))
+        return this._call(Arrays.scan, accumulator, initial)
     }
 
     buffer(count: number, step = count): FluentArray<T[]> {
-        return new FluentArray(Arrays.buffer(this.value, count, step))
+        return this._call(Arrays.buffer, count, step)
     }
 
     flatMap<R>(project: (value: T, index: number) => R[]): FluentArray<R> {
-        return new FluentArray(Arrays.flatMap(this.value, project))
+        return this._call(Arrays.flatMap, project)
     }
 
     skip(count: number): FluentArray<T> {
-        return new FluentArray(Arrays.skip(this.value, count))
+        return this._call(Arrays.skip, count)
     }
 
     skipLast(count: number): FluentArray<T> {
-        return new FluentArray(Arrays.skipLast(this.value, count))
+        return this._call(Arrays.skipLast, count)
     }
 
     take(count: number): FluentArray<T> {
-        return new FluentArray(Arrays.take(this.value, count))
+        return this._call(Arrays.take, count)
     }
 
     takeLast(count: number): FluentArray<T> {
-        return new FluentArray(Arrays.takeLast(this.value, count))
+        return this._call(Arrays.takeLast, count)
     }
 
     filter(predicate: (value: T, index: number) => boolean): FluentArray<T> {
-        return new FluentArray(Arrays.filter(this.value, predicate))
+        return this._call(Arrays.filter, predicate)
     }
 
     reverse(): FluentArray<T> {
-        return new FluentArray(Arrays.reverse(this.value))
+        return this._call(Arrays.reverse)
     }
 
     sort(comparator: Comparator<T>): FluentArray<T> {
-        return new FluentArray(Arrays.sort(this.value, comparator))
+        return this._call(Arrays.sort, comparator)
     }
 
     distinct(): FluentArray<T> {
-        return new FluentArray(Arrays.distinct(this.value))
+        return this._call(Arrays.distinct)
     }
 
     partition(size: number): FluentArray<T>[] {
@@ -232,45 +246,51 @@ class FluentArray<T> {
     }
 
     fill(item: T, start?: number, end?: number): FluentArray<T> {
-        return new FluentArray(Arrays.fill(this.value, item, start, end))
+        return this._call(Arrays.fill, item, start, end)
     }
 
     push(...items: T[]): FluentArray<T> {
-        return new FluentArray(Arrays.push(this.value, ...items))
+        return this._call(Arrays.push, ...items)
     }
 
     unshift(...items: T[]): FluentArray<T> {
-        return new FluentArray(Arrays.unshift(this.value, ...items))
+        return this._call(Arrays.unshift, ...items)
     }
 
     pop(size = 1): FluentArray<T> {
-        return new FluentArray(Arrays.pop(this.value, size))
+        return this._call(Arrays.pop, size)
     }
 
     shift(size = 1): FluentArray<T> {
-        return new FluentArray(Arrays.shift(this.value, size))
+        return this._call(Arrays.shift, size)
     }
 
     splice(start: number, deleteCount?: number): FluentArray<T>
     splice(start: number, deleteCount: number, ...items: T[]): FluentArray<T>
     splice(start: number, deleteCount = 0, ...items: T[]): FluentArray<T> {
-        return new FluentArray(Arrays.splice(this.value, start, deleteCount, ...items))
+        return this._call(Arrays.splice, start, deleteCount, ...items) as FluentArray<T>
     }
 
     slice(start?: number, end?: number): FluentArray<T> {
-        return new FluentArray(Arrays.slice(this.value, start, end))
+        return this._call(Arrays.slice, start, end)
     }
 
-    asIterable(): FluentIterable<T> {
-        return new FluentIterable(this.value)
+    asIterable(): FluentIterable<T>
+    asIterable<R>(project: (value: T, index: number) => R): FluentIterable<R>
+    asIterable(project?: (value: T, index: number) => unknown): FluentIterable<unknown> {
+        return new FluentIterable(project ? Arrays.map(this.value, project) : this.value)
     }
 
-    asSet(): FluentSet<T> {
-        return new FluentSet(Sets.from(this.value))
+    asSet(): FluentSet<T>
+    asSet<R>(project: (value: T, index: number) => R): FluentSet<R>
+    asSet(project?: (value: T, index: number) => unknown): FluentSet<unknown> {
+        return new FluentSet(Sets.from(project ? Arrays.map(this.value, project) : this.value))
     }
 
-    asMultiset(): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.from(this.value))
+    asMultiset(): FluentMultiset<T>
+    asMultiset<R>(project: (value: T, index: number) => R): FluentMultiset<R>
+    asMultiset(project?: (value: T, index: number) => unknown): FluentMultiset<unknown> {
+        return new FluentMultiset(Multisets.from(project ? Arrays.map(this.value, project) : this.value))
     }
 
     asMap<K, V>(project: (value: T, index: number) => [K, V]): FluentMap<K, V> {
@@ -293,36 +313,40 @@ class FluentSet<T> {
         this.value = set
     }
 
+    private _call<A extends unknown[], R>(func: (value: Set<T>, ...args: A) => Set<R>, ...args: A): FluentSet<R> {
+        return new FluentSet(func(this.value, ...args))
+    }
+
     concat(...sets: Set<T>[]): FluentSet<T> {
-        return new FluentSet(Sets.concat(this.value, ...sets))
+        return this._call(Sets.concat, ...sets)
     }
 
     union(set: Set<T>): FluentSet<T> {
-        return new FluentSet(Sets.union(this.value, set))
+        return this._call(Sets.union, set)
     }
 
     intersection(set: Set<T>): FluentSet<T> {
-        return new FluentSet(Sets.intersection(this.value, set))
+        return this._call(Sets.intersection, set)
     }
 
     difference(set: Set<T>): FluentSet<T> {
-        return new FluentSet(Sets.difference(this.value, set))
+        return this._call(Sets.difference, set)
     }
 
     sysmmetricDifference(set: Set<T>): FluentSet<T> {
-        return new FluentSet(Sets.symmetricDifference(this.value, set))
+        return this._call(Sets.symmetricDifference, set)
     }
 
     map<R>(project: (value: T) => R): FluentSet<R> {
-        return new FluentSet(Sets.map(this.value, project))
+        return this._call(Sets.map, project)
     }
 
     flatMap<R>(project: (value: T) => R[]): FluentSet<R> {
-        return new FluentSet(Sets.flatMap(this.value, project))
+        return this._call(Sets.flatMap, project)
     }
 
     filter(predicate: (value: T) => boolean): FluentSet<T> {
-        return new FluentSet(Sets.filter(this.value, predicate))
+        return this._call(Sets.filter, predicate)
     }
 
     partition(size: number): FluentSet<T>[] {
@@ -336,23 +360,29 @@ class FluentSet<T> {
     }
 
     add(...items: T[]): FluentSet<T> {
-        return new FluentSet(Sets.add(this.value, ...items))
+        return this._call(Sets.add, ...items)
     }
 
     delete(...items: T[]): FluentSet<T> {
-        return new FluentSet(Sets.delete(this.value, ...items))
+        return this._call(Sets.delete, ...items)
     }
 
-    asIterable(): FluentIterable<T> {
-        return new FluentIterable(this.value)
+    asIterable(): FluentIterable<T>
+    asIterable<R>(project: (value: T) => R): FluentIterable<R>
+    asIterable(project?: (value: T) => unknown): FluentIterable<unknown> {
+        return new FluentIterable(project ? Sets.map(this.value, project) : this.value)
     }
 
-    asArray(): FluentArray<T> {
-        return new FluentArray(Arrays.from(this.value))
+    asArray(): FluentArray<T>
+    asArray<R>(project: (value: T) => R): FluentArray<R>
+    asArray(project?: (value: T) => unknown): FluentArray<unknown> {
+        return new FluentArray(Arrays.from(project ? Sets.map(this.value, project) : this.value))
     }
 
-    asMultiset(): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.from(this.value))
+    asMultiset(): FluentMultiset<T>
+    asMultiset<R>(project: (value: T) => R): FluentMultiset<R>
+    asMultiset(project?: (value: T) => unknown): FluentMultiset<unknown> {
+        return new FluentMultiset(Multisets.from(project ? Sets.map(this.value, project) : this.value))
     }
 
     asMap<K, V>(project: (value: T) => [K, V]): FluentMap<K, V> {
@@ -375,60 +405,64 @@ class FluentMultiset<T> {
         this.value = multiset
     }
 
+    private _call<A extends unknown[], R>(func: (value: Multiset<T>, ...args: A) => Multiset<R>, ...args: A): FluentMultiset<R> {
+        return new FluentMultiset(func(this.value, ...args))
+    }
+
     concat(...multisets: Multiset<T>[]): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.concat(this.value, ...multisets))
+        return this._call(Multisets.concat, ...multisets)
     }
 
     union(set: Multiset<T>): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.union(this.value, set))
+        return this._call(Multisets.union, set)
     }
 
     intersection(set: Multiset<T>): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.intersection(this.value, set))
+        return this._call(Multisets.intersection, set)
     }
 
     difference(set: Multiset<T>): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.difference(this.value, set))
+        return this._call(Multisets.difference, set)
     }
 
     sysmmetricDifference(set: Multiset<T>): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.symmetricDifference(this.value, set))
+        return this._call(Multisets.symmetricDifference, set)
     }
 
     sum(set: Multiset<T>): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.sum(this.value, set))
+        return this._call(Multisets.sum, set)
     }
 
     removeOccurrences(set: Multiset<T>): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.removeOccurrences(this.value, set))
+        return this._call(Multisets.removeOccurrences, set)
     }
 
     retainOccurrences(set: Multiset<T>): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.retainOccurrences(this.value, set))
+        return this._call(Multisets.retainOccurrences, set)
     }
 
     map<R>(project: (value: T) => R): FluentMultiset<R> {
-        return new FluentMultiset(Multisets.map(this.value, project))
+        return this._call(Multisets.map, project)
     }
 
     flatMap<R>(project: (value: T) => R[]): FluentMultiset<R> {
-        return new FluentMultiset(Multisets.flatMap(this.value, project))
+        return this._call(Multisets.flatMap, project)
     }
 
     filter(predicate: (value: T) => boolean): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.filter(this.value, predicate))
+        return this._call(Multisets.filter, predicate)
     }
 
     filterEntries(predicate: (value: T, count: number) => boolean): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.filterEntries(this.value, predicate))
+        return this._call(Multisets.filterEntries, predicate)
     }
 
     sortByCount(comparator: Comparator<number>): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.sortByCount(this.value, comparator))
+        return this._call(Multisets.sortByCount, comparator)
     }
 
     distinct(): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.distinct(this.value))
+        return this._call(Multisets.distinct)
     }
 
     partition(size: number): FluentMultiset<T>[] {
@@ -442,27 +476,33 @@ class FluentMultiset<T> {
     }
 
     add(...items: T[]): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.add(this.value, ...items))
+        return this._call(Multisets.add, ...items)
     }
 
     delete(...items: T[]): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.delete(this.value, ...items))
+        return this._call(Multisets.delete, ...items)
     }
 
     setCount(item: T, count: number): FluentMultiset<T> {
-        return new FluentMultiset(Multisets.setCount(this.value, item, count))
+        return this._call(Multisets.setCount, item, count)
     }
 
-    asIterable(): FluentIterable<T> {
-        return new FluentIterable(this.value)
+    asIterable(): FluentIterable<T>
+    asIterable<R>(project: (value: T) => R): FluentIterable<R>
+    asIterable(project?: (value: T) => unknown): FluentIterable<unknown> {
+        return new FluentIterable(project ? Multisets.map(this.value, project) : this.value)
     }
 
-    asArray(): FluentArray<T> {
-        return new FluentArray(Arrays.from(this.value))
+    asArray(): FluentArray<T>
+    asArray<R>(project: (value: T) => R): FluentArray<R>
+    asArray(project?: (value: T) => unknown): FluentArray<unknown> {
+        return new FluentArray(Arrays.from(project ? Multisets.map(this.value, project) : this.value))
     }
 
-    asSet(): FluentSet<T> {
-        return new FluentSet(Sets.from(this.value))
+    asSet(): FluentSet<T>
+    asSet<R>(project: (value: T) => R): FluentSet<R>
+    asSet(project?: (value: T) => unknown): FluentSet<unknown> {
+        return new FluentSet(Sets.from(project ? Multisets.map(this.value, project) : this.value))
     }
 
     asMap<K, V>(project: (value: T) => [K, V]): FluentMap<K, V> {
@@ -485,16 +525,20 @@ class FluentMap<K, V> {
         this.value = map
     }
 
+    private _call<A extends unknown[], T>(func: (value: Map<K, V>, ...args: A) => Map<K, T>, ...args: A): FluentMap<K, T> {
+        return new FluentMap(func(this.value, ...args))
+    }
+
     concat(...maps: Map<K, V>[]): FluentMap<K, V> {
-        return new FluentMap(Maps.concat(this.value, ...maps))
+        return this._call(Maps.concat, ...maps)
     }
 
     transform<T>(project: (entry: [K, V]) => T): FluentMap<K, T> {
-        return new FluentMap(Maps.transform(this.value, project))
+        return this._call(Maps.transform, project)
     }
 
     filter(predicate: (entry: [K, V]) => boolean): FluentMap<K, V> {
-        return new FluentMap(Maps.filter(this.value, predicate))
+        return this._call(Maps.filter, predicate)
     }
 
     forEach(consumer: (entry: [K, V]) => void): void {
@@ -504,35 +548,47 @@ class FluentMap<K, V> {
     }
 
     set(...entries: [K, V][]): FluentMap<K, V> {
-        return new FluentMap(Maps.set(this.value, ...entries))
+        return this._call(Maps.set, ...entries)
     }
 
     delete(...keys: K[]): FluentMap<K, V> {
-        return new FluentMap(Maps.delete(this.value, ...keys))
+        return this._call(Maps.delete, ...keys)
     }
 
-    asIterable(): FluentIterable<[K, V]> {
-        return new FluentIterable(this.value)
+    asIterable(): FluentIterable<[K, V]>
+    asIterable<R>(project: (entry: [K, V]) => R): FluentIterable<R>
+    asIterable(project?: (entry: [K, V]) => unknown): FluentIterable<unknown> {
+        return new FluentIterable(project ? Iterables.map(this.value, project) : this.value)
     }
 
-    asArray(): FluentArray<[K, V]> {
-        return new FluentArray(Arrays.from(this.value))
+    asArray(): FluentArray<[K, V]>
+    asArray<R>(project: (entry: [K, V]) => R): FluentArray<R>
+    asArray(project?: (entry: [K, V]) => unknown): FluentArray<unknown> {
+        return new FluentArray(Arrays.from(project ? Iterables.map(this.value, project) : this.value))
     }
 
-    asSet(): FluentSet<[K, V]> {
-        return new FluentSet(Sets.from(this.value))
+    asSet(): FluentSet<[K, V]>
+    asSet<R>(project: (entry: [K, V]) => R): FluentSet<R>
+    asSet(project?: (entry: [K, V]) => unknown): FluentSet<unknown> {
+        return new FluentSet(Sets.from(project ? Iterables.map(this.value, project) : this.value))
     }
 
-    asMultiset(): FluentMultiset<[K, V]> {
-        return new FluentMultiset(Multisets.from(this.value))
+    asMultiset(): FluentMultiset<[K, V]>
+    asMultiset<R>(project: (entry: [K, V]) => R): FluentMultiset<R>
+    asMultiset(project?: (entry: [K, V]) => unknown): FluentMultiset<unknown> {
+        return new FluentMultiset(Multisets.from(project ? Iterables.map(this.value, project) : this.value))
     }
 
-    asArrayMultimap(): FluentArrayMultimap<K, V> {
-        return new FluentArrayMultimap(ArrayMultimaps.from(this.value))
+    asArrayMultimap(): FluentArrayMultimap<K, V>
+    asArrayMultimap<T>(project: (entry: [K, V]) => T): FluentArrayMultimap<K, T>
+    asArrayMultimap(project?: (entry: [K, V]) => unknown): FluentArrayMultimap<K, unknown> {
+        return new FluentArrayMultimap(ArrayMultimaps.from(project ? Maps.transform(this.value, project) : this.value))
     }
 
-    asSetMultimap(): FluentSetMultimap<K, V> {
-        return new FluentSetMultimap(SetMultimaps.from(this.value))
+    asSetMultimap(): FluentSetMultimap<K, V>
+    asSetMultimap<T>(project: (entry: [K, V]) => T): FluentSetMultimap<K, T>
+    asSetMultimap(project?: (entry: [K, V]) => unknown): FluentSetMultimap<K, unknown> {
+        return new FluentSetMultimap(SetMultimaps.from(project ? Maps.transform(this.value, project) : this.value))
     }
 }
 
@@ -543,20 +599,24 @@ class FluentArrayMultimap<K, V> {
         this.value = multimap
     }
 
+    private _call<A extends unknown[], T>(func: (value: ArrayMultimap<K, V>, ...args: A) => ArrayMultimap<K, T>, ...args: A): FluentArrayMultimap<K, T> {
+        return new FluentArrayMultimap(func(this.value, ...args))
+    }
+
     concat(...multimaps: ArrayMultimap<K, V>[]): FluentArrayMultimap<K, V> {
-        return new FluentArrayMultimap(ArrayMultimaps.concat(this.value, ...multimaps))
+        return this._call(ArrayMultimaps.concat, ...multimaps)
     }
 
     transform<T>(project: (entry: [K, V]) => T): FluentArrayMultimap<K, T> {
-        return new FluentArrayMultimap(ArrayMultimaps.transform(this.value, project))
+        return this._call(ArrayMultimaps.transform, project)
     }
 
     filter(predicate: (entry: [K, V]) => boolean): FluentArrayMultimap<K, V> {
-        return new FluentArrayMultimap(ArrayMultimaps.filter(this.value, predicate))
+        return this._call(ArrayMultimaps.filter, predicate)
     }
 
     filterCollections(predicate: (entry: [K, V[]]) => boolean): FluentArrayMultimap<K, V> {
-        return new FluentArrayMultimap(ArrayMultimaps.filterCollections(this.value, predicate))
+        return this._call(ArrayMultimaps.filterCollections, predicate)
     }
 
     forEach(consumer: (entry: [K, V]) => void): void {
@@ -566,35 +626,47 @@ class FluentArrayMultimap<K, V> {
     }
 
     set(...entries: [K, V][]): FluentArrayMultimap<K, V> {
-        return new FluentArrayMultimap(ArrayMultimaps.set(this.value, ...entries))
+        return this._call(ArrayMultimaps.set, ...entries)
     }
 
     delete(...entries: [K, V[]][]): FluentArrayMultimap<K, V> {
-        return new FluentArrayMultimap(ArrayMultimaps.delete(this.value, ...entries))
+        return this._call(ArrayMultimaps.delete, ...entries)
     }
 
-    asIterable(): FluentIterable<[K, V]> {
-        return new FluentIterable(this.value)
+    asIterable(): FluentIterable<[K, V]>
+    asIterable<R>(project: (entry: [K, V]) => R): FluentIterable<R>
+    asIterable(project?: (entry: [K, V]) => unknown): FluentIterable<unknown> {
+        return new FluentIterable(project ? Iterables.map(this.value, project) : this.value)
     }
 
-    asArray(): FluentArray<[K, V]> {
-        return new FluentArray(Arrays.from(this.value))
+    asArray(): FluentArray<[K, V]>
+    asArray<R>(project: (entry: [K, V]) => R): FluentArray<R>
+    asArray(project?: (entry: [K, V]) => unknown): FluentArray<unknown> {
+        return new FluentArray(Arrays.from(project ? Iterables.map(this.value, project) : this.value))
     }
 
-    asSet(): FluentSet<[K, V]> {
-        return new FluentSet(Sets.from(this.value))
+    asSet(): FluentSet<[K, V]>
+    asSet<R>(project: (entry: [K, V]) => R): FluentSet<R>
+    asSet(project?: (entry: [K, V]) => unknown): FluentSet<unknown> {
+        return new FluentSet(Sets.from(project ? Iterables.map(this.value, project) : this.value))
     }
 
-    asMultiset(): FluentMultiset<[K, V]> {
-        return new FluentMultiset(Multisets.from(this.value))
+    asMultiset(): FluentMultiset<[K, V]>
+    asMultiset<R>(project: (entry: [K, V]) => R): FluentMultiset<R>
+    asMultiset(project?: (entry: [K, V]) => unknown): FluentMultiset<unknown> {
+        return new FluentMultiset(Multisets.from(project ? Iterables.map(this.value, project) : this.value))
     }
 
-    asMap(): FluentMap<K, V> {
-        return new FluentMap(Maps.from(this.value))
+    asMap(): FluentMap<K, V>
+    asMap<T>(project: (entry: [K, V]) => T): FluentMap<K, T>
+    asMap(project?: (entry: [K, V]) => unknown): FluentMap<K, unknown> {
+        return new FluentMap(Maps.from(project ? ArrayMultimaps.transform(this.value, project) : this.value))
     }
 
-    asSetMultimap(): FluentSetMultimap<K, V> {
-        return new FluentSetMultimap(SetMultimaps.from(this.value))
+    asSetMultimap(): FluentSetMultimap<K, V>
+    asSetMultimap<T>(project: (entry: [K, V]) => T): FluentSetMultimap<K, T>
+    asSetMultimap(project?: (entry: [K, V]) => unknown): FluentSetMultimap<K, unknown> {
+        return new FluentSetMultimap(SetMultimaps.from(project ? ArrayMultimaps.transform(this.value, project) : this.value))
     }
 }
 
@@ -605,20 +677,24 @@ class FluentSetMultimap<K, V> {
         this.value = multimap
     }
 
+    private _call<A extends unknown[], T>(func: (value: SetMultimap<K, V>, ...args: A) => SetMultimap<K, T>, ...args: A): FluentSetMultimap<K, T> {
+        return new FluentSetMultimap(func(this.value, ...args))
+    }
+
     concat(...multimaps: SetMultimap<K, V>[]): FluentSetMultimap<K, V> {
-        return new FluentSetMultimap(SetMultimaps.concat(this.value, ...multimaps))
+        return this._call(SetMultimaps.concat, ...multimaps)
     }
 
     transform<T>(project: (entry: [K, V]) => T): FluentSetMultimap<K, T> {
-        return new FluentSetMultimap(SetMultimaps.transform(this.value, project))
+        return this._call(SetMultimaps.transform, project)
     }
 
     filter(predicate: (entry: [K, V]) => boolean): FluentSetMultimap<K, V> {
-        return new FluentSetMultimap(SetMultimaps.filter(this.value, predicate))
+        return this._call(SetMultimaps.filter, predicate)
     }
 
     filterCollections(predicate: (entry: [K, Set<V>]) => boolean): FluentSetMultimap<K, V> {
-        return new FluentSetMultimap(SetMultimaps.filterCollections(this.value, predicate))
+        return this._call(SetMultimaps.filterCollections, predicate)
     }
 
     forEach(consumer: (entry: [K, V]) => void): void {
@@ -628,35 +704,47 @@ class FluentSetMultimap<K, V> {
     }
 
     set(...entries: [K, V][]): FluentSetMultimap<K, V> {
-        return new FluentSetMultimap(SetMultimaps.set(this.value, ...entries))
+        return this._call(SetMultimaps.set, ...entries)
     }
 
     delete(...entries: [K, Set<V>][]): FluentSetMultimap<K, V> {
-        return new FluentSetMultimap(SetMultimaps.delete(this.value, ...entries))
+        return this._call(SetMultimaps.delete, ...entries)
     }
 
-    asIterable(): FluentIterable<[K, V]> {
-        return new FluentIterable(this.value)
+    asIterable(): FluentIterable<[K, V]>
+    asIterable<R>(project: (entry: [K, V]) => R): FluentIterable<R>
+    asIterable(project?: (entry: [K, V]) => unknown): FluentIterable<unknown> {
+        return new FluentIterable(project ? Iterables.map(this.value, project) : this.value)
     }
 
-    asArray(): FluentArray<[K, V]> {
-        return new FluentArray(Arrays.from(this.value))
+    asArray(): FluentArray<[K, V]>
+    asArray<R>(project: (entry: [K, V]) => R): FluentArray<R>
+    asArray(project?: (entry: [K, V]) => unknown): FluentArray<unknown> {
+        return new FluentArray(Arrays.from(project ? Iterables.map(this.value, project) : this.value))
     }
 
-    asSet(): FluentSet<[K, V]> {
-        return new FluentSet(Sets.from(this.value))
+    asSet(): FluentSet<[K, V]>
+    asSet<R>(project: (entry: [K, V]) => R): FluentSet<R>
+    asSet(project?: (entry: [K, V]) => unknown): FluentSet<unknown> {
+        return new FluentSet(Sets.from(project ? Iterables.map(this.value, project) : this.value))
     }
 
-    asMultiset(): FluentMultiset<[K, V]> {
-        return new FluentMultiset(Multisets.from(this.value))
+    asMultiset(): FluentMultiset<[K, V]>
+    asMultiset<R>(project: (entry: [K, V]) => R): FluentMultiset<R>
+    asMultiset(project?: (entry: [K, V]) => unknown): FluentMultiset<unknown> {
+        return new FluentMultiset(Multisets.from(project ? Iterables.map(this.value, project) : this.value))
     }
 
-    asMap(): FluentMap<K, V> {
-        return new FluentMap(Maps.from(this.value))
+    asMap(): FluentMap<K, V>
+    asMap<T>(project: (entry: [K, V]) => T): FluentMap<K, T>
+    asMap(project?: (entry: [K, V]) => unknown): FluentMap<K, unknown> {
+        return new FluentMap(Maps.from(project ? SetMultimaps.transform(this.value, project) : this.value))
     }
 
-    asArrayMultimap(): FluentArrayMultimap<K, V> {
-        return new FluentArrayMultimap(ArrayMultimaps.from(this.value))
+    asArrayMultimap(): FluentArrayMultimap<K, V>
+    asArrayMultimap<T>(project: (entry: [K, V]) => T): FluentArrayMultimap<K, T>
+    asArrayMultimap(project?: (entry: [K, V]) => unknown): FluentArrayMultimap<K, unknown> {
+        return new FluentArrayMultimap(ArrayMultimaps.from(project ? SetMultimaps.transform(this.value, project) : this.value))
     }
 }
 

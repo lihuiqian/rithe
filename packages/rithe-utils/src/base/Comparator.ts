@@ -1,7 +1,5 @@
-type ComparatorResult = -1 | 0 | 1
-
 interface Comparator<T> {
-    (a: T, b: T): ComparatorResult
+    (a: T, b: T): -1 | 0 | 1
 }
 
 export default Comparator

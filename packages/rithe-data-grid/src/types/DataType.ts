@@ -18,6 +18,7 @@ interface TypeMap {
     'time': Date,
     'datetime': Date,
     'code': string | number,
+    // eslint-disable-next-line @typescript-eslint/ban-types
     'object': object,
     'array': any[],
 }
