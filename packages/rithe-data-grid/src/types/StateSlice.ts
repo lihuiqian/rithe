@@ -1,13 +1,15 @@
 import Column from "./Column";
 import Row from "./Row";
+import RowId from "./RowId";
 
 interface StateSlice {
     // Data
     columns: Column[],
-    displayColumns: Column[],
     rows: Row[],
+    displayColumns: Column[],
     displayRows: Row[],
-    tableWidth: number,
+    getRowId: (row: Row) => RowId,
+    getCellValue: (column: Column, row: Row) => any,
 }
 
 export default StateSlice
