@@ -7,6 +7,7 @@ export { default as Records } from './base/Records';
 export { default as ArrayMultimap } from './collect/ArrayMultimap';
 export { default as ArrayMultimaps } from './collect/ArrayMultimaps';
 export { default as Arrays } from './collect/Arrays';
+export { default as iter } from './collect/ITER';
 export { default as Iterables } from './collect/Iterables';
 export { default as Maps } from './collect/Maps';
 export { default as Multimap } from './collect/Multimap';
@@ -26,3 +27,6 @@ export { default as Operator } from './fp/Operator';
 export { default as Predicate } from './fp/Predicate';
 export { default as Project } from './fp/Project';
 export { default as Supplier } from './fp/Supplier';
+// hooks
+export { default as useMeasure } from './hooks/useMeasure';
+export { default as usePrevious } from './hooks/usePrevious';

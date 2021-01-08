@@ -3,7 +3,7 @@ import Row from "./Row";
 interface Column {
     field: string,
     dataTypeName: string,
-    title?: string,
+    title: string,
     width?: number,
     getCellValue?: (row: Row) => any,
 }

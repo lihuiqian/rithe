@@ -1,21 +1,27 @@
-import { PluginHost } from '@rithe/plugin';
-import React, { useCallback, useState } from 'react';
+import { Data, DataGrid, DataGridThemeProvider, TableHeadLayout, TableLayout } from '@rithe/data-grid';
+import { Pipe } from '@rithe/plugin';
+import React, { useCallback } from 'react';
 import { Debugger } from './Debugger';
-import { P1 } from './P1';
-import { P2 } from './P2';
-import { P3 } from './P3';
 
 function App() {
 
-  console.log('App')
-  const [open, setOpen] = useState(true)
-  const onClick = useCallback(() => setOpen(open => !open), [])
+  const columns = [{ field: 'string', dataTypeName: 'string', title: 'String' }, { field: 'number', dataTypeName: 'number', title: 'Number' }]
+  const rows = [{ string: 'A', number: 1234.56 }, { string: 'B', number: 2345.67 }]
 
-  return <PluginHost>
-    <button onClick={onClick}>open</button>
-    {open ? [<P1 key={1} />, <P3 key={3} />] : [<P1 key={1} />, <P2 key={2} />, <P3 key={3} />]}
-    <Debugger />
-  </PluginHost>
+  const computed = useCallback((columns: any[]) => {
+    return columns ? [...columns, { field: 'boolean', dataTypeName: 'boolean', title: 'Boolean' }] : columns
+  }, [])
+
+  return <DataGridThemeProvider>
+    <DataGrid>
+      <Data columns={columns} rows={rows} />
+      <Pipe name="displayColumns" computed={computed} />
+      <Debugger />
+      <TableLayout>
+        <TableHeadLayout />
+      </TableLayout>
+    </DataGrid>
+  </DataGridThemeProvider>
 }
 
 export default App;

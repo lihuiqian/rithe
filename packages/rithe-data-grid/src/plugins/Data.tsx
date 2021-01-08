@@ -18,6 +18,10 @@ const Data = ({ columns, rows, getRowId }: DataProps) => {
     return <Plugin>
         <StatePipe name="columns" value={columns} />
         <StatePipe name="rows" value={rows} />
+        <StatePipe name="displayColumns" value={columns} />
+        <StatePipe name="displayRows" value={rows} />
         <StatePipe name="getRowId" value={getRowId} />
     </Plugin>
 }
+
+export default Data

@@ -5,12 +5,10 @@ const PluginIndexer = ({ children }: { children: ReactNode | ReactNode[] }) => {
     const [cache, setCache] = useState<{ [index: number]: number[] }>({})
 
     const addCache = useCallback((index: number, position: number[]) => {
-        console.log('addCache', index, JSON.stringify(position))
         setCache(cache => ({ ...cache, [index]: position }))
         return position
     }, [])
     const calculatePosition = useCallback((position: number[], index: number) => {
-        console.log('calculatePosition', JSON.stringify(position), index)
         return addCache(index, [...position, index])
     }, [addCache])
 

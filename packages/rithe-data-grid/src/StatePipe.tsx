@@ -13,7 +13,7 @@ interface ValueStatePipeProps<T extends Key> {
 }
 interface ComputedStatePipeProps<T extends Key, DS extends Key[]> {
     name: T,
-    computed: (prev: StateSlice[T] | undefined, ...deps: OptionalValues<DS>) => StateSlice[T],
+    computed: (prev: StateSlice[T] | undefined, ...deps: OptionalValues<DS>) => StateSlice[T] | undefined,
     dependencyNames?: [...DS],
     lazy?: boolean,
 }

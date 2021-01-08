@@ -7,8 +7,9 @@ import { DataGridTitleProps } from '../components/DataGridTitle'
 import Align from "./Align"
 import FilterPredicate from './FilterPredicate'
 import FilterPredicator from './FilterPredicator'
+import Formatter from './Formatter'
 
-interface TypeMap {
+interface DataTypeInfer {
     'unknown': unknown,
     'string': string,
     'number': number,
@@ -23,12 +24,12 @@ interface TypeMap {
     'array': any[],
 }
 
-interface DataType<T extends keyof TypeMap> {
+interface DataType<T extends keyof DataTypeInfer> {
     type: T,
     name: string,
     align: Align,
-    formatter: undefined,
-    comparator: Comparator<TypeMap[T]>
+    formatter: Formatter<T>,
+    comparator: Comparator<DataTypeInfer[T]>
     predicates: Partial<{ [predicator in FilterPredicator]: FilterPredicate }>,
     titleComponent: JSXElementConstructor<DataGridTitleProps>,
     filterComponents: { name: string, filterComponent: JSXElementConstructor<DataGridFilterProps> }[],
@@ -36,4 +37,5 @@ interface DataType<T extends keyof TypeMap> {
     editorComponent: JSXElementConstructor<DataGridEditorProps>,
 }
 
+export type { DataTypeInfer }
 export default DataType
