@@ -1,3 +1,4 @@
+import { useShallow } from '@rithe/utils'
 import React, { useContext, useEffect } from 'react'
 import PluginContext from './internal/PluginContext'
 import PositionContext from './internal/PositionContext'
@@ -19,15 +20,18 @@ type PipeProps = ValuePipeProps | ComputedPipeProps
 const Pipe = (props: PipeProps) => {
     const position = useContext(PositionContext)
     const { register, unregister } = useContext(PluginContext)
-    const { name, value, computed, dependencyNames, lazy } = props as any
+    const { name, value, computed, dependencyNames, lazy } = props as ValuePipeProps & ComputedPipeProps
+
     useEffect(() => {
         computed || register(name, position, value)
-        return () => computed || unregister(position)
+        return () => computed as any || unregister(position)
     }, [position, register, unregister, name, value, computed])
+
+    const shallowedDependencyNames = useShallow(dependencyNames ?? [])
     useEffect(() => {
-        computed && register(name, position, computed, dependencyNames || [], lazy || false)
+        computed && register(name, position, computed, shallowedDependencyNames ?? [], lazy ?? false)
         return () => computed && unregister(position)
-    }, [position, register, unregister, name, value, computed, dependencyNames, lazy])
+    }, [computed, lazy, name, position, register, shallowedDependencyNames, unregister])
     return <></>
 }
 

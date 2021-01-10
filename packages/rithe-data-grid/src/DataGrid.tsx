@@ -1,7 +1,7 @@
 import { PluginHost } from "@rithe/plugin"
 import React, { ReactNode, useMemo } from 'react'
 import useDataType from "./hooks/useDataType"
-import DataTypeProvider from "./plugins/DataTypeProvider"
+import { DataTypeProvider } from "./plugins/DataTypeProvider"
 
 const DataGrid = ({ children }: { children: ReactNode | ReactNode[] }) => {
     const dataTypes = useDataTypes()
@@ -39,5 +39,5 @@ const useDataTypes = () => {
     ], [arrayDataType, bigintDataType, booleanDataType, codeDataType, dateDataType, datetimeDataType, numberDataType, objectDataType, stringDataType, timeDataType, unknownDataType])
 }
 
-export default DataGrid
+export { DataGrid }
 

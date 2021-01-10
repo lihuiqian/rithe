@@ -23,5 +23,4 @@ const StatePipe = <T extends Key, DS extends Key[]>(props: StatePipeProps<T, DS>
     return <Pipe {...props as any} />
 }
 
-export type { StatePipeProps };
-export default StatePipe
+export { StatePipeProps, StatePipe };

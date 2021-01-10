@@ -1,6 +1,6 @@
 import { Plugin } from '@rithe/plugin';
 import React from "react";
-import StatePipe from '../StatePipe';
+import { StatePipe } from '../StatePipe';
 import Column from "../types/Column";
 import Row from "../types/Row";
 import RowId from "../types/RowId";
@@ -24,4 +24,5 @@ const Data = ({ columns, rows, getRowId }: DataProps) => {
     </Plugin>
 }
 
-export default Data
+export { DataProps, Data };
+

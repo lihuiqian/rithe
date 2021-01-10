@@ -15,7 +15,7 @@
         "baseUrl": "./",
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
-        "downlevelIteration": true,
+        "downlevelIteration": true
     },
     "exclude": [
         "**/dist",

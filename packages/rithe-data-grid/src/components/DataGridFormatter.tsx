@@ -1,9 +1,9 @@
 import React from "react"
-import { useDataGridTheme } from "../DataGridTheme"
 import Column from "../types/Column"
 import DataType from "../types/DataType"
 import Row from "../types/Row"
 import RowId from "../types/RowId"
+import { useDataGridTheme } from "./DataGridTheme"
 
 interface DataGridFormatterProps {
     value: unknown,
@@ -18,5 +18,5 @@ const DataGridFormatter = ({ value, dataType, column, rowId, row }: DataGridForm
     return <Typography>{dataType.formatter(value as any, dataType, column, rowId, row)}</Typography>
 }
 
-export type { DataGridFormatterProps }
-export default DataGridFormatter
+export { DataGridFormatterProps, DataGridFormatter }
+

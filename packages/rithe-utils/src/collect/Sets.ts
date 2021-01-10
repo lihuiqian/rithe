@@ -31,7 +31,7 @@ function intersection<T>(set1: Set<T>, set2: Set<T>): Set<T> {
 
 function difference<T>(set1: Set<T>, set2: Set<T>): Set<T> {
     const result = new Set(set1)
-    set2.forEach(result.delete)
+    set2.forEach(item => result.delete(item))
     return result
 }
 

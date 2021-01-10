@@ -1,10 +1,9 @@
-interface DataGridEditorProps {
+import React from "react"
 
+export interface DataGridEditorProps {
+    some: any
 }
 
-const DataGridEditor = () => {
-
+export const DataGridEditor = () => {
+    return <></>
 }
-
-export type { DataGridEditorProps }
-export default DataGridEditor

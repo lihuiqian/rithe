@@ -7,7 +7,8 @@
   "author": "lihuiqian",
   "private": false,
   "scripts": {
-    "build": "tsc"
+    "build": "./../../node_modules/.bin/tsc",
+    "watch": "./../../node_modules/.bin/tsc --watch"
   },
   "peerDependencies": {
     "@types/node": "^12.0.0",

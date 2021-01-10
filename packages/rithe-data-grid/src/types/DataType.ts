@@ -37,5 +37,5 @@ interface DataType<T extends keyof DataTypeInfer> {
     editorComponent: JSXElementConstructor<DataGridEditorProps>,
 }
 
-export type { DataTypeInfer }
+export { DataTypeInfer }
 export default DataType

@@ -80,6 +80,14 @@ function size<K extends keyof any, V>(record: Record<K, V>): number {
     return Iterables.size(keys(record))
 }
 
+function elementsEqual<K extends keyof any, V>(record1: Record<K, V>, record2: Record<K, V>): boolean {
+    if (size(record1) !== size(record2)) return false
+    for (const [key, value] of entries(record1)) {
+        if (record2[key] !== value) return false
+    }
+    return true
+}
+
 function set<K extends keyof any, V>(record: Record<K, V>, ...entries: [K, V][]): Record<K, V> {
     if (entries.length === 0) return record
     const result = of(record)
@@ -110,6 +118,7 @@ export default {
     transform,
     filter,
     size,
+    elementsEqual,
     set,
     delete: _delete,
 }

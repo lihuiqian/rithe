@@ -1,7 +1,7 @@
 import React, { CSSProperties, useMemo } from "react"
-import { useDataGridTheme } from "../DataGridTheme"
 import Column from "../types/Column"
 import DataType from "../types/DataType"
+import { useDataGridTheme } from "./DataGridTheme"
 
 interface DataGridTitleProps {
     title: string,
@@ -19,5 +19,5 @@ const DataGridTitle = React.memo(({ title }: DataGridTitleProps) => {
     return <Typography style={style}>{title}</Typography>
 })
 
-export type { DataGridTitleProps }
-export default DataGridTitle
+export { DataGridTitleProps, DataGridTitle }
+

@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
+import Records from "./Records"
+
 const EMPTY: object = {}
 
 function empty(): object {
@@ -16,6 +18,10 @@ function concat(...objects: object[]): object {
         Object.assign(result, object)
     }
     return result
+}
+
+function shallowEquals<T extends object>(object1: T, object2: T): boolean {
+    return Records.elementsEqual(object1, object2)
 }
 
 function set<T extends object, K extends keyof T, V extends T[K]>(object: T, ...entries: [K, V][]): T {
@@ -57,6 +63,7 @@ export default {
     empty,
     of,
     concat,
+    shallowEquals,
     set,
     delete: _delete,
     trim,

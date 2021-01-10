@@ -1,10 +1,11 @@
-interface DataGridFilterProps {
+import React from "react"
 
+interface DataGridFilterProps {
+    some: any
 }
 
 const DataGridFilter = () => {
-
+    return <></>
 }
 
-export type { DataGridFilterProps }
-export default DataGridFilter
+export { DataGridFilterProps, DataGridFilter }

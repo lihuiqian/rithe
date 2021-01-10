@@ -1,22 +1,25 @@
 import { Plugin } from "@rithe/plugin"
 import { Arrays, iter } from "@rithe/utils"
 import React, { useCallback } from "react"
-import StatePipe from "../StatePipe"
+import { StatePipe } from "../StatePipe"
 import Column from "../types/Column"
 
 const DEFAULT_WIDTH = 120
 
-const ColumnWidthAdjustment = () => {
+export interface ColumnWidthAdjustmentProps {
+    tableWidth?: number
+}
 
-    const computedDisplayColumns = useComputedDisplayColumns()
+export const ColumnWidthAdjustment = ({ tableWidth }: ColumnWidthAdjustmentProps) => {
+    const computedDisplayColumns = useComputedDisplayColumns(tableWidth)
 
     return <Plugin>
-        <StatePipe name="displayColumns" computed={computedDisplayColumns} dependencyNames={["tableWidth"]} />
+        <StatePipe name="displayColumns" computed={computedDisplayColumns} />
     </Plugin>
 }
 
-const useComputedDisplayColumns = () => {
-    return useCallback((displayColumns?: Column[], tableWidth?: number) => {
+const useComputedDisplayColumns = (tableWidth?: number) => {
+    return useCallback((displayColumns?: Column[]) => {
         if (!tableWidth || !displayColumns) return displayColumns
 
         const dynamicColumns = displayColumns.filter(dc => dc.width === undefined)
@@ -31,7 +34,6 @@ const useComputedDisplayColumns = () => {
             .value
 
         return displayColumns.map(dc => dc.width === undefined ? { ...dc, width: widths.shift() } : dc)
-    }, [])
+    }, [tableWidth])
 }
 
-export default ColumnWidthAdjustment

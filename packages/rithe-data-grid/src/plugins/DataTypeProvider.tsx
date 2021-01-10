@@ -1,7 +1,7 @@
 import { Plugin } from "@rithe/plugin";
 import { iter } from "@rithe/utils";
 import React, { useCallback } from "react";
-import StatePipe from "../StatePipe";
+import { StatePipe } from "../StatePipe";
 import DataType from "../types/DataType";
 
 interface DataTypeProviderProps {
@@ -29,5 +29,5 @@ const useComputedDataTypes = (dataTypes: DataType<any>[]) => {
     }, [dataTypes])
 }
 
-export type { DataTypeProviderProps };
-export default DataTypeProvider
+export { DataTypeProviderProps, DataTypeProvider };
+
