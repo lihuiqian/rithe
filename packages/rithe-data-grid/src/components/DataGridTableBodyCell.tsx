@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import { Align, Column, Row, RowId } from "..";
 import DataType from "../types/DataType";
 import { useDataGridTheme } from "./DataGridTheme";
@@ -15,11 +15,11 @@ export interface DataGridTableBodyCellProps {
     // cell
     colSpan?: number,
     rowSpan?: number,
-    children: ReactNode | ReactNode[],
 }
 
 // eslint-disable-next-line react/display-name
-export const DataGridTableBodyCell = React.memo(({ children }: DataGridTableBodyCellProps) => {
+export const DataGridTableBodyCell = React.memo((props: DataGridTableBodyCellProps) => {
+    const { formattedValue } = props
     const { tableHeadCellComponent: Th } = useDataGridTheme()
-    return <Th>{children}</Th>
+    return <Th>{formattedValue}</Th>
 })

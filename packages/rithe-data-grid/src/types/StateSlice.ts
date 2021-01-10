@@ -13,7 +13,6 @@ interface StateSlice {
     displayColumns: Column[],
     displayRows: Row[],
     getRowId: (row: Row) => RowId,
-    getCellValue: (column: Column, row: Row) => any,
     // ColumnResizing
     columnResizingEnabled: boolean,
     columnResizingExcludes: string[],

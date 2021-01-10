@@ -21,9 +21,7 @@ export const TableHeadLayout = ({
     cellComponent: Cell = DataGridTableHeaderCell,
     bandComponent: Band = DataGridTableBandCell,
 }: TableHeadLayoutProps) => {
-    const { tableHeadComponent: TableHead,
-        tableHeadRowComponent: TableHeadRow,
-        tableHeadCellComponent: TableHeadCell } = useDataGridTheme()
+    const { tableHeadComponent: TableHead } = useDataGridTheme()
 
     const {
         dataTypes, displayColumns,
@@ -61,20 +59,21 @@ export const TableHeadLayout = ({
     const getDataType = useCallback((field: string) => {
         return dataTypeMap.get(field) ?? unknownDataType
     }, [dataTypeMap, unknownDataType])
-    const realDisplayColumns = useRealDisplayColumns(displayColumns, !!columnResizingDraft && !!columnDraggingDraft)
+    const realDisplayColumns = useRealDisplayColumns(displayColumns, !!columnResizingDraft || !!columnDraggingDraft)
     const cellWidthChange = useCallback((field: string, delta: number) => changeColumnWidth && changeColumnWidth([field], delta), [changeColumnWidth])
     const cellWidthDraft = useCallback((field: string, delta: number) => draftColumnWidth && draftColumnWidth([field], delta), [draftColumnWidth])
     const cellWidthDraftCancel = useCallback((field: string) => cancelColumnWidthDraft && cancelColumnWidthDraft([field]), [cancelColumnWidthDraft])
     const bandWidthChange = useCallback((fields: string[], delta: number) => changeColumnWidth && changeColumnWidth(fields, delta), [changeColumnWidth])
     const bandWidthDraft = useCallback((fields: string[], delta: number) => draftColumnWidth && draftColumnWidth(fields, delta), [draftColumnWidth])
     const bandWidthDraftCancel = useCallback((fields: string[]) => cancelColumnWidthDraft && cancelColumnWidthDraft(fields), [cancelColumnWidthDraft])
-    const cellXAxisChange = useCallback((field: string, delta: number) => changeColumnOrder && changeColumnOrder([field], getDeltaOrder(realDisplayColumns, [field], delta)), [changeColumnOrder, displayColumns])
-    const cellXAxisDraft = useCallback((field: string, delta: number) => draftColumnOrder && draftColumnOrder([field], getDeltaOrder(realDisplayColumns, [field], delta)), [displayColumns, draftColumnOrder])
+    const cellXAxisChange = useCallback((field: string, delta: number) => changeColumnOrder && changeColumnOrder([field], getDeltaOrder(realDisplayColumns, [field], delta)), [changeColumnOrder, realDisplayColumns])
+    const cellXAxisDraft = useCallback((field: string, delta: number) => draftColumnOrder && draftColumnOrder([field], getDeltaOrder(realDisplayColumns, [field], delta)), [realDisplayColumns, draftColumnOrder])
     const cellXAxisDraftCancel = useCallback((field: string) => cancelColumnOrderDraft && cancelColumnOrderDraft([field]), [cancelColumnOrderDraft])
-    const bandXAxisChange = useCallback((fields: string[], delta: number) => changeColumnOrder && changeColumnOrder(fields, getDeltaOrder(realDisplayColumns, fields, delta)), [changeColumnOrder, displayColumns])
-    const bandXAxisDraft = useCallback((fields: string[], delta: number) => draftColumnOrder && draftColumnOrder(fields, getDeltaOrder(realDisplayColumns, fields, delta)), [displayColumns, draftColumnOrder])
+    const bandXAxisChange = useCallback((fields: string[], delta: number) => changeColumnOrder && changeColumnOrder(fields, getDeltaOrder(realDisplayColumns, fields, delta)), [changeColumnOrder, realDisplayColumns])
+    const bandXAxisDraft = useCallback((fields: string[], delta: number) => draftColumnOrder && draftColumnOrder(fields, getDeltaOrder(realDisplayColumns, fields, delta)), [realDisplayColumns, draftColumnOrder])
     const bandXAxisDraftCancel = useCallback((fields: string[]) => cancelColumnOrderDraft && cancelColumnOrderDraft(fields), [cancelColumnOrderDraft])
 
+    console.log(JSON.stringify(displayColumns?.map(dc => dc.width)))
     return <Plugin>
         <TableHead>
             {rowCol.map((cells, rowIndex) => {

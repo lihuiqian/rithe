@@ -19,7 +19,7 @@ export const ColumnOrdering = (props: ColumnOrderingProps) => {
     const [columnOrder, setColumnOrder] = useMixed(props.columnOrder, props.onColumnOrderChange, props.defaultColumnOrder)
     const excludes = useExcludes(columnOrder)
     const [draftColumnDelta, setDraftColumnDelta] = useState<DraftColumnOrderDelta | undefined>()
-    const changeColumnOrder = useChangeColumnOrder(columnOrder, setColumnOrder)
+    const changeColumnOrder = useChangeColumnOrder(columnOrder, setColumnOrder, setDraftColumnDelta)
     const draftColumnOrder = useDraftColumnOrder(setDraftColumnDelta)
     const cancelColumnOrderDraft = useCancelColumnOrderDraft(setDraftColumnDelta)
     const displayColumns = useDisplayColumns(columnOrder, draftColumnDelta)
@@ -45,12 +45,13 @@ const useExcludes = (columnOrder?: string[]) => {
     }, [columnOrder])
 }
 
-const useChangeColumnOrder = (columnOrder: string[] | undefined, setColumnOrder: (columnOrder: string[]) => void) => {
+const useChangeColumnOrder = (columnOrder: string[] | undefined, setColumnOrder: (columnOrder: string[]) => void, setDraftColumnDeltas: Dispatch<SetStateAction<DraftColumnOrderDelta | undefined>>) => {
     return useCallback((fields: string[], delta: number) => {
         if (!columnOrder || fields.length === 0 || delta === 0) return
         console.log('change', fields, delta)
         setColumnOrder(patchDeltaToOrder(columnOrder, fields, delta))
-    }, [columnOrder, setColumnOrder])
+        setDraftColumnDeltas(undefined)
+    }, [columnOrder, setColumnOrder, setDraftColumnDeltas])
 }
 
 const useDraftColumnOrder = (setDraftColumnDelta: Dispatch<SetStateAction<DraftColumnOrderDelta | undefined>>) => {
@@ -61,8 +62,8 @@ const useDraftColumnOrder = (setDraftColumnDelta: Dispatch<SetStateAction<DraftC
 }
 
 const useCancelColumnOrderDraft = (setDraftColumnDeltas: Dispatch<SetStateAction<DraftColumnOrderDelta | undefined>>) => {
-    return useCallback((fields: string[]) => {
-        console.log('cancel', fields)
+    return useCallback(() => {
+        console.log('cancel')
         setDraftColumnDeltas(undefined)
     }, [setDraftColumnDeltas])
 }
@@ -74,8 +75,9 @@ const useDisplayColumns = (columnOrder?: string[], draftColumnDelta?: DraftColum
 
         const patched = patchDeltaToOrder(columnOrder, draftColumnDelta?.fields ?? [], draftColumnDelta?.delta ?? 0)
 
+        console.log(columnOrder, draftColumnDelta, patched)
         return Arrays.sort(displayColumns, Comparators.compare(c => patched.indexOf(c.field), Comparators.natualOrder()))
-    }, [columnOrder, draftColumnDelta?.delta, draftColumnDelta?.fields])
+    }, [columnOrder, draftColumnDelta])
 }
 
 function patchDeltaToOrder(columnOrder: string[], fields: string[], delta: number) {

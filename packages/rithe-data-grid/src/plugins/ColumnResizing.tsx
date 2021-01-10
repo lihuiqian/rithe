@@ -20,7 +20,7 @@ export const ColumnResizing = (props: ColumnResizingProps) => {
     const [columnWidths, setColumnWidths] = useMixed(props.columnWidths, props.onColumnWidthsChange, props.defaultColumnWidths)
     const excludes = useExcludes(columnWidths)
     const [draftColumnDelta, setDraftColumnDelta] = useState<DraftColumnWidthDelta | undefined>()
-    const changeColumnWidth = useChangeColumnWidth(columnWidths, setColumnWidths)
+    const changeColumnWidth = useChangeColumnWidth(columnWidths, setColumnWidths, setDraftColumnDelta)
     const draftColumnWidth = useDraftColumnWidth(setDraftColumnDelta)
     const cancelColumnWidthDraft = useCancelColumnWidthDraft(setDraftColumnDelta)
     const displayColumns = useDisplayColumns(columnWidths, draftColumnDelta)
@@ -46,24 +46,27 @@ const useExcludes = (columnWidths?: ColumnWidth[]) => {
     }, [columnWidths])
 }
 
-const useChangeColumnWidth = (columnWidths: ColumnWidth[] | undefined, setColumnWidths: (columnWidths: ColumnWidth[]) => void) => {
+const useChangeColumnWidth = (columnWidths: ColumnWidth[] | undefined, setColumnWidths: (columnWidths: ColumnWidth[]) => void, setDraftColumnDelta: Dispatch<SetStateAction<DraftColumnWidthDelta | undefined>>) => {
     return useCallback((fields: string[], delta: number) => {
         if (!columnWidths || fields.length === 0 || delta === 0) return
-
+        console.log('change', fields, delta)
         setColumnWidths(patchDeltaToWidth(columnWidths, fields, delta))
-    }, [columnWidths, setColumnWidths])
+        setDraftColumnDelta(undefined)
+    }, [columnWidths, setColumnWidths, setDraftColumnDelta])
 }
 
 const useDraftColumnWidth = (setDraftColumnDelta: Dispatch<SetStateAction<DraftColumnWidthDelta | undefined>>) => {
     return useCallback((fields: string[], delta: number) => {
+        console.log('draft', fields, delta)
         setDraftColumnDelta({ fields, delta })
     }, [setDraftColumnDelta])
 }
 
-const useCancelColumnWidthDraft = (setDraftColumnDeltas: Dispatch<SetStateAction<DraftColumnWidthDelta | undefined>>) => {
+const useCancelColumnWidthDraft = (setDraftColumnDelta: Dispatch<SetStateAction<DraftColumnWidthDelta | undefined>>) => {
     return useCallback(() => {
-        setDraftColumnDeltas(undefined)
-    }, [setDraftColumnDeltas])
+        console.log('cancel')
+        setDraftColumnDelta(undefined)
+    }, [setDraftColumnDelta])
 }
 
 const useDisplayColumns = (columnWidths?: ColumnWidth[], draftColumnDelta?: DraftColumnWidthDelta) => {

@@ -20,14 +20,13 @@ const TableLayout = ({ children }: TableLayoutProps) => {
 
     const [dragHandlers, addDragListener, removeDragListener] = useDragHandlers()
     const bind = useDragBind(dragHandlers)
-
     const [measureRef, rect] = useMeasure<HTMLDivElement>()
     return <Plugin>
         <ColumnWidthAdjustment tableWidth={rect?.width} />
         <StatePipe name="addDragListener" value={addDragListener} />
         <StatePipe name="removeDragListener" value={removeDragListener} />
         <div ref={measureRef}>
-            <Table {...bind('hahaha')}>
+            <Table {...bind()}>
                 {children}
             </Table>
         </div>
@@ -59,8 +58,8 @@ const useDragBind = (dragHandlers: DragHandlerMap) => {
         }
         const target = targetRef.current
         if (target) {
-            const handler = dragHandlers.get(target.element)!
-            handler({ ...state, initialRect: target.initialRect })
+            const handler = dragHandlers.get(target.element)
+            handler && handler({ ...state, initialRect: target.initialRect })
         }
         if (!down) {
             targetRef.current = null
