@@ -1,5 +1,5 @@
 import { Plugin } from "@rithe/plugin";
-import { Arrays, Comparators, iter, usePrevious } from "@rithe/utils";
+import { Arrays, Comparators, iter } from "@rithe/utils";
 import React, { ComponentType, useCallback, useMemo, useRef } from "react";
 import { DataGridTableBandCell, DataGridTableBandCellProps } from "../components/DataGridTableBandCell";
 import { DataGridTableHeader, DataGridTableHeaderProps } from "../components/DataGridTableHeader";
@@ -35,10 +35,7 @@ export const TableHeadLayout = ({
         'addDragListener', 'removeDragListener',
     )
 
-    const prevDisplayColumns = usePrevious(displayColumns)
-    console.log('displayColumns', prevDisplayColumns === displayColumns, prevDisplayColumns?.map(c => c.field).join(','), displayColumns?.map(c => c.field).join(','))
     const rowCol = useMemo<([colIndex: number, catIndex: number, colSpan: number, rowSpan: number] | undefined)[][]>(() => {
-        console.log('recalc')
         if (!displayColumns) return []
         const rowCount = 1 + (Arrays.max(displayColumns.map(dc => dc.categories?.length ?? 0), Comparators.natualOrder()) ?? 0)
         const colRow = displayColumns.map((col, colIndex) => {

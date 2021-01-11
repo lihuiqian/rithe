@@ -49,7 +49,6 @@ const useExcludes = (columnWidths?: ColumnWidth[]) => {
 const useChangeColumnWidth = (columnWidths: ColumnWidth[] | undefined, setColumnWidths: (columnWidths: ColumnWidth[]) => void, setDraftColumnDelta: Dispatch<SetStateAction<DraftColumnWidthDelta | undefined>>) => {
     return useCallback((fields: string[], delta: number) => {
         if (!columnWidths || fields.length === 0 || delta === 0) return
-        console.log('change', fields, delta)
         setColumnWidths(patchDeltaToWidth(columnWidths, fields, delta))
         setDraftColumnDelta(undefined)
     }, [columnWidths, setColumnWidths, setDraftColumnDelta])
@@ -57,14 +56,12 @@ const useChangeColumnWidth = (columnWidths: ColumnWidth[] | undefined, setColumn
 
 const useDraftColumnWidth = (setDraftColumnDelta: Dispatch<SetStateAction<DraftColumnWidthDelta | undefined>>) => {
     return useCallback((fields: string[], delta: number) => {
-        console.log('draft', fields, delta)
         setDraftColumnDelta({ fields, delta })
     }, [setDraftColumnDelta])
 }
 
 const useCancelColumnWidthDraft = (setDraftColumnDelta: Dispatch<SetStateAction<DraftColumnWidthDelta | undefined>>) => {
     return useCallback(() => {
-        console.log('cancel')
         setDraftColumnDelta(undefined)
     }, [setDraftColumnDelta])
 }
@@ -76,8 +73,7 @@ const useDisplayColumns = (columnWidths?: ColumnWidth[], draftColumnDelta?: Draf
 
         const patched = patchDeltaToWidth(columnWidths, draftColumnDelta?.fields ?? [], draftColumnDelta?.delta ?? 0)
         const map = Maps.from(patched.map(({ field, width }) => [field, width]))
-
-        return displayColumns.map(dc => !map.has(dc.field) ? dc : { ...dc, width: map.get(dc.field) })
+        return displayColumns.map(dc => !map.has(dc.field) ? dc.width ? dc : { ...dc, width: 200 } : { ...dc, width: map.get(dc.field) })
     }, [columnWidths, draftColumnDelta?.delta, draftColumnDelta?.fields])
 }
 

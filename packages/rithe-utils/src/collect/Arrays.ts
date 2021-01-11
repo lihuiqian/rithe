@@ -78,7 +78,7 @@ function reverse<T>(arr: T[]): T[] {
 }
 
 function sort<T>(arr: T[], comparator: Comparator<T>): T[] {
-    return arr.sort(comparator)
+    return arr.slice().sort(comparator)
 }
 
 function distinct<T>(arr: T[]): T[] {

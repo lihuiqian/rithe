@@ -12,13 +12,13 @@ function App() {
 
   return <DataGrid>
     <Data columns={columns} rows={rows} />
-    <Debugger />
     <ColumnResizing defaultColumnWidths={[{ field: 'string', width: 150 }]} />
     <ColumnOrdering defaultColumnOrder={['number', 'string', 'boolean']} />
     <TableLayout>
       <TableHeadLayout />
       <TableBodyLayout />
     </TableLayout>
+    <Debugger />
   </DataGrid>
 }
 

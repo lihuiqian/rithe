@@ -1,6 +1,6 @@
 import { Plugin } from '@rithe/plugin';
 import { Arrays, Comparators, iter, Sets } from '@rithe/utils';
-import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
+import React, { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
 import { StatePipe } from "..";
 import useMixed from '../hooks/useMixed';
 import Column from '../types/Column';
@@ -54,8 +54,12 @@ const useChangeColumnOrder = (columnOrder: string[] | undefined, setColumnOrder:
 }
 
 const useDraftColumnOrder = (setDraftColumnDelta: Dispatch<SetStateAction<DraftColumnOrderDelta | undefined>>) => {
+    const ref = useRef(0)
     return useCallback((fields: string[], delta: number) => {
-        setDraftColumnDelta({ fields, delta })
+        if (delta !== ref.current) {
+            setDraftColumnDelta({ fields, delta })
+            ref.current = delta
+        }
     }, [setDraftColumnDelta])
 }
 
