@@ -13,7 +13,7 @@ export interface DataGridTableHeaderCellProps {
     dataType: DataType<any>,
     column: Column,
     // event
-    addDragListener?: (target: EventTarget, eventHandler: DragHandler) => void,
+    addDragListener?: (target: EventTarget, eventHandler: DragHandler, options?: { retainTarget?: boolean, retainHandler?: boolean }) => void,
     removeDragListener?: (target: EventTarget) => void,
     // resizing
     resizingEnabled: boolean,
@@ -84,7 +84,7 @@ const useColumnOrder = (props: DataGridTableHeaderCellProps) => {
                 x < left ? onXAxisChange(field, x - left) : x > right ? onXAxisChange(field, x - right) : onXAxisChange(field, 0)
                 onXAxisDraftCancel(field)
             }
-        })
+        }, { retainTarget: true, retainHandler: true })
         return () => {
             removeDragListener && removeDragListener(draggable)
         }
@@ -108,7 +108,7 @@ const useColumnResize = (props: DataGridTableHeaderCellProps) => {
                 onWidthChange(field, x - initialX)
                 onWidthDraftCancel(field)
             }
-        })
+        }, { retainTarget: true, retainHandler: true })
         return () => removeDragListener && removeDragListener(resizable)
     }, [addDragListener, field, onWidthChange, onWidthDraft, onWidthDraftCancel, removeDragListener, resizingEnabled])
     return resizableRef

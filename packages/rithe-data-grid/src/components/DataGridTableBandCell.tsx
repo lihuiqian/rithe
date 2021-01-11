@@ -21,7 +21,7 @@ export interface DataGridTableBandCellProps {
     onXAxisDraft: (fields: string[], delta: number) => void,
     onXAxisDraftCancel: (fields: string[]) => void,
     // event
-    addDragListener?: (target: EventTarget, eventHandler: DragHandler) => void,
+    addDragListener?: (target: EventTarget, eventHandler: DragHandler, options?: { retainTarget?: boolean, retainHandler?: boolean }) => void,
     removeDragListener?: (target: EventTarget) => void,
     // cell
     colSpan?: number,
@@ -83,7 +83,7 @@ const useColumnOrder = (props: DataGridTableBandCellProps) => {
                 x < left ? onXAxisChange(fields, x - left) : x > right ? onXAxisChange(fields, x - right) : onXAxisChange(fields, 0)
                 onXAxisDraftCancel(fields)
             }
-        })
+        }, { retainTarget: true, retainHandler: true })
         return () => {
             removeDragListener && removeDragListener(draggable)
         }
@@ -108,7 +108,7 @@ const useColumnResize = (props: DataGridTableBandCellProps) => {
                 onWidthChange(fields, x - initialX)
                 onWidthDraftCancel(fields)
             }
-        })
+        }, { retainTarget: true, retainHandler: true })
         return () => removeDragListener && removeDragListener(resizable)
     }, [addDragListener, fields, onWidthChange, onWidthDraft, onWidthDraftCancel, removeDragListener, resizingEnabled])
     return resizableRef

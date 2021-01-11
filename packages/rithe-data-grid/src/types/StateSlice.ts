@@ -28,7 +28,7 @@ interface StateSlice {
     draftColumnOrder: (fields: string[], delta: number) => void,
     cancelColumnOrderDraft: (fields: string[]) => void,
     // TableLayout
-    addDragListener: (target: EventTarget, eventHandler: DragHandler) => void,
+    addDragListener: (target: EventTarget, eventHandler: DragHandler, options?: { retainTarget?: boolean, retainHandler?: boolean }) => void,
     removeDragListener: (target: EventTarget) => void,
 }
 

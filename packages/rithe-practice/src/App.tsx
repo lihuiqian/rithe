@@ -1,5 +1,6 @@
 import { ColumnOrdering, ColumnResizing, Data, DataGrid, TableBodyLayout, TableHeadLayout, TableLayout } from '@rithe/data-grid';
 import React, { useMemo } from 'react';
+import { Arrays } from '../../rithe-data-grid/node_modules/@rithe/utils/dist';
 import { Debugger } from './Debugger';
 
 function App() {
@@ -7,7 +8,7 @@ function App() {
   const columns = useMemo(() => [{ field: 'string', dataTypeName: 'string', title: 'String', categories: ['CATEGORY A', 'CATEGORY B'] },
   { field: 'number', dataTypeName: 'number', title: 'Number', categories: ['CATEGORY A'] },
   { field: 'boolean', dataTypeName: 'boolean', title: 'Boolean' }], [])
-  const rows = useMemo(() => [{ string: 'A', number: 1234.56 }, { string: 'B', number: 2345.67 }], [])
+  const rows = useMemo(() => Arrays.range(0, 2000).map(index => ({ string: index + 'Str', number: index, boolean: index % 2 === 0 })), [])
 
   return <DataGrid>
     <Data columns={columns} rows={rows} />

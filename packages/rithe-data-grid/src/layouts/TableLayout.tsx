@@ -7,8 +7,8 @@ import { ColumnWidthAdjustment } from "../plugins/ColumnWidthAdjustment";
 import { StatePipe } from "../StatePipe";
 import DragHandler from "../types/DragHandler";
 
-type DragHandlerMap = Map<EventTarget, DragHandler>
-type AddDragListener = (target: EventTarget, eventHandler: DragHandler) => void
+type DragHandlerMap = Map<EventTarget, { handler: DragHandler, options: { retainTarget: boolean, retainHandler: boolean } }>
+type AddDragListener = (target: EventTarget, eventHandler: DragHandler, options?: { retainTarget?: boolean, retainHandler?: boolean }) => void
 type RemoveDragListener = (target: EventTarget) => void
 
 interface TableLayoutProps {
@@ -35,8 +35,8 @@ const TableLayout = ({ children }: TableLayoutProps) => {
 
 const useDragHandlers = () => {
     const ref = useRef<DragHandlerMap>(new Map())
-    const addDragListener = useCallback<AddDragListener>((target, eventHandler) => {
-        ref.current.set(target, eventHandler)
+    const addDragListener = useCallback<AddDragListener>((target, eventHandler, options) => {
+        ref.current.set(target, { handler: eventHandler, options: { retainTarget: options?.retainHandler ?? false, retainHandler: options?.retainHandler ?? false } })
     }, [])
     const removeDragListener = useCallback<RemoveDragListener>(target => {
         ref.current.delete(target)
@@ -45,28 +45,37 @@ const useDragHandlers = () => {
 }
 
 const useDragBind = (dragHandlers: DragHandlerMap) => {
-    const targetRef = useRef<{ element: HTMLElement, initialRect: DOMRect } | null>(null)
+    const initialRef = useRef<{ element: HTMLElement, handler: DragHandler, options: { retainTarget: boolean, retainHandler: boolean }, rect: DOMRect } | null>(null)
     const handler = useCallback((state: Omit<Parameters<DragHandler>[0], 'initialRect'>) => {
         const { down, first, event } = state
         if (first) {
-            const { target: inner, currentTarget: outer } = event
-            let target = inner as HTMLElement | null
-            while (target !== null && target !== outer && !dragHandlers.has(target)) {
-                target = target.parentElement
+            const eventTarget = findEventTarget(event, dragHandlers)
+            if (eventTarget) {
+                const { handler, options } = dragHandlers.get(eventTarget)!
+                initialRef.current = { element: eventTarget, handler, options, rect: eventTarget.getBoundingClientRect() }
             }
-            target && (targetRef.current = { element: target, initialRect: target?.getBoundingClientRect() })
         }
-        const target = targetRef.current
-        if (target) {
-            const handler = dragHandlers.get(target.element)
-            handler && handler({ ...state, initialRect: target.initialRect })
+        const initial = initialRef.current
+        if (initial) {
+            const eventTarget = initial.options.retainTarget ? initial.element : findEventTarget(event, dragHandlers)
+            const handler = initial.options.retainHandler ? initial.handler : eventTarget ? dragHandlers.get(eventTarget)?.handler : undefined
+            handler && handler({ ...state, initialRect: initial.rect })
         }
         if (!down) {
-            targetRef.current = null
+            initialRef.current = null
         }
     }, [dragHandlers])
     const throttledHandler = useAnimationThrottle(handler)
     return useDrag(throttledHandler)
+}
+
+function findEventTarget(event: React.PointerEvent<Element> | PointerEvent, dragHandlers: DragHandlerMap) {
+    const { target: inner, currentTarget: outer } = event
+    let target = inner as HTMLElement | null
+    while (target !== null && target !== outer && !dragHandlers.has(target)) {
+        target = target.parentElement
+    }
+    return target
 }
 
 export { TableLayoutProps, TableLayout };
