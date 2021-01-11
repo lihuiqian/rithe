@@ -37,21 +37,23 @@ export const DataGridTableHeaderCell = React.memo((props: DataGridTableHeaderCel
     const draggableRef = useColumnOrder(props)
     const resizableRef = useColumnResize(props)
 
-    const { title, align, resizingEnabled, draggingEnabled, width, colSpan, rowSpan } = props
+    const { title, align, dataType, column, resizingEnabled, draggingEnabled, width, colSpan, rowSpan } = props
     const { tableHeadCellComponent: Th } = useDataGridTheme()
+    const Title = dataType.titleComponent
+    const cellStyle = useMemo<CSSProperties>(() => ({
+        boxSizing: 'border-box',
+        width,
+        maxWidth: width,
+        minWidth: width,
+    }), [width])
     const contentStyle = useMemo<CSSProperties>(() => ({
         display: 'flex',
-        position: 'relative',
-        width,
-        flexDirection: 'row',
-        justifyContent: align,
+        justifyContent: align === 'center' ? 'center' : `flex-${align}`,
         alignItems: 'stretch',
+        position: 'relative',
         cursor: draggingEnabled ? 'grab' : 'default',
         userSelect: 'none',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-    }), [align, draggingEnabled, width])
+    }), [align, draggingEnabled])
     const resizeHandlerStype = useMemo<CSSProperties>(() => ({
         width: 4,
         height: '100%',
@@ -60,9 +62,9 @@ export const DataGridTableHeaderCell = React.memo((props: DataGridTableHeaderCel
         position: 'absolute',
         right: 0,
     }), [])
-    return <Th colSpan={colSpan} rowSpan={rowSpan}>
+    return <Th colSpan={colSpan} rowSpan={rowSpan} style={cellStyle}>
         <div ref={draggableRef} style={contentStyle}>
-            {title}
+            <Title title={title} dataType={dataType} column={column} />
             {resizingEnabled && <div ref={resizableRef} style={resizeHandlerStype}></div>}
         </div>
     </Th>

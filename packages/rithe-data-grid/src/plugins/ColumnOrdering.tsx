@@ -45,25 +45,22 @@ const useExcludes = (columnOrder?: string[]) => {
     }, [columnOrder])
 }
 
-const useChangeColumnOrder = (columnOrder: string[] | undefined, setColumnOrder: (columnOrder: string[]) => void, setDraftColumnDeltas: Dispatch<SetStateAction<DraftColumnOrderDelta | undefined>>) => {
+const useChangeColumnOrder = (columnOrder: string[] | undefined, setColumnOrder: (columnOrder: string[]) => void, setDraftColumnDelta: Dispatch<SetStateAction<DraftColumnOrderDelta | undefined>>) => {
     return useCallback((fields: string[], delta: number) => {
         if (!columnOrder || fields.length === 0 || delta === 0) return
-        console.log('change', fields, delta)
         setColumnOrder(patchDeltaToOrder(columnOrder, fields, delta))
-        setDraftColumnDeltas(undefined)
-    }, [columnOrder, setColumnOrder, setDraftColumnDeltas])
+        setDraftColumnDelta(undefined)
+    }, [columnOrder, setColumnOrder, setDraftColumnDelta])
 }
 
 const useDraftColumnOrder = (setDraftColumnDelta: Dispatch<SetStateAction<DraftColumnOrderDelta | undefined>>) => {
     return useCallback((fields: string[], delta: number) => {
-        console.log('draft', fields, delta)
         setDraftColumnDelta({ fields, delta })
     }, [setDraftColumnDelta])
 }
 
 const useCancelColumnOrderDraft = (setDraftColumnDeltas: Dispatch<SetStateAction<DraftColumnOrderDelta | undefined>>) => {
     return useCallback(() => {
-        console.log('cancel')
         setDraftColumnDeltas(undefined)
     }, [setDraftColumnDeltas])
 }
@@ -75,7 +72,6 @@ const useDisplayColumns = (columnOrder?: string[], draftColumnDelta?: DraftColum
 
         const patched = patchDeltaToOrder(columnOrder, draftColumnDelta?.fields ?? [], draftColumnDelta?.delta ?? 0)
 
-        console.log(columnOrder, draftColumnDelta, patched)
         return Arrays.sort(displayColumns, Comparators.compare(c => patched.indexOf(c.field), Comparators.natualOrder()))
     }, [columnOrder, draftColumnDelta])
 }

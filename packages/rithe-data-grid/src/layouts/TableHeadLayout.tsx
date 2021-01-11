@@ -1,28 +1,28 @@
 import { Plugin } from "@rithe/plugin";
-import { Arrays, Comparators, iter } from "@rithe/utils";
+import { Arrays, Comparators, iter, usePrevious } from "@rithe/utils";
 import React, { ComponentType, useCallback, useMemo, useRef } from "react";
 import { DataGridTableBandCell, DataGridTableBandCellProps } from "../components/DataGridTableBandCell";
+import { DataGridTableHeader, DataGridTableHeaderProps } from "../components/DataGridTableHeader";
 import { DataGridTableHeaderCell, DataGridTableHeaderCellProps } from "../components/DataGridTableHeaderCell";
 import { DataGridTableHeaderRow, DataGridTableHeaderRowProps } from "../components/DataGridTableHeaderRow";
-import { useDataGridTheme } from "../components/DataGridTheme";
 import useUnknownDataType from "../hooks/useUnknownDataType";
 import Column from "../types/Column";
 import DataType from "../types/DataType";
 import useStateSlice from "../useStateSlice";
 
 export interface TableHeadLayoutProps {
+    headComponent?: ComponentType<DataGridTableHeaderProps>,
     rowComponent?: ComponentType<DataGridTableHeaderRowProps>,
     cellComponent?: ComponentType<DataGridTableHeaderCellProps>,
     bandComponent?: ComponentType<DataGridTableBandCellProps>,
 }
 
 export const TableHeadLayout = ({
+    headComponent: Head = DataGridTableHeader,
     rowComponent: Row = DataGridTableHeaderRow,
     cellComponent: Cell = DataGridTableHeaderCell,
     bandComponent: Band = DataGridTableBandCell,
 }: TableHeadLayoutProps) => {
-    const { tableHeadComponent: TableHead } = useDataGridTheme()
-
     const {
         dataTypes, displayColumns,
         columnResizingEnabled, columnResizingExcludes, columnResizingDraft, changeColumnWidth, draftColumnWidth, cancelColumnWidthDraft,
@@ -35,7 +35,10 @@ export const TableHeadLayout = ({
         'addDragListener', 'removeDragListener',
     )
 
+    const prevDisplayColumns = usePrevious(displayColumns)
+    console.log('displayColumns', prevDisplayColumns === displayColumns, prevDisplayColumns?.map(c => c.field).join(','), displayColumns?.map(c => c.field).join(','))
     const rowCol = useMemo<([colIndex: number, catIndex: number, colSpan: number, rowSpan: number] | undefined)[][]>(() => {
+        console.log('recalc')
         if (!displayColumns) return []
         const rowCount = 1 + (Arrays.max(displayColumns.map(dc => dc.categories?.length ?? 0), Comparators.natualOrder()) ?? 0)
         const colRow = displayColumns.map((col, colIndex) => {
@@ -55,7 +58,7 @@ export const TableHeadLayout = ({
     }, [displayColumns])
 
     const unknownDataType = useUnknownDataType()
-    const dataTypeMap = useMemo(() => iter(dataTypes ?? []).asMap((dataType: DataType<any>) => [dataType.name, dataType]).value, [])
+    const dataTypeMap = useMemo(() => iter(dataTypes ?? []).asMap((dataType: DataType<any>) => [dataType.name, dataType]).value, [dataTypes])
     const getDataType = useCallback((field: string) => {
         return dataTypeMap.get(field) ?? unknownDataType
     }, [dataTypeMap, unknownDataType])
@@ -73,9 +76,8 @@ export const TableHeadLayout = ({
     const bandXAxisDraft = useCallback((fields: string[], delta: number) => draftColumnOrder && draftColumnOrder(fields, getDeltaOrder(realDisplayColumns, fields, delta)), [realDisplayColumns, draftColumnOrder])
     const bandXAxisDraftCancel = useCallback((fields: string[]) => cancelColumnOrderDraft && cancelColumnOrderDraft(fields), [cancelColumnOrderDraft])
 
-    console.log(JSON.stringify(displayColumns?.map(dc => dc.width)))
     return <Plugin>
-        <TableHead>
+        <Head>
             {rowCol.map((cells, rowIndex) => {
                 return <Row key={rowIndex}>
                     {cells.map(cell => {
@@ -85,13 +87,14 @@ export const TableHeadLayout = ({
                             const columns = Arrays.range(colIndex, colSpan).map(index => displayColumns![index])
                             const dataTypes = columns.map(({ field }) => getDataType(field))
                             const title = columns[0].categories![catIndex], align = 'center'
+                            const width = columns.map(c => c.width ?? 0).reduce((a, b) => a + b, 0)
                             const resizingEnabled = !!columnResizingEnabled && columns.map(({ field }) => (columnResizingExcludes?.indexOf(field) ?? -1) < 0).reduce((a, b) => a || b, false)
                             const draggingEnabled = !!columnDraggingEnabled && columns.map(({ field }) => (columnDraggingExcludes?.indexOf(field) ?? -1) < 0).reduce((a, b) => a && b, true)
                             return <Band key={columns[0].field} title={title} align={align} dataTypes={dataTypes} columns={columns}
                                 addDragListener={addDragListener} removeDragListener={removeDragListener}
                                 resizingEnabled={resizingEnabled} onWidthChange={bandWidthChange} onWidthDraft={bandWidthDraft} onWidthDraftCancel={bandWidthDraftCancel}
                                 draggingEnabled={draggingEnabled} onXAxisChange={bandXAxisChange} onXAxisDraft={bandXAxisDraft} onXAxisDraftCancel={bandXAxisDraftCancel}
-                                colSpan={colSpan} rowSpan={rowSpan} />
+                                width={width} colSpan={colSpan} rowSpan={rowSpan} />
                         } else {
                             const column = displayColumns![colIndex]
                             const { field, title, width } = column, align = 'center'
@@ -107,7 +110,7 @@ export const TableHeadLayout = ({
                     })}
                 </Row>
             })}
-        </TableHead>
+        </Head>
     </Plugin>
 }
 

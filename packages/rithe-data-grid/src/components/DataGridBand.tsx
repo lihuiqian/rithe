@@ -3,14 +3,14 @@ import Column from "../types/Column"
 import DataType from "../types/DataType"
 import { useDataGridTheme } from "./DataGridTheme"
 
-interface DataGridTitleProps {
+interface DataGridBandProps {
     title: string,
-    dataType: DataType<any>,
-    column: Column,
+    dataTypes: DataType<any>[],
+    columns: Column[],
 }
 
 // eslint-disable-next-line react/display-name
-const DataGridTitle = React.memo(({ title }: DataGridTitleProps) => {
+const DataGridBand = React.memo(({ title }: DataGridBandProps) => {
     const { typographyComponent: Typography } = useDataGridTheme()
     const style: CSSProperties = useMemo(() => ({
         display: 'inline-block',
@@ -23,5 +23,5 @@ const DataGridTitle = React.memo(({ title }: DataGridTitleProps) => {
     return <Typography title={title} style={style}>{title}</Typography>
 })
 
-export { DataGridTitleProps, DataGridTitle }
+export { DataGridBandProps, DataGridBand }
 

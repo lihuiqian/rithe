@@ -8,7 +8,7 @@ function App() {
   const columns = useMemo(() => [{ field: 'string', dataTypeName: 'string', title: 'String', categories: ['CATEGORY A', 'CATEGORY B'] },
   { field: 'number', dataTypeName: 'number', title: 'Number', categories: ['CATEGORY A'] },
   { field: 'boolean', dataTypeName: 'boolean', title: 'Boolean' }], [])
-  const rows = useMemo(() => Arrays.range(0, 2000).map(index => ({ string: index + 'Str', number: index, boolean: index % 2 === 0 })), [])
+  const rows = useMemo(() => Arrays.range(0, 20).map(index => ({ string: index + 'Str', number: index, boolean: index % 2 === 0 })), [])
 
   return <DataGrid>
     <Data columns={columns} rows={rows} />

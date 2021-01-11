@@ -2,6 +2,7 @@ import React, { CSSProperties, useEffect, useMemo, useRef } from "react";
 import { Align, Column } from "..";
 import DataType from "../types/DataType";
 import DragHandler from "../types/DragHandler";
+import { DataGridBand } from "./DataGridBand";
 import { useDataGridTheme } from "./DataGridTheme";
 
 export interface DataGridTableBandCellProps {
@@ -24,6 +25,7 @@ export interface DataGridTableBandCellProps {
     addDragListener?: (target: EventTarget, eventHandler: DragHandler, options?: { retainTarget?: boolean, retainHandler?: boolean }) => void,
     removeDragListener?: (target: EventTarget) => void,
     // cell
+    width?: number,
     colSpan?: number,
     rowSpan?: number,
 }
@@ -34,21 +36,21 @@ export const DataGridTableBandCell = React.memo((props: DataGridTableBandCellPro
     const draggableRef = useColumnOrder(props)
     const resizableRef = useColumnResize(props)
 
-    const { title, align, columns, resizingEnabled, draggingEnabled, colSpan, rowSpan } = props
+    const { title, align, dataTypes, columns, resizingEnabled, draggingEnabled, width, colSpan, rowSpan } = props
     const { tableHeadCellComponent: Th } = useDataGridTheme()
-    // const width = columns.map(c => c.width ?? 0).reduce((a, b) => a + b, 0)
+    const cellStyle = useMemo<CSSProperties>(() => ({
+        boxSizing: 'border-box',
+        width,
+        maxWidth: width,
+        minWidth: width,
+    }), [width])
     const contentStyle = useMemo<CSSProperties>(() => ({
         display: 'flex',
-        position: 'relative',
-        // width,
-        flexDirection: 'row',
-        justifyContent: align,
+        justifyContent: align === 'center' ? 'center' : `flex-${align}`,
         alignItems: 'stretch',
+        position: 'relative',
         cursor: draggingEnabled ? 'grab' : 'default',
         userSelect: 'none',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
     }), [align, draggingEnabled])
     const resizeHandlerStype = useMemo<CSSProperties>(() => ({
         width: 4,
@@ -58,9 +60,9 @@ export const DataGridTableBandCell = React.memo((props: DataGridTableBandCellPro
         position: 'absolute',
         right: 0,
     }), [])
-    return <Th colSpan={colSpan} rowSpan={rowSpan}>
+    return <Th colSpan={colSpan} rowSpan={rowSpan} style={cellStyle}>
         <div ref={draggableRef} style={contentStyle}>
-            {title}
+            <DataGridBand title={title} dataTypes={dataTypes} columns={columns} />
             {resizingEnabled && <div ref={resizableRef} style={resizeHandlerStype}></div>}
         </div>
     </Th>
