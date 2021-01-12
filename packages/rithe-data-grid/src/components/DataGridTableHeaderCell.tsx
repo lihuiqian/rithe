@@ -1,7 +1,9 @@
-import React, { CSSProperties, useEffect, useMemo, useRef } from "react";
+import React, { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { useHover } from "react-use-gesture";
 import { Align, Column } from "..";
+import BindOptions from "../types/BindOptions";
 import DataType from "../types/DataType";
-import DragHandler from "../types/DragHandler";
+import DragState from "../types/DragState";
 import Frozen from "../types/Frozen";
 import { useDataGridTheme } from "./DataGridTheme";
 
@@ -13,7 +15,7 @@ export interface DataGridTableHeaderCellProps {
     dataType: DataType<any>,
     column: Column,
     // event
-    addDragListener?: (target: EventTarget, eventHandler: DragHandler, options?: { retainTarget?: boolean, retainHandler?: boolean }) => void,
+    addDragListener?: (target: EventTarget, eventHandler: (state: DragState) => void, options?: Partial<BindOptions>) => void,
     removeDragListener?: (target: EventTarget) => void,
     // resizing
     resizingEnabled: boolean,
@@ -36,6 +38,10 @@ export const DataGridTableHeaderCell = React.memo((props: DataGridTableHeaderCel
 
     const draggableRef = useColumnOrder(props)
     const resizableRef = useColumnResize(props)
+    const [hover, setHover] = useState(false)
+    const bind = useHover(({ hovering }) => {
+        setHover(hovering)
+    })
 
     const { title, align, dataType, column, resizingEnabled, draggingEnabled, width, colSpan, rowSpan } = props
     const { tableHeadCellComponent: Th } = useDataGridTheme()
@@ -55,15 +61,19 @@ export const DataGridTableHeaderCell = React.memo((props: DataGridTableHeaderCel
         userSelect: 'none',
     }), [align, draggingEnabled])
     const resizeHandlerStype = useMemo<CSSProperties>(() => ({
+        boxSizing: 'border-box',
         width: 4,
         height: '100%',
-        background: 'blue',
+        borderLeft: '1px solid #404040',
+        borderRight: '1px solid #404040',
         cursor: 'col-resize',
         position: 'absolute',
         right: 0,
-    }), [])
+        opacity: hover ? 1 : 0,
+        transition: 'opacity 200ms ease-in-out',
+    }), [hover])
     return <Th colSpan={colSpan} rowSpan={rowSpan} style={cellStyle}>
-        <div ref={draggableRef} style={contentStyle}>
+        <div ref={draggableRef}  {...bind()} style={contentStyle}>
             <Title title={title} dataType={dataType} column={column} />
             {resizingEnabled && <div ref={resizableRef} style={resizeHandlerStype}></div>}
         </div>
@@ -71,7 +81,7 @@ export const DataGridTableHeaderCell = React.memo((props: DataGridTableHeaderCel
 })
 
 const useColumnOrder = (props: DataGridTableHeaderCellProps) => {
-    const draggableRef = useRef<HTMLTableHeaderCellElement | null>(null)
+    const draggableRef = useRef<HTMLDivElement | null>(null)
     const { column: { field }, draggingEnabled, addDragListener, removeDragListener, onXAxisChange, onXAxisDraft, onXAxisDraftCancel } = props
     useEffect(() => {
         const draggable = draggableRef.current

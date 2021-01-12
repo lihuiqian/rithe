@@ -1,6 +1,7 @@
+import BindOptions from "./BindOptions";
 import Column from "./Column";
 import DataType from "./DataType";
-import DragHandler from "./DragHandler";
+import DragState from "./DragState";
 import Row from "./Row";
 import RowId from "./RowId";
 
@@ -28,7 +29,7 @@ interface StateSlice {
     draftColumnOrder: (fields: string[], delta: number) => void,
     cancelColumnOrderDraft: (fields: string[]) => void,
     // TableLayout
-    addDragListener: (target: EventTarget, eventHandler: DragHandler, options?: { retainTarget?: boolean, retainHandler?: boolean }) => void,
+    addDragListener: (target: EventTarget, eventHandler: (state: DragState) => void, options?: Partial<BindOptions>) => void,
     removeDragListener: (target: EventTarget) => void,
 }
 

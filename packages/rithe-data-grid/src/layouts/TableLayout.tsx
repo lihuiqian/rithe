@@ -4,12 +4,12 @@ import React, { ComponentType, ReactNode, useCallback, useRef } from "react";
 import { DataGridTable, DataGridTableProps } from "../components/DataGridTable";
 import { ColumnWidthAdjustment } from "../plugins/ColumnWidthAdjustment";
 import { StatePipe } from "../StatePipe";
-import DragHandler from "../types/DragHandler";
+import BindOptions from "../types/BindOptions";
+import DragState from "../types/DragState";
 
-type DragHandlerMap = Map<EventTarget, { handler: DragHandler, options: { retainTarget: boolean, retainHandler: boolean } }>
-type AddDragListener = (target: EventTarget, eventHandler: DragHandler, options?: { retainTarget?: boolean, retainHandler?: boolean }) => void
+type DragHandlerMap = Map<EventTarget, { handler: (state: DragState) => void, options: BindOptions }>
+type AddDragListener = (target: EventTarget, eventHandler: (state: DragState) => void, options?: Partial<BindOptions>) => void
 type RemoveDragListener = (target: EventTarget) => void
-
 interface TableLayoutProps {
     tableComponent?: ComponentType<DataGridTableProps>,
     children: ReactNode | ReactNode[],
@@ -19,14 +19,14 @@ const TableLayout = ({
     tableComponent: Table = DataGridTable,
     children
 }: TableLayoutProps) => {
-    const [dragHandlers, addDragListener, removeDragListener] = useDragHandlers()
+    const [dragHandlerMap, addDragListener, removeDragListener] = useDragHandlers()
     const [measureRef, rect] = useMeasure<HTMLDivElement>()
     return <Plugin>
         <ColumnWidthAdjustment tableWidth={rect?.width} />
         <StatePipe name="addDragListener" value={addDragListener} />
         <StatePipe name="removeDragListener" value={removeDragListener} />
         <div ref={measureRef}>
-            <Table dragHandlerMap={dragHandlers}>
+            <Table dragHandlerMap={dragHandlerMap}>
                 {children}
             </Table>
         </div>
