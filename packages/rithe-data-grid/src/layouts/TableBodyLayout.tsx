@@ -30,7 +30,6 @@ export const TableBodyLayout = ({
     const getDataType = useCallback((field: string) => {
         return dataTypeMap.get(field) ?? unknownDataType
     }, [dataTypeMap, unknownDataType])
-
     return <Plugin>
         <Body>
             {displayRows?.map((row, rowIndex) => {

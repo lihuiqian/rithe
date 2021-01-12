@@ -4,6 +4,7 @@ import DataType from "./DataType";
 import DragState from "./DragState";
 import Row from "./Row";
 import RowId from "./RowId";
+import Toggle from "./Toggle";
 
 interface StateSlice {
     // DataTypeProvider
@@ -28,6 +29,15 @@ interface StateSlice {
     changeColumnOrder: (fields: string[], delta: number) => void,
     draftColumnOrder: (fields: string[], delta: number) => void,
     cancelColumnOrderDraft: (fields: string[]) => void,
+    // Selection
+    selectionEnabled: boolean,
+    highlightSelectedRows: boolean,
+    selectByRowClick: boolean,
+    selectedRowIds: RowId[],
+    allSelected: boolean,
+    someSelected: boolean,
+    toggleSelection: (rowIds: RowId[], toggle: Toggle) => void,
+    toggleSelectAll: (toggle: Toggle) => void,
     // TableLayout
     addDragListener: (target: EventTarget, eventHandler: (state: DragState) => void, options?: Partial<BindOptions>) => void,
     removeDragListener: (target: EventTarget) => void,

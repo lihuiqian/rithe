@@ -1,5 +1,5 @@
 import { Comparator } from '@rithe/utils'
-import { JSXElementConstructor } from 'react'
+import { ComponentType } from 'react'
 import { DataGridEditorProps } from '../components/DataGridEditor'
 import { DataGridFilterProps } from '../components/DataGridFilter'
 import { DataGridFormatterProps } from '../components/DataGridFormatter'
@@ -22,6 +22,7 @@ interface DataTypeInfer {
     // eslint-disable-next-line @typescript-eslint/ban-types
     'object': object,
     'array': any[],
+    'action': any,
 }
 
 interface DataType<T extends keyof DataTypeInfer> {
@@ -31,10 +32,10 @@ interface DataType<T extends keyof DataTypeInfer> {
     formatter: Formatter<T>,
     comparator: Comparator<DataTypeInfer[T]>
     predicates: Partial<{ [predicator in FilterPredicator]: FilterPredicate }>,
-    titleComponent: JSXElementConstructor<DataGridTitleProps>,
-    filterComponents: { name: string, filterComponent: JSXElementConstructor<DataGridFilterProps> }[],
-    formatterComponent: JSXElementConstructor<DataGridFormatterProps>,
-    editorComponent: JSXElementConstructor<DataGridEditorProps>,
+    titleComponent: ComponentType<DataGridTitleProps>,
+    filterComponents: { name: string, filterComponent: ComponentType<DataGridFilterProps> }[],
+    formatterComponent: ComponentType<DataGridFormatterProps>,
+    editorComponent: ComponentType<DataGridEditorProps>,
 }
 
 export { DataTypeInfer }

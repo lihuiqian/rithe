@@ -1,4 +1,4 @@
-import { ColumnOrdering, ColumnResizing, Data, DataGrid, TableBodyLayout, TableHeadLayout, TableLayout } from '@rithe/data-grid';
+import { ColumnOrdering, ColumnResizing, Data, DataGrid, RowSelection, SelectionColumn, TableBodyLayout, TableHeadLayout, TableLayout } from '@rithe/data-grid';
 import React, { useMemo } from 'react';
 import { Arrays } from '../../rithe-data-grid/node_modules/@rithe/utils/dist';
 import { Debugger } from './Debugger';
@@ -14,6 +14,8 @@ function App() {
     <Data columns={columns} rows={rows} />
     <ColumnResizing defaultColumnWidths={[{ field: 'string', width: 150 }]} />
     <ColumnOrdering defaultColumnOrder={['number', 'string', 'boolean']} />
+    <RowSelection />
+    <SelectionColumn />
     <TableLayout>
       <TableHeadLayout />
       <TableBodyLayout />
