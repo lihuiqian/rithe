@@ -1,26 +1,26 @@
 import { useShallow } from '@rithe/utils'
 import React, { useContext, useEffect } from 'react'
-import PluginContext from './internal/PluginContext'
-import PositionContext from './internal/PositionContext'
+import { PositionContext } from './internal/PositionContext'
+import { StateContext } from './internal/StateContext'
 
-interface ValuePipeProps {
+export interface ValueStateProps {
     name: string,
     value: any,
 }
 
-interface ComputedPipeProps {
+export interface ComputedStateProps {
     name: string,
     computed: (prev: any, ...deps: any[]) => any,
     dependencyNames?: string[],
     lazy?: boolean,
 }
 
-type PipeProps = ValuePipeProps | ComputedPipeProps
+export type StateProps = ValueStateProps | ComputedStateProps
 
-const Pipe = (props: PipeProps) => {
+export const State = (props: StateProps) => {
     const position = useContext(PositionContext)
-    const { register, unregister } = useContext(PluginContext)
-    const { name, value, computed, dependencyNames, lazy } = props as ValuePipeProps & ComputedPipeProps
+    const { register, unregister } = useContext(StateContext)
+    const { name, value, computed, dependencyNames, lazy } = props as ValueStateProps & ComputedStateProps
 
     useEffect(() => {
         computed || register(name, position, value)
@@ -34,6 +34,3 @@ const Pipe = (props: PipeProps) => {
     }, [computed, lazy, name, position, register, shallowedDependencyNames, unregister])
     return <></>
 }
-
-export default Pipe
-

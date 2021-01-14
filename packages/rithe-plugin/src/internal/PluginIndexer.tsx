@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback, useContext, useState } from 'react'
-import PositionContext from './PositionContext'
+import { PositionContext } from './PositionContext'
 
-const PluginIndexer = ({ children }: { children: ReactNode | ReactNode[] }) => {
+export const PluginIndexer = ({ children }: { children: ReactNode | ReactNode[] }) => {
     const [cache, setCache] = useState<{ [index: number]: number[] }>({})
 
     const addCache = useCallback((index: number, position: number[]) => {
@@ -23,5 +23,3 @@ const PluginIndexer = ({ children }: { children: ReactNode | ReactNode[] }) => {
         })}
     </>
 }
-
-export default PluginIndexer

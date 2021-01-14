@@ -1,7 +1,6 @@
-export { default as Pipe } from './Pipe'
-export { default as Plugin } from './Plugin'
-export { default as PluginHost } from './PluginHost'
-export { default as useDebug } from './useDebug'
-export { default as usePrevious } from './usePrevious'
-export { default as useSlice } from './useSlice'
+export * from './Plugin'
+export * from './PluginHost'
+export * from './State'
+export * from './useDebug'
+export * from './useStates'
 

@@ -1,12 +1,12 @@
 import { useContext } from "react"
-import PluginContext from "./internal/PluginContext"
-import PositionContext from "./internal/PositionContext"
+import { PositionContext } from "./internal/PositionContext"
+import { StateContext } from "./internal/StateContext"
+import { TemplateContext } from "./internal/TemplateContext"
 
-const useDebug = () => {
+export const useDebug = () => {
     const position = useContext(PositionContext)
-    const { registry } = useContext(PluginContext)
-    console.log('useDebug', JSON.stringify(position), registry)
+    const { registry: stateRegistry } = useContext(StateContext)
+    const { registry: templateRegistry } = useContext(TemplateContext)
+    console.log('useDebug', JSON.stringify(position), stateRegistry, templateRegistry)
     console.log('')
 }
-
-export default useDebug
