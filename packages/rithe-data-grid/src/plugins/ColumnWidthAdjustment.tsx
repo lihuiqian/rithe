@@ -1,7 +1,7 @@
 import { Plugin } from "@rithe/plugin"
 import { Arrays, iter } from "@rithe/utils"
 import React, { useCallback } from "react"
-import { StatePipe } from "../StatePipe"
+import { StatePipe } from "../State"
 import Column from "../types/Column"
 
 const DEFAULT_WIDTH = 120

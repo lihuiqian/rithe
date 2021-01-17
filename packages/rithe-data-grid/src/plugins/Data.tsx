@@ -1,6 +1,6 @@
 import { Plugin } from '@rithe/plugin';
 import React, { useCallback } from "react";
-import { StatePipe } from '../StatePipe';
+import { StatePipe } from '../State';
 import Column from "../types/Column";
 import Row from "../types/Row";
 import RowId from "../types/RowId";

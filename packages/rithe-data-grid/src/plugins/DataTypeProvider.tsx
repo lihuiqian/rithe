@@ -1,7 +1,7 @@
 import { Plugin } from "@rithe/plugin";
 import { iter } from "@rithe/utils";
 import React, { useCallback } from "react";
-import { StatePipe } from "../StatePipe";
+import { StatePipe } from "../State";
 import DataType from "../types/DataType";
 
 interface DataTypeProviderProps {

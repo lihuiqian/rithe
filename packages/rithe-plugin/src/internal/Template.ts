@@ -1,4 +1,3 @@
-
 export interface Template {
     readonly name: string
     readonly position: number[]

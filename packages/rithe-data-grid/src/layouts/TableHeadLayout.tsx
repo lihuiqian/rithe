@@ -8,7 +8,7 @@ import { DataGridTableHeaderRow, DataGridTableHeaderRowProps } from "../componen
 import useUnknownDataType from "../hooks/useUnknownDataType";
 import Column from "../types/Column";
 import DataType from "../types/DataType";
-import useStateSlice from "../useStateSlice";
+import useStateSlice from "../useStates";
 
 export interface TableHeadLayoutProps {
     headComponent?: ComponentType<DataGridTableHeaderProps>,

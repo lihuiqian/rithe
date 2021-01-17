@@ -8,8 +8,11 @@ export interface RenderProps {
 }
 
 export const Render = ({ name, param }: RenderProps) => {
-    const template = useTemplate(name, param)
-    const states = useStates(...(template?.stateNames ?? []))
+    const { render, stateNames } = useTemplate(name, param)
+    const values = useStates(...(stateNames ?? []))
 
-    return template ? template.render(param, ...states.map(state => state?.value)) : <></>
+    console.log(render)
+    console.log(stateNames, values)
+
+    return render ? render(param, ...values) : <></>
 }

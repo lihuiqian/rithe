@@ -2,7 +2,6 @@ import { useShallowPrevious } from "@rithe/utils"
 import { useContext, useLayoutEffect, useMemo, useReducer, useRef } from "react"
 import { PositionContext } from './internal/PositionContext'
 import { Subscription } from "./internal/Subscription"
-import { Template } from "./internal/Template"
 import { TemplateContext } from './internal/TemplateContext'
 
 export const useTemplate = (name: string, param: any) => {
@@ -14,33 +13,43 @@ export const useTemplate = (name: string, param: any) => {
 
     const latestName = useRef<string>('')
     const latestParam = useRef<any>()
-    const latestTemplate = useRef<Template>()
+    const latestRender = useRef<(param: any, ...states: any[]) => JSX.Element>()
+    const latestStateNames = useRef<string[]>()
 
     const diff = name !== latestName.current || param !== latestParam.current
-    const template = diff ? core.slice(name, position, param) : latestTemplate.current
+    let render: ((param: any, ...states: any[]) => JSX.Element) | undefined, stateNames: string[] | undefined
+    if (diff) {
+        const template = core.slice(name, position, param)
+        template && ({ render, stateNames } = template)
+    } else {
+        render = latestRender.current
+        stateNames = latestStateNames.current
+    }
 
     useLayoutEffect(() => {
         latestName.current = name
         latestParam.current = param
-        latestTemplate.current = template
-    }, [name, param, template])
+        latestRender.current = render
+        latestStateNames.current = stateNames
+    }, [name, param, render, stateNames])
 
     useLayoutEffect(() => {
         const checkForUpdate = () => {
             const newTemplate = core.slice(latestName.current, position, latestParam.current)
-            if (newTemplate !== latestTemplate.current) {
-                latestTemplate.current = newTemplate
+            const newRender = newTemplate?.render
+            const newStateNames = newTemplate?.stateNames
+            if (newRender !== latestRender.current || newStateNames !== latestStateNames.current) {
+                latestRender.current = newRender
+                latestStateNames.current = newStateNames
                 forceUpdate()
             }
         }
-
         sub.subscribe = checkForUpdate
+
         core.subscribe(sub)
-
         checkForUpdate()
-
         return () => core.unsubscribe(sub)
     }, [core, position, sub])
 
-    return template
+    return { render, stateNames }
 }

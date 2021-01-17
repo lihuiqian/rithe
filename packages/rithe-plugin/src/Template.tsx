@@ -6,7 +6,7 @@ import { TemplateContext } from "./internal/TemplateContext";
 export interface TemplateProps {
     name: string,
     predicate: (param: any) => boolean,
-    render: (param: any, ...deps: any[]) => JSX.Element,
+    render: (param: any, ...states: any[]) => JSX.Element,
     stateNames: string[],
 }
 

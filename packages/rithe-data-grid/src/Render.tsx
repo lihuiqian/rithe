@@ -1,13 +1,12 @@
-import React from "react";
-import StateSlice from "./types/StateSlice";
+import { Render as PluginRender } from '@rithe/plugin'
+import React from "react"
+import { TemplateParam } from "./types/TemplateParam"
 
-export interface RenderProps {
-    name: string,
-    params: any,
-    slice: StateSlice,
+export interface RenderProps<T extends keyof TemplateParam> {
+    name: T,
+    param: TemplateParam[T],
 }
 
-export const Render = ({ name, params, slice }: RenderProps) => {
-
-    return <></>
+export const Render = <T extends keyof TemplateParam>(props: RenderProps<T>) => {
+    return <PluginRender {...props} />
 }

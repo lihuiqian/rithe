@@ -3,7 +3,7 @@ import { Arrays, Sets } from "@rithe/utils";
 import React, { useCallback } from "react";
 import { Row, RowId } from "..";
 import useMixed from "../hooks/useMixed";
-import { StatePipe } from "../StatePipe";
+import { StatePipe } from "../State";
 import Toggle from "../types/Toggle";
 
 export interface RowSelectionProps {

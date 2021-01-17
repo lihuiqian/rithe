@@ -6,7 +6,7 @@ import Row from "./Row";
 import RowId from "./RowId";
 import Toggle from "./Toggle";
 
-interface StateSlice {
+export interface StateSlice {
     // DataTypeProvider
     dataTypes: DataType<any>[],
     // Data
@@ -42,5 +42,3 @@ interface StateSlice {
     addDragListener: (target: EventTarget, eventHandler: (state: DragState) => void, options?: Partial<BindOptions>) => void,
     removeDragListener: (target: EventTarget) => void,
 }
-
-export default StateSlice

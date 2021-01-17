@@ -1,4 +1,4 @@
-import { Plugin, PluginHost, Render, State, Template } from '@rithe/plugin';
+import { Debug, Plugin, PluginHost, Render, State, Template } from '@rithe/plugin';
 import React, { useCallback, useState } from 'react';
 
 function App() {
@@ -6,6 +6,7 @@ function App() {
   return <PluginHost>
     <Part1></Part1>
     <Part2></Part2>
+    <Debug></Debug>
   </PluginHost>
 }
 
@@ -20,7 +21,6 @@ function Part1() {
     <State name="arr" value={arr} />
     <Template name="disp" predicate={() => true} render={(param: any, arr: number[]) => <div>{"render1" + JSON.stringify(param)} + {JSON.stringify(arr)}</div>} stateNames={['arr']} />
     <Render name="disp" param={{}} />
-    <Render name="disp" param={'join'} />
   </Plugin>
 }
 
@@ -36,7 +36,6 @@ function Part2() {
     <Template name="num" predicate={() => true} render={(_, num) => <div>{JSON.stringify(num)}</div>} stateNames={['num']} />
     <Template name="disp" predicate={(param) => param === 'join'} render={(param: any, arr: number[]) => <div>{"render2" + JSON.stringify(param)} + {JSON.stringify(arr)}</div>} stateNames={['arr']} />
     <Render name="num" param={{}} />
-    <Render name="disp" param={{}} />
     <Render name="disp" param={'join'} />
   </Plugin>
 }

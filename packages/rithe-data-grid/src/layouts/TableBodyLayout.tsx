@@ -6,7 +6,7 @@ import { DataGridTableBodyCell, DataGridTableBodyCellProps } from "../components
 import { DataGridTableBodyRow, DataGridTableBodyRowProps } from "../components/DataGridTableBodyRow";
 import useUnknownDataType from "../hooks/useUnknownDataType";
 import DataType from "../types/DataType";
-import useStateSlice from "../useStateSlice";
+import useStateSlice from "../useStates";
 
 export interface TableBodyLayoutProps {
     bodyComponent?: ComponentType<DataGridTableBodyProps>,

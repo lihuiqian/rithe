@@ -3,7 +3,7 @@ import { useMeasure } from "@rithe/utils";
 import React, { ComponentType, ReactNode, useCallback, useRef } from "react";
 import { DataGridTable, DataGridTableProps } from "../components/DataGridTable";
 import { ColumnWidthAdjustment } from "../plugins/ColumnWidthAdjustment";
-import { StatePipe } from "../StatePipe";
+import { StatePipe } from "../State";
 import BindOptions from "../types/BindOptions";
 import DragState from "../types/DragState";
 

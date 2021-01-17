@@ -2,7 +2,7 @@ import { Plugin } from '@rithe/plugin'
 import { iter, Maps, Sets } from '@rithe/utils'
 import React, { Dispatch, SetStateAction, useCallback, useState } from "react"
 import useMixed from '../hooks/useMixed'
-import { StatePipe } from '../StatePipe'
+import { StatePipe } from '../State'
 import Column from '../types/Column'
 
 export type ColumnWidth = { field: string, width: number }
