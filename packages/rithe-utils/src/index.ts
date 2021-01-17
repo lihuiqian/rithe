@@ -31,5 +31,5 @@ export { default as Supplier } from './fp/Supplier';
 export { default as useAnimationThrottle } from './hooks/useAnimationThrottle';
 export { default as useMeasure } from './hooks/useMeasure';
 export { default as usePrevious } from './hooks/usePrevious';
-export { default as useShallow } from './hooks/useShallow';
+export { default as useShallowPrevious } from './hooks/useShallowPrevious';
 

@@ -1,44 +1,77 @@
-import { stateComparator } from "./comparators"
-import { ComputedState, State, ValueState } from './State'
-import { StateArray } from "./StateArray"
+import { Arrays } from "@rithe/utils"
+import { insertItem, itemsBetween, itemsNext, itemsPrev, removeItem } from "./helpers"
+import { ComputedState, State } from './State'
+import { Subscription } from './Subscription'
 
 export class StateCore {
 
-    private _stateArray: StateArray
+    private _states: State[]
+    private _subs: Subscription[]
 
     constructor() {
-        this._stateArray = new StateArray()
+        this._states = []
+        this._subs = []
     }
 
-    mount(name: string, position: number[], value: any): void
-    mount(name: string, position: number[], computed: (prev: any, ...deps: any[]) => any, dependencyNames: string[], lazy: boolean): void
-    mount(name: string, position: number[], ...args: any[]): void {
-        const stateArray = this._stateArray
-        const state = args.length === 1 ? new ValueState(stateArray, name, position, args[0]) : new ComputedState(stateArray, name, position, args[0], args[1], args[2])
-        stateArray.add(state)
-        this.mark(state)
+    register(state: State) {
+        insertItem(this._states, state)
+        this._markAndNotify(state)
     }
 
-    unmount(position: number[]) {
-        const state: State | undefined = this._stateArray.remove(position)
-        state && this.mark(state)
+    unregister(state: State) {
+        removeItem(this._states, state)
+        this._markAndNotify(state)
     }
 
-    mark(state: State) {
-        const affectedStates = this._stateArray.affectedStates(state)
-        for (const affectedState of affectedStates) {
-            affectedState.mark()
+    private _markAndNotify(state: State) {
+        const states = this._states
+        const subs = this._subs
+        const pending: State[] = []
+        pending.push(state)
+
+        while (pending.length > 0) {
+            // mark if current state is not state
+            const working = pending.shift()!
+            working === state || working.mark()
+            // notify subscriptions between current state and next state
+            const stateNext = Arrays.first(itemsNext(states, working.position, working.name))
+            const subsBetween = itemsBetween(subs, working.position, stateNext?.position, working.name)
+            subsBetween.forEach(sub => sub.subscribe())
+            // push next state to pending if next state is computed state
+            stateNext && stateNext instanceof ComputedState && pending.push(stateNext)
+            // push states between current state and next state if they are computed state and depends on current state
+            const statesBetween = itemsBetween(states, working.position, stateNext?.position)
+            statesBetween.forEach(state => {
+                state.depNames.indexOf(working.name) >= 0 && pending.push(state)
+            })
         }
     }
 
-    calculate(state: State) {
-        for (const p of this._stateArray) {
-            if (stateComparator(p, state) > 0) break
-            p.dirty && p.calculate()
-        }
+    subscribe(sub: Subscription) {
+        insertItem(this._subs, sub)
     }
 
-    latest(name: string, position: number[]): State | undefined {
-        return this._stateArray.previousState(name, position)
+    unsubscribe(sub: Subscription) {
+        removeItem(this._subs, sub)
     }
+
+    slice(name: string, position: number[]) {
+        const states = this._states
+        // find prev state
+        const statePrev = Arrays.last(itemsPrev(states, position, name))
+        // return if prev state not found or is not dirty
+        if (statePrev === undefined || !statePrev.dirty) return statePrev
+
+        // compute dirty state
+        this._compute(statePrev)
+        return statePrev
+    }
+
+    private _compute(state: State) {
+        const { name, position } = state
+        const prev = this.slice(name, position)?.value
+        const deps = state.depNames.map(name => this.slice(name, position)?.value)
+        state.compute(prev, ...deps)
+    }
+
 }

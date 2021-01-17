@@ -1,18 +1,15 @@
-import { useContext } from "react"
-import { PositionContext } from "./internal/PositionContext"
-import { TemplateContext } from "./internal/TemplateContext"
+import React from "react"
 import { useStates } from "./useStates"
+import { useTemplate } from './useTemplate'
 
 export interface RenderProps {
     name: string,
-    params: any,
-    slice: any,
+    param: any,
 }
 
-export const Render = ({ name, params }: RenderProps) => {
-    const position = useContext(PositionContext)
-    const { registry: { core } } = useContext(TemplateContext)
-    const { render, stateNames } = core.latest(name, position, params) ?? { render: undefined, stateNames: [] }
-    const states = useStates(...stateNames)
-    return render && render(params, ...states)
+export const Render = ({ name, param }: RenderProps) => {
+    const template = useTemplate(name, param)
+    const states = useStates(...(template?.stateNames ?? []))
+
+    return template ? template.render(param, ...states.map(state => state?.value)) : <></>
 }

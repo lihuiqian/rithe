@@ -5,8 +5,8 @@ import { TemplateContext } from "./internal/TemplateContext"
 
 export const useDebug = () => {
     const position = useContext(PositionContext)
-    const { registry: stateRegistry } = useContext(StateContext)
-    const { registry: templateRegistry } = useContext(TemplateContext)
-    console.log('useDebug', JSON.stringify(position), stateRegistry, templateRegistry)
+    const stateCore = useContext(StateContext)
+    const templateCore = useContext(TemplateContext)
+    console.log('useDebug', JSON.stringify(position), stateCore, templateCore)
     console.log('')
 }

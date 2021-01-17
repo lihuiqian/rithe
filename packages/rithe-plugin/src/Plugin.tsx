@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
-import { PluginIndexer } from "./internal/PluginIndexer";
+import { PositionIndexer } from "./internal/PositionIndexer";
 
 export const Plugin = ({ children }: { children: ReactNode | ReactNode[] }) => {
-    return <PluginIndexer>
+    return <PositionIndexer>
         {children}
-    </PluginIndexer>
+    </PositionIndexer>
 }

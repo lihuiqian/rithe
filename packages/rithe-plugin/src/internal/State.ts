@@ -1,63 +1,56 @@
-import { StateArray } from "./StateArray"
 
 export interface State {
     readonly name: string
     readonly position: number[]
     readonly value: any
+    readonly depNames: string[]
     readonly dirty: boolean
     mark(): void
-    calculate(): void
+    compute(prev: any, ...deps: any[]): void
 }
 
 export class ValueState implements State {
     readonly name: string
     readonly position: number[]
-    private _value: any
-    private _dirty: boolean
+    readonly value: any
+    readonly depNames: string[]
+    readonly dirty: boolean
 
-    constructor(_: StateArray, name: string, position: number[], value: any) {
+    constructor(name: string, position: number[], value: any) {
         this.name = name
         this.position = position
-        this._value = value
-        this._dirty = true
+        this.value = value
+        this.depNames = []
+        this.dirty = false
     }
 
-    get value(): any {
-        return this._value
+    mark() {
+        // empty
     }
 
-    get dirty(): boolean {
-        return this._dirty
+    compute() {
+        // empty
     }
 
-    mark(): void {
-        this._dirty = true
-    }
-
-    calculate() {
-        this._dirty = false
-    }
 }
 
 export class ComputedState implements State {
     readonly name: string
     readonly position: number[]
     readonly computed: (prev: any, ...deps: any[]) => any
-    readonly dependencyNames: string[]
+    readonly depNames: string[]
     readonly lazy: boolean
     private _dirty: boolean
     private _value: any
-    private _stateArray: StateArray
 
-    constructor(stateArray: StateArray, name: string, position: number[], computed: (prev: any, ...deps: any[]) => any, dependencyNames: string[], lazy: boolean) {
+    constructor(name: string, position: number[], computed: (prev: any, ...deps: any[]) => any, depNames: string[], lazy: boolean) {
         this.name = name
         this.position = position
         this.computed = computed
-        this.dependencyNames = dependencyNames
+        this.depNames = depNames
         this.lazy = lazy
         this._dirty = true
         this._value = undefined
-        this._stateArray = stateArray
     }
 
     get dirty(): boolean {
@@ -68,18 +61,12 @@ export class ComputedState implements State {
         return this.lazy ? this._value() : this._value
     }
 
-    mark(): void {
+    mark() {
         this._dirty = true
     }
 
-    calculate(): void {
-        const stateArray = this._stateArray
-        const { name, position, dependencyNames, computed } = this
-        const previousState = stateArray.previousState(name, position)
-        const dependencyStates = dependencyNames.map(dependencyName => stateArray.previousState(dependencyName, position))
-        const prev = previousState?.value
-        const deps = dependencyStates.map(dependencyState => dependencyState?.value)
-        this._value = this.lazy ? () => computed(prev, ...deps) : computed(prev, ...deps)
+    compute(prev: any, ...deps: any[]): void {
+        this._value = this.lazy ? () => this.computed(prev, ...deps) : this.computed(prev, ...deps)
         this._dirty = false
     }
 }
