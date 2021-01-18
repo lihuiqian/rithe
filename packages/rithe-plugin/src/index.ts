@@ -6,4 +6,5 @@ export * from './State'
 export * from './Template'
 export * from './useDebug'
 export * from './useStates'
-export * from './useTemplate'
+export * from './useTemplates'
+

@@ -1,7 +1,19 @@
-import Column from "./Column";
-import Row from "./Row";
 
 export interface TemplateParam {
-    tableCell: { row: Row, column: Column },
+    root: any,
 
+    toolbar: any,
+
+    table: any,
+    tableHeader: any,
+    tableHeaderRow: any,
+    tableHeaderCell: any,
+    tableBody: any,
+    tableBodyRow: any,
+    tableBodyCell: any,
+    tableFooter: any,
+    tableFooterRow: any,
+    tableFooterCell: any,
+
+    pagination: any,
 }

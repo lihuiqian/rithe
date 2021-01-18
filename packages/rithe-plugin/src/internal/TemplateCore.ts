@@ -1,4 +1,3 @@
-import { Arrays } from "@rithe/utils"
 import { insertItem, itemsNext, itemsPrev, removeItem } from "./helpers"
 import { Subscription } from "./Subscription"
 import { Template } from './Template'
@@ -38,10 +37,9 @@ export class TemplateCore {
         removeItem(this._subs, sub)
     }
 
-    slice(name: string, position: number[], param: any) {
+    available(name: string, position: number[], param: any) {
         const templates = this._templates
-        // find prev template which match the param
-        const templatePrev = Arrays.last(itemsPrev(templates, position, name).filter(template => template.test(param)))
-        return templatePrev
+        // find prev templates which match the param
+        return itemsPrev(templates, position, name).filter(template => template.test(param)).reverse()
     }
 }

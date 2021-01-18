@@ -10,9 +10,9 @@ type OptionalValues<KS extends Key[]> = {
 
 export interface TemplateProps<T extends keyof TemplateParam, DS extends Key[]> {
     name: T,
-    predicate: (param: TemplateParam[T] | undefined) => boolean,
-    render: (param: TemplateParam[T] | undefined, ...states: OptionalValues<DS>) => JSX.Element,
-    stateNames: [...DS],
+    predicate?: (param: TemplateParam[T] | undefined) => boolean,
+    stateNames?: [...DS],
+    children: (param: TemplateParam[T] | undefined, ...states: OptionalValues<DS>) => JSX.Element,
 }
 
 export const Template = <T extends keyof TemplateParam, DS extends Key[]>(props: TemplateProps<T, DS>) => {

@@ -32,12 +32,10 @@ export class StateCore {
         while (pending.length > 0) {
             // mark if current state is not state
             const working = pending.shift()!
-            console.log('working', JSON.stringify(working))
             working === state || working.mark()
             // notify subscriptions between current state and next state
             const stateNext = Arrays.first(itemsNext(states, working.position, working.name))
             const subsBetween = itemsBetween(subs, working.position, stateNext?.position, working.name)
-            console.log('subsBetween', JSON.stringify(subsBetween))
             subsBetween.forEach(sub => sub.subscribe())
             // push next state to pending if next state is computed state
             stateNext && stateNext instanceof ComputedState && pending.push(stateNext)

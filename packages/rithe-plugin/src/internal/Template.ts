@@ -13,10 +13,10 @@ export class ConditionalTemplate implements Template {
     readonly render: (param: any, ...states: any[]) => JSX.Element
     readonly stateNames: string[]
 
-    constructor(name: string, position: number[], predicate: (params: any) => boolean, render: (params: any, ...states: any[]) => JSX.Element, depNames: string[]) {
+    constructor(name: string, position: number[], predicate: ((params: any) => boolean) | undefined, render: (params: any, ...states: any[]) => JSX.Element, depNames: string[]) {
         this.name = name
         this.position = position
-        this.test = predicate
+        this.test = predicate ?? (() => true)
         this.render = render
         this.stateNames = depNames
     }

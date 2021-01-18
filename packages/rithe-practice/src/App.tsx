@@ -1,13 +1,14 @@
-import { Debug, Plugin, PluginHost, Render, State, Template } from '@rithe/plugin';
+import { DataGrid, PaginationLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
+import { Plugin, Render, State, Template } from '@rithe/plugin';
 import React, { useCallback, useState } from 'react';
 
 function App() {
 
-  return <PluginHost>
-    <Part1></Part1>
-    <Part2></Part2>
-    <Debug></Debug>
-  </PluginHost>
+  return <DataGrid columns={[]} rows={[]}>
+    <ToolbarLayout />
+    <TableLayout />
+    <PaginationLayout />
+  </DataGrid>
 }
 
 function Part1() {
@@ -19,8 +20,10 @@ function Part1() {
   return <Plugin>
     <button onClick={onClick}>append</button>
     <State name="arr" value={arr} />
-    <Template name="disp" predicate={() => true} render={(param: any, arr: number[]) => <div>{"render1" + JSON.stringify(param)} + {JSON.stringify(arr)}</div>} stateNames={['arr']} />
-    <Render name="disp" param={{}} />
+    <Template name="disp" stateNames={['arr']}>
+      {(param, arr) => <div>{"render1" + JSON.stringify(param)} + {JSON.stringify(arr)}</div>}
+    </Template>
+    <Render name="disp" param={1} />
   </Plugin>
 }
 
@@ -33,9 +36,13 @@ function Part2() {
     <button onClick={onClick}>add</button>
     <State name="num" value={num} />
     <State name="arr" computed={(prev?: number[], num?: number) => prev ? [...prev, num] : [num]} depNames={['num']} />
-    <Template name="num" predicate={() => true} render={(_, num) => <div>{JSON.stringify(num)}</div>} stateNames={['num']} />
-    <Template name="disp" predicate={(param) => param === 'join'} render={(param: any, arr: number[]) => <div>{"render2" + JSON.stringify(param)} + {JSON.stringify(arr)}</div>} stateNames={['arr']} />
-    <Render name="num" param={{}} />
+    <Template name="num" stateNames={['num']}>
+      {(_, num) => <div>{JSON.stringify(num)}</div>}
+    </Template>
+    <Template name="disp" predicate={param => param === 'join'} stateNames={['arr']}>
+      {(param, arr) => <div>{"render2" + JSON.stringify(param)} + {JSON.stringify(arr)}</div>}
+    </Template>
+    <Render name="num" param={2} />
     <Render name="disp" param={'join'} />
   </Plugin>
 }

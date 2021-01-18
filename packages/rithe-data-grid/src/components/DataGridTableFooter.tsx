@@ -1,10 +1,10 @@
 import React, { ReactNode } from "react";
 
-export interface DataGridTableHeaderProps {
+export interface DataGridTableFooterProps {
     children?: ReactNode | ReactNode[]
 }
 
-export const DataGridTableHeader = (props: DataGridTableHeaderProps) => {
+export const DataGridTableFooter = (props: DataGridTableFooterProps) => {
     const { children } = props
     return <thead>{children}</thead>
 }

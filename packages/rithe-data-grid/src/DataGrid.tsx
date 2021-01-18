@@ -1,41 +1,36 @@
 import { PluginHost } from "@rithe/plugin"
-import React, { ReactNode, useMemo } from 'react'
-import useDataType from "./hooks/useDataType"
-import { DataTypeProvider } from "./plugins/DataTypeProvider"
+import React, { ComponentType, ReactNode } from 'react'
+import { DataGridContainer, DataGridContainerProps } from "./components/DataGridContainer"
+import { Render } from "./Render"
+import { Template } from "./Template"
+import Column from "./types/Column"
+import Row from "./types/Row"
+import RowId from "./types/RowId"
 
-export const DataGrid = ({ children }: { children: ReactNode | ReactNode[] }) => {
-    const dataTypes = useDataTypes()
+export interface DataGridProps {
+    columns: Column[],
+    rows: Row[],
+    getRowId?: (row: Row) => RowId,
+    rootComponent?: ComponentType<DataGridContainerProps>
+    children?: ReactNode | ReactNode[]
+}
+
+export const DataGrid = (props: DataGridProps) => {
+    const { columns,
+        rows,
+        getRowId,
+        rootComponent: RootComponent = DataGridContainer,
+        children } = props
 
     return <PluginHost>
-        <DataTypeProvider dataTypes={dataTypes} />
+        <Template name="root">
+            {() => <RootComponent>
+                <Render name="toolbar" />
+                <Render name="table" />
+                <Render name="pagination" />
+            </RootComponent>}
+        </Template>
         {children}
+        <Render name="root" />
     </PluginHost>
 }
-
-const useDataTypes = () => {
-    const unknownDataType = useDataType('unknown', 'unknown')
-    const stringDataType = useDataType('string', 'string')
-    const numberDataType = useDataType('number', 'number')
-    const bigintDataType = useDataType('bigint', 'bigint')
-    const booleanDataType = useDataType('boolean', 'boolean')
-    const dateDataType = useDataType('date', 'date')
-    const timeDataType = useDataType('time', 'time')
-    const datetimeDataType = useDataType('datetime', 'datetime')
-    const codeDataType = useDataType('code', 'code')
-    const arrayDataType = useDataType('array', 'array')
-    const objectDataType = useDataType('object', 'object')
-    return useMemo(() => [
-        unknownDataType,
-        stringDataType,
-        numberDataType,
-        bigintDataType,
-        booleanDataType,
-        dateDataType,
-        timeDataType,
-        datetimeDataType,
-        codeDataType,
-        arrayDataType,
-        objectDataType,
-    ], [arrayDataType, bigintDataType, booleanDataType, codeDataType, dateDataType, datetimeDataType, numberDataType, objectDataType, stringDataType, timeDataType, unknownDataType])
-}
-

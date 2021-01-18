@@ -1,48 +1,49 @@
 import { Plugin } from "@rithe/plugin";
-import { useMeasure } from "@rithe/utils";
-import React, { ComponentType, ReactNode, useCallback, useRef } from "react";
+import React, { ComponentType } from "react";
 import { DataGridTable, DataGridTableProps } from "../components/DataGridTable";
-import { ColumnWidthAdjustment } from "../plugins/ColumnWidthAdjustment";
-import { StatePipe } from "../State";
-import BindOptions from "../types/BindOptions";
-import DragState from "../types/DragState";
+import { DataGridTableBody, DataGridTableBodyProps } from "../components/DataGridTableBody";
+import { DataGridTableFooter, DataGridTableFooterProps } from "../components/DataGridTableFooter";
+import { DataGridTableHeader, DataGridTableHeaderProps } from "../components/DataGridTableHeader";
+import { Render } from "../Render";
+import { Template } from "../Template";
 
-type DragHandlerMap = Map<EventTarget, { handler: (state: DragState) => void, options: BindOptions }>
-type AddDragListener = (target: EventTarget, eventHandler: (state: DragState) => void, options?: Partial<BindOptions>) => void
-type RemoveDragListener = (target: EventTarget) => void
-interface TableLayoutProps {
-    tableComponent?: ComponentType<DataGridTableProps>,
-    children: ReactNode | ReactNode[],
+export interface TableLayoutProps {
+    rootComponent?: ComponentType<DataGridTableProps>,
+    tableHeaderComponent?: ComponentType<DataGridTableHeaderProps>,
+    tableBodyComponent?: ComponentType<DataGridTableBodyProps>,
+    tableFooterComponent?: ComponentType<DataGridTableFooterProps>,
 }
 
-const TableLayout = ({
-    tableComponent: Table = DataGridTable,
-    children
-}: TableLayoutProps) => {
-    const [dragHandlerMap, addDragListener, removeDragListener] = useDragHandlers()
-    const [measureRef, rect] = useMeasure<HTMLDivElement>()
+export const TableLayout = (props: TableLayoutProps) => {
+    const {
+        rootComponent: RootComponent = DataGridTable,
+        tableHeaderComponent: TableHeaderComponent = DataGridTableHeader,
+        tableBodyComponent: TableBodyComponent = DataGridTableBody,
+        tableFooterComponent: TableFooterComponent = DataGridTableFooter,
+    } = props
+
     return <Plugin>
-        <ColumnWidthAdjustment tableWidth={rect?.width} />
-        <StatePipe name="addDragListener" value={addDragListener} />
-        <StatePipe name="removeDragListener" value={removeDragListener} />
-        <div ref={measureRef}>
-            <Table dragHandlerMap={dragHandlerMap}>
-                {children}
-            </Table>
-        </div>
+        <Template name="table">
+            {() => <RootComponent>
+                <Render name="tableHeader" />
+                <Render name="tableBody" />
+                <Render name="tableFooter" />
+            </RootComponent>}
+        </Template>
+        <Template name="tableHeader">
+            {() => <TableHeaderComponent>
+                THEAD
+            </TableHeaderComponent>}
+        </Template>
+        <Template name="tableBody">
+            {() => <TableBodyComponent>
+                TBODY
+            </TableBodyComponent>}
+        </Template>
+        <Template name="tableFooter">
+            {() => <TableFooterComponent>
+                TFOOT
+            </TableFooterComponent>}
+        </Template>
     </Plugin>
 }
-
-const useDragHandlers = () => {
-    const ref = useRef<DragHandlerMap>(new Map())
-    const addDragListener = useCallback<AddDragListener>((target, eventHandler, options) => {
-        ref.current.set(target, { handler: eventHandler, options: { retainTarget: options?.retainHandler ?? false, retainHandler: options?.retainHandler ?? false } })
-    }, [])
-    const removeDragListener = useCallback<RemoveDragListener>(target => {
-        ref.current.delete(target)
-    }, [])
-    return [ref.current, addDragListener, removeDragListener] as [DragHandlerMap, AddDragListener, RemoveDragListener]
-}
-
-export { TableLayoutProps, TableLayout };
-

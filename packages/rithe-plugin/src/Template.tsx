@@ -5,20 +5,20 @@ import { TemplateContext } from "./internal/TemplateContext";
 
 export interface TemplateProps {
     name: string,
-    predicate: (param: any) => boolean,
-    render: (param: any, ...states: any[]) => JSX.Element,
-    stateNames: string[],
+    predicate?: (param: any) => boolean,
+    stateNames?: string[],
+    children: (param: any, ...states: any[]) => JSX.Element,
 }
 
-export const Template = ({ name, predicate, render, stateNames }: TemplateProps) => {
+export const Template = ({ name, predicate, stateNames, children }: TemplateProps) => {
     const position = useContext(PositionContext)
     const core = useContext(TemplateContext)
 
     useEffect(() => {
-        const template = new ConditionalTemplate(name, position, predicate, render, stateNames)
+        const template = new ConditionalTemplate(name, position, predicate, children, stateNames ?? [])
         core.register(template)
         return () => core.unregister(template)
-    }, [core, name, position, predicate, render, stateNames])
+    }, [children, core, name, position, predicate, stateNames])
 
     return <></>
 }
