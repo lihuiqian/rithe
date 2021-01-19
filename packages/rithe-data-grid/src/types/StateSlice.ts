@@ -4,6 +4,8 @@ import DataType from "./DataType";
 import DragState from "./DragState";
 import Row from "./Row";
 import RowId from "./RowId";
+import { TableColumn } from "./TableColumn";
+import { TableRow } from "./TableRow";
 import Toggle from "./Toggle";
 
 export interface StateSlice {
@@ -12,9 +14,11 @@ export interface StateSlice {
     // Data
     columns: Column[],
     rows: Row[],
-    displayColumns: Column[],
-    displayRows: Row[],
     getRowId: (row: Row) => RowId,
+    tableColumns: TableColumn[],
+    tableHeaderRows: TableRow[],
+    tableBodyRows: TableRow[],
+    tableFooterRows: TableRow[],
     // ColumnResizing
     columnResizingEnabled: boolean,
     columnResizingExcludes: string[],

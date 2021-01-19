@@ -2,7 +2,6 @@ import { Comparator } from '@rithe/utils'
 import Align from "./Align"
 import FilterPredicate from './FilterPredicate'
 import FilterPredicator from './FilterPredicator'
-import Formatter from './Formatter'
 
 interface DataTypeInfer {
     'unknown': unknown,
@@ -24,7 +23,6 @@ interface DataType<T extends keyof DataTypeInfer> {
     type: T,
     name: string,
     align: Align,
-    formatter: Formatter<T>,
     comparator: Comparator<DataTypeInfer[T]>
     predicates: Partial<{ [predicator in FilterPredicator]: FilterPredicate }>,
 }

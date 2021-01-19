@@ -1,3 +1,3 @@
-type Fixed = 'start' | 'end' | 'none'
+type Fixed = 'start' | 'end'
 
 export default Fixed

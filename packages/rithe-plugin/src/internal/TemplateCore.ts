@@ -37,9 +37,9 @@ export class TemplateCore {
         removeItem(this._subs, sub)
     }
 
-    available(name: string, position: number[], param: any) {
+    available(name: string, position: number[], props: any) {
         const templates = this._templates
-        // find prev templates which match the param
-        return itemsPrev(templates, position, name).filter(template => template.test(param)).reverse()
+        // find prev templates which match the props
+        return itemsPrev(templates, position, name).filter(template => template.test(props)).reverse()
     }
 }

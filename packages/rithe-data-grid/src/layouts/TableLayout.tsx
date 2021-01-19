@@ -1,25 +1,18 @@
 import { Plugin } from "@rithe/plugin";
-import React, { ComponentType } from "react";
+import React, { ComponentType, ReactNode } from "react";
 import { DataGridTable, DataGridTableProps } from "../components/DataGridTable";
-import { DataGridTableBody, DataGridTableBodyProps } from "../components/DataGridTableBody";
-import { DataGridTableFooter, DataGridTableFooterProps } from "../components/DataGridTableFooter";
-import { DataGridTableHeader, DataGridTableHeaderProps } from "../components/DataGridTableHeader";
 import { Render } from "../Render";
 import { Template } from "../Template";
 
 export interface TableLayoutProps {
     rootComponent?: ComponentType<DataGridTableProps>,
-    tableHeaderComponent?: ComponentType<DataGridTableHeaderProps>,
-    tableBodyComponent?: ComponentType<DataGridTableBodyProps>,
-    tableFooterComponent?: ComponentType<DataGridTableFooterProps>,
+    children?: ReactNode | ReactNode[],
 }
 
 export const TableLayout = (props: TableLayoutProps) => {
     const {
         rootComponent: RootComponent = DataGridTable,
-        tableHeaderComponent: TableHeaderComponent = DataGridTableHeader,
-        tableBodyComponent: TableBodyComponent = DataGridTableBody,
-        tableFooterComponent: TableFooterComponent = DataGridTableFooter,
+        children,
     } = props
 
     return <Plugin>
@@ -30,20 +23,6 @@ export const TableLayout = (props: TableLayoutProps) => {
                 <Render name="tableFooter" />
             </RootComponent>}
         </Template>
-        <Template name="tableHeader">
-            {() => <TableHeaderComponent>
-                THEAD
-            </TableHeaderComponent>}
-        </Template>
-        <Template name="tableBody">
-            {() => <TableBodyComponent>
-                TBODY
-            </TableBodyComponent>}
-        </Template>
-        <Template name="tableFooter">
-            {() => <TableFooterComponent>
-                TFOOT
-            </TableFooterComponent>}
-        </Template>
+        {children}
     </Plugin>
 }

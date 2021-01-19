@@ -1,12 +1,12 @@
 import { Render as PluginRender } from '@rithe/plugin'
 import React from "react"
-import { TemplateParam } from "./types/TemplateParam"
+import { TemplateBaseProps } from "./types/TemplateBaseProps"
 
-export interface RenderProps<T extends keyof TemplateParam> {
+export interface RenderProps<T extends keyof TemplateBaseProps> {
     name?: T,
-    param?: TemplateParam[T],
+    props?: TemplateBaseProps[T],
 }
 
-export const Render = <T extends keyof TemplateParam>(props: RenderProps<T>) => {
+export const Render = <T extends keyof TemplateBaseProps>(props: RenderProps<T>) => {
     return <PluginRender {...props} />
 }

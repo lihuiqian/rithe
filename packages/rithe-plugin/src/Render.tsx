@@ -5,35 +5,35 @@ import { useTemplates } from './useTemplates'
 
 export interface RenderProps {
     name?: string,
-    param?: any,
+    props?: any,
 }
 
-export const Render = ({ name, param }: RenderProps) => {
-    return name === undefined ? <RenderPlaceholder /> : <RenderHost name={name} param={param} />
+export const Render = ({ name, props }: RenderProps) => {
+    return name === undefined ? <RenderPlaceholder /> : <RenderHost name={name} props={props} />
 }
 
-const RenderHost = ({ name, param }: { name: string, param: any }) => {
-    const templates = useTemplates(name, param)
+const RenderHost = ({ name, props }: { name: string, props: any }) => {
+    const templates = useTemplates(name, props)
     if (templates.length === 0) {
         return null
     } else {
-        return <RenderInternal template={templates[0]} param={param} restTemplates={templates.slice(1)} />
+        return <RenderInternal template={templates[0]} props={props} restTemplates={templates.slice(1)} />
     }
 }
 
 const RenderPlaceholder = () => {
-    const { templates, param } = useContext(RenderContext)
+    const { templates, props } = useContext(RenderContext)
     if (templates.length === 0) {
         return null
     } else {
-        return <RenderInternal template={templates[0]} param={param} restTemplates={templates.slice(1)} />
+        return <RenderInternal template={templates[0]} props={props} restTemplates={templates.slice(1)} />
     }
 }
 
-const RenderInternal = ({ template, param, restTemplates }: { template: any, param: any, restTemplates: any[] }) => {
+const RenderInternal = ({ template, props, restTemplates }: { template: any, props: any, restTemplates: any[] }) => {
     const { render, stateNames } = template
     const states = useStates(...stateNames)
-    return <RenderContext.Provider value={{ templates: restTemplates, param }}>
-        {render(param, ...states)}
+    return <RenderContext.Provider value={{ templates: restTemplates, props }}>
+        {render(props, ...states)}
     </RenderContext.Provider>
 }

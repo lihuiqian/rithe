@@ -1,4 +1,4 @@
-import { DataGrid, PaginationLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
+import { DataGrid, PaginationLayout, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
 import { Plugin, Render, State, Template } from '@rithe/plugin';
 import React, { useCallback, useState } from 'react';
 
@@ -6,7 +6,11 @@ function App() {
 
   return <DataGrid columns={[]} rows={[]}>
     <ToolbarLayout />
-    <TableLayout />
+    <TableLayout>
+      <TableHeaderLayout />
+      <TableBodyLayout />
+      <TableFooterLayout />
+    </TableLayout>
     <PaginationLayout />
   </DataGrid>
 }
