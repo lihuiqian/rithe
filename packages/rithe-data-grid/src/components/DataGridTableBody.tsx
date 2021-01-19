@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { useDataGridTheme } from "../DataGridTheme";
 
 export interface DataGridTableBodyProps {
     children?: ReactNode | ReactNode[]
@@ -6,5 +7,6 @@ export interface DataGridTableBodyProps {
 
 export const DataGridTableBody = (props: DataGridTableBodyProps) => {
     const { children } = props
-    return <thead>{children}</thead>
+    const { tableBodyComponent: Tbody } = useDataGridTheme()
+    return <Tbody>{children}</Tbody>
 }

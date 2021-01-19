@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { useDataGridTheme } from "../DataGridTheme";
 
 export interface DataGridContainerProps {
     children?: ReactNode | ReactNode[]
@@ -6,5 +7,6 @@ export interface DataGridContainerProps {
 
 export const DataGridContainer = (props: DataGridContainerProps) => {
     const { children } = props
-    return <div>{children}</div>
+    const { containerComponent: Div } = useDataGridTheme()
+    return <Div>{children}</Div>
 }

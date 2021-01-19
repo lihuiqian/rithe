@@ -1,20 +1,22 @@
-import React, { createContext, ForwardRefExoticComponent, HTMLAttributes, ReactNode, TableHTMLAttributes, TdHTMLAttributes, ThHTMLAttributes, useContext } from "react"
+import React, { ComponentType, createContext, HTMLAttributes, ReactNode, TableHTMLAttributes, TdHTMLAttributes, ThHTMLAttributes, useContext } from "react"
 
 interface DataGridTheme {
-    tableComponent: ForwardRefExoticComponent<TableHTMLAttributes<HTMLTableElement>> | 'table',
-    tableHeadComponent: ForwardRefExoticComponent<HTMLAttributes<HTMLTableSectionElement>> | 'thead',
-    tableHeadRowComponent: ForwardRefExoticComponent<HTMLAttributes<HTMLTableRowElement>> | 'tr',
-    tableHeadCellComponent: ForwardRefExoticComponent<ThHTMLAttributes<HTMLTableHeaderCellElement>> | 'th',
-    tableBodyComponent: ForwardRefExoticComponent<HTMLAttributes<HTMLTableSectionElement>> | 'tbody',
-    tableBodyRowComponent: ForwardRefExoticComponent<HTMLAttributes<HTMLTableRowElement>> | 'tr',
-    tableBodyCellComponent: ForwardRefExoticComponent<TdHTMLAttributes<HTMLTableDataCellElement>> | 'td',
-    tableFootComponent: ForwardRefExoticComponent<HTMLAttributes<HTMLTableSectionElement>> | 'tfoot',
-    tableFootRowComponent: ForwardRefExoticComponent<HTMLAttributes<HTMLTableRowElement>> | 'tr',
-    tableFootCellComponent: ForwardRefExoticComponent<TdHTMLAttributes<HTMLTableDataCellElement>> | 'td',
-    typographyComponent: ForwardRefExoticComponent<HTMLAttributes<HTMLSpanElement>> | 'span',
+    containerComponent: ComponentType<HTMLAttributes<HTMLDivElement>> | 'div',
+    tableComponent: ComponentType<TableHTMLAttributes<HTMLTableElement>> | 'table',
+    tableHeadComponent: ComponentType<HTMLAttributes<HTMLTableSectionElement>> | 'thead',
+    tableHeadRowComponent: ComponentType<HTMLAttributes<HTMLTableRowElement>> | 'tr',
+    tableHeadCellComponent: ComponentType<ThHTMLAttributes<HTMLTableHeaderCellElement>> | 'th',
+    tableBodyComponent: ComponentType<HTMLAttributes<HTMLTableSectionElement>> | 'tbody',
+    tableBodyRowComponent: ComponentType<HTMLAttributes<HTMLTableRowElement>> | 'tr',
+    tableBodyCellComponent: ComponentType<TdHTMLAttributes<HTMLTableDataCellElement>> | 'td',
+    tableFootComponent: ComponentType<HTMLAttributes<HTMLTableSectionElement>> | 'tfoot',
+    tableFootRowComponent: ComponentType<HTMLAttributes<HTMLTableRowElement>> | 'tr',
+    tableFootCellComponent: ComponentType<TdHTMLAttributes<HTMLTableDataCellElement>> | 'td',
+    typographyComponent: ComponentType<HTMLAttributes<HTMLSpanElement>> | 'span',
 }
 
 const defaultTheme: DataGridTheme = {
+    containerComponent: 'div',
     tableComponent: 'table',
     tableHeadComponent: 'thead',
     tableHeadRowComponent: 'tr',
@@ -39,3 +41,4 @@ const DataGridThemeProvider = ({ value, children }: { value: DataGridTheme, chil
 }
 
 export { useDataGridTheme, DataGridThemeProvider }
+

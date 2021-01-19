@@ -25,9 +25,9 @@ function Part1() {
     <button onClick={onClick}>append</button>
     <State name="arr" value={arr} />
     <Template name="disp" stateNames={['arr']}>
-      {(param, arr) => <div>{"render1" + JSON.stringify(param)} + {JSON.stringify(arr)}</div>}
+      {(props, arr) => <div>{"render1" + JSON.stringify(props)} + {JSON.stringify(arr)}</div>}
     </Template>
-    <Render name="disp" param={1} />
+    <Render name="disp" props={1} />
   </Plugin>
 }
 
@@ -43,11 +43,11 @@ function Part2() {
     <Template name="num" stateNames={['num']}>
       {(_, num) => <div>{JSON.stringify(num)}</div>}
     </Template>
-    <Template name="disp" predicate={param => param === 'join'} stateNames={['arr']}>
-      {(param, arr) => <div>{"render2" + JSON.stringify(param)} + {JSON.stringify(arr)}</div>}
+    <Template name="disp" predicate={props => props === 'join'} stateNames={['arr']}>
+      {(props, arr) => <div>{"render2" + JSON.stringify(props)} + {JSON.stringify(arr)}</div>}
     </Template>
-    <Render name="num" param={2} />
-    <Render name="disp" param={'join'} />
+    <Render name="num" props={2} />
+    <Render name="disp" props={'join'} />
   </Plugin>
 }
 
