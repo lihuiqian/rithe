@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "cd ./packages/rithe-utils & yarn build & cd ../rithe-plugin & yarn build & cd ../rithe-data-grid & yarn build",
-    "start": "cd ./packages/rithe-practice & yarn start"
+    "start": "cd ./packages & cd ./rithe-utils & start yarn watch & cd ../rithe-plugin & start yarn watch & cd ../rithe-data-grid & start yarn watch & cd ../rithe-practice & yarn start"
   },
   "devDependencies": {
     "@types/node": "^12.0.0",
