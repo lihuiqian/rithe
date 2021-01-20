@@ -1,6 +1,6 @@
 import { Column } from "./Column";
 import { DataType } from "./DataType";
-import { Fixed } from "./Fixed";
+import { Freeze } from "./Freeze";
 
 export interface TableColumn {
     key: string,
@@ -8,5 +8,5 @@ export interface TableColumn {
     column?: Column,
     dataType?: DataType<any>,
     width?: number,
-    fixed?: Fixed,
+    freeze?: Freeze,
 }

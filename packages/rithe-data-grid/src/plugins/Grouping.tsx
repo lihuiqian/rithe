@@ -16,11 +16,11 @@ export interface GroupingProps {
     disableUserControl?: boolean,
     options?: {
         field: string,
-        disabled?: boolean,
         criteria?: (value: any) => {
             key: string,
             value: any,
         },
+        disableUserControl?: boolean,
         removeWhenGrouped?: boolean,
     },
     panelComponent?: ComponentType<DataGridGroupingPanelProps>,

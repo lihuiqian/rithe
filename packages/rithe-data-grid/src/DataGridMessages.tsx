@@ -2,6 +2,7 @@ import React, { createContext, ReactNode, useContext } from "react"
 
 export interface DataGridMessages {
     noData: string,
+    noColumns: string,
     noGrouping: string,
     count: string,
     sum: string,
@@ -12,6 +13,7 @@ export interface DataGridMessages {
 
 const defaultMessages: DataGridMessages = {
     noData: 'No Data',
+    noColumns: 'No Columns',
     noGrouping: 'No Grouping Column',
     count: 'Count',
     sum: 'Sum',
