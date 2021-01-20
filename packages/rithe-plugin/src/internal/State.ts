@@ -34,6 +34,43 @@ export class ValueState implements State {
 
 }
 
+export class GeneratedState implements State {
+    readonly name: string
+    readonly position: number[]
+    readonly generated: (...deps: any[]) => any
+    readonly depNames: string[]
+    readonly lazy: boolean
+    private _dirty: boolean
+    private _value: any
+
+    constructor(name: string, position: number[], generated: (...deps: any[]) => any, depNames: string[], lazy: boolean) {
+        this.name = name
+        this.position = position
+        this.generated = generated
+        this.depNames = depNames
+        this.lazy = lazy
+        this._dirty = true
+        this._value = undefined
+    }
+
+    get dirty(): boolean {
+        return this._dirty
+    }
+
+    get value(): any {
+        return this.lazy ? this._value() : this._value
+    }
+
+    mark() {
+        this._dirty = true
+    }
+
+    compute(_: any, ...deps: any[]): void {
+        this._value = this.lazy ? () => this.generated(...deps) : this.generated(...deps)
+        this._dirty = false
+    }
+}
+
 export class ComputedState implements State {
     readonly name: string
     readonly position: number[]

@@ -11,6 +11,12 @@ export interface ValueStateProps<T extends Key> {
     name: T,
     value?: StateSlice[T],
 }
+export interface GeneratedStateProps<T extends Key, DS extends Key[]> {
+    name: T,
+    generated: (...deps: OptionalValues<DS>) => StateSlice[T] | undefined,
+    depNames?: [...DS],
+    lazy?: boolean,
+}
 export interface ComputedStateProps<T extends Key, DS extends Key[]> {
     name: T,
     computed: (prev: StateSlice[T] | undefined, ...deps: OptionalValues<DS>) => StateSlice[T] | undefined,
@@ -18,6 +24,6 @@ export interface ComputedStateProps<T extends Key, DS extends Key[]> {
     lazy?: boolean,
 }
 
-export const State = <T extends Key, DS extends Key[]>(props: ValueStateProps<T> | ComputedStateProps<T, DS>) => {
+export const State = <T extends Key, DS extends Key[]>(props: ValueStateProps<T> | GeneratedStateProps<T, DS> | ComputedStateProps<T, DS>) => {
     return <PluginState {...props as any} />
 }

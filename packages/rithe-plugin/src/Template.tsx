@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { PositionContext } from "./internal/PositionContext";
-import { ConditionalTemplate } from './internal/Template';
+import { ConditionalTemplate, ReservedTemplate } from './internal/Template';
 import { TemplateContext } from "./internal/TemplateContext";
 
 export interface TemplateProps {
@@ -15,7 +15,7 @@ export const Template = ({ name, predicate, stateNames, children }: TemplateProp
     const core = useContext(TemplateContext)
 
     useEffect(() => {
-        const template = new ConditionalTemplate(name, position, predicate, children, stateNames ?? [])
+        const template = predicate ? new ConditionalTemplate(name, position, predicate, children, stateNames ?? []) : new ReservedTemplate(name, position, children, stateNames ?? [])
         core.register(template)
         return () => core.unregister(template)
     }, [children, core, name, position, predicate, stateNames])

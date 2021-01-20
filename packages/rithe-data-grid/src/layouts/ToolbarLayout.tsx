@@ -4,19 +4,19 @@ import { DataGridToolbar, DataGridToolbarProps } from "../components/DataGridToo
 import { Template } from "../Template";
 
 export interface ToolbarLayoutProps {
-    rootComponent?: ComponentType<DataGridToolbarProps>,
+    toolbarComponent?: ComponentType<DataGridToolbarProps>,
 }
 
 export const ToolbarLayout = (props: ToolbarLayoutProps) => {
     const {
-        rootComponent: RootComponent = DataGridToolbar,
+        toolbarComponent: ToolbarComponent = DataGridToolbar,
     } = props
 
     return <Plugin>
         <Template name="toolbar">
-            {() => <RootComponent>
+            {() => <ToolbarComponent>
                 Toolbar
-        </RootComponent>}
+        </ToolbarComponent>}
         </Template>
     </Plugin>
 }

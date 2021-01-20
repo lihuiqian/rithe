@@ -14,6 +14,8 @@ export interface StateSlice {
     // Data
     columns: Column[],
     rows: Row[],
+    displayColumns: Column[],
+    displayRows: Row[],
     getRowId: (row: Row) => RowId,
     tableColumns: TableColumn[],
     tableHeaderRows: TableRow[],

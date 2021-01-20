@@ -5,23 +5,23 @@ import { Render } from "../Render";
 import { Template } from "../Template";
 
 export interface TableLayoutProps {
-    rootComponent?: ComponentType<DataGridTableProps>,
+    tableComponent?: ComponentType<DataGridTableProps>,
     children?: ReactNode | ReactNode[],
 }
 
 export const TableLayout = (props: TableLayoutProps) => {
     const {
-        rootComponent: RootComponent = DataGridTable,
+        tableComponent: TableComponent = DataGridTable,
         children,
     } = props
 
     return <Plugin>
         <Template name="table">
-            {() => <RootComponent>
+            {() => <TableComponent>
                 <Render name="tableHeader" />
                 <Render name="tableBody" />
                 <Render name="tableFooter" />
-            </RootComponent>}
+            </TableComponent>}
         </Template>
         {children}
     </Plugin>

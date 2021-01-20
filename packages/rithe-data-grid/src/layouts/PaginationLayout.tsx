@@ -4,19 +4,19 @@ import { DataGridPagination, DataGridPaginationProps } from "../components/DataG
 import { Template } from "../Template";
 
 export interface PaginationLayoutProps {
-    rootComponent?: ComponentType<DataGridPaginationProps>,
+    paginationComponent?: ComponentType<DataGridPaginationProps>,
 }
 
 export const PaginationLayout = (props: PaginationLayoutProps) => {
     const {
-        rootComponent: RootComponent = DataGridPagination,
+        paginationComponent: PaginationComponent = DataGridPagination,
     } = props
 
     return <Plugin>
         <Template name="pagination">
-            {() => <RootComponent>
+            {() => <PaginationComponent>
                 Pagination
-        </RootComponent>}
+        </PaginationComponent>}
         </Template>
     </Plugin>
 }

@@ -5,6 +5,7 @@ import { DataGridTableHeaderCell, DataGridTableHeaderCellProps } from "../compon
 import { DataGridTableHeaderRow, DataGridTableHeaderRowProps } from "../components/DataGridTableHeaderRow";
 import { Render } from "../Render";
 import { Template } from "../Template";
+import { HEADER_TYPE } from "../utils/constants";
 
 export interface TableHeaderLayoutProps {
     headerComponent?: ComponentType<DataGridTableHeaderProps>,
@@ -14,26 +15,26 @@ export interface TableHeaderLayoutProps {
 
 export const TableHeaderLayout = (props: TableHeaderLayoutProps) => {
     const {
-        headerComponent: Thead = DataGridTableHeader,
-        rowComponent: Tr = DataGridTableHeaderRow,
-        cellComponent: Th = DataGridTableHeaderCell,
+        headerComponent: HeaderComponent = DataGridTableHeader,
+        rowComponent: RowComponent = DataGridTableHeaderRow,
+        cellComponent: CellComponent = DataGridTableHeaderCell,
     } = props
 
     return <Plugin>
         <Template name="tableHeader" stateNames={['tableHeaderRows']}>
-            {(_, tableHeaderRows) => <Thead>
+            {(_, tableHeaderRows) => <HeaderComponent>
                 {tableHeaderRows && tableHeaderRows.map(tableRow => <Render key={tableRow.key} name="tableRow" props={{ tableRow }} />)}
-            </Thead>}
+            </HeaderComponent>}
         </Template>
-        <Template name="tableRow" stateNames={['tableColumns']}>
-            {({ tableRow }, tableColumns) => <Tr tableRow={tableRow}>
+        <Template name="tableRow" stateNames={['tableColumns']} predicate={({ tableRow }) => tableRow.type === HEADER_TYPE}>
+            {({ tableRow }, tableColumns) => <RowComponent tableRow={tableRow}>
                 {tableColumns && tableColumns.map(tableColumn => <Render key={tableColumn.key} name="tableCell" props={{ tableColumn, tableRow }} />)}
-            </Tr>}
+            </RowComponent>}
         </Template>
-        <Template name="tableCell">
-            {({ tableColumn, tableRow, colSpan, rowSpan }) => <Th tableColumn={tableColumn} tableRow={tableRow} colSpan={colSpan} rowSpan={rowSpan}>
+        <Template name="tableCell" predicate={({ tableRow }) => tableRow.type === HEADER_TYPE}>
+            {({ tableColumn, tableRow, colSpan, rowSpan }) => <CellComponent tableColumn={tableColumn} tableRow={tableRow} colSpan={colSpan} rowSpan={rowSpan}>
                 {tableColumn.key + tableRow.key}
-            </Th>}
+            </CellComponent>}
         </Template>
     </Plugin>
 }

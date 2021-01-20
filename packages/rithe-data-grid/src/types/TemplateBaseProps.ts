@@ -11,6 +11,7 @@ export interface TemplateBaseProps {
     tableRow: TableRowProps,
     tableCell: TableCellProps,
     pagination: undefined,
+    formatter: FormatterProps,
 }
 
 export interface TableRowProps {
@@ -22,4 +23,10 @@ export interface TableCellProps {
     tableRow: TableRow,
     colSpan?: number,
     rowSpan?: number,
+}
+
+export interface FormatterProps {
+    value: any,
+    tableColumn: TableColumn,
+    tableRow: TableRow,
 }
