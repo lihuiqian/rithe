@@ -1,13 +1,7 @@
 import React from "react";
-import { TableColumn } from "../types/TableColumn";
-import { TableRow } from "../types/TableRow";
-import { TableCellProps } from "../types/TemplateBaseProps";
+import { FormatterProps } from '../types/TemplateBaseProps';
 
-export interface DataGridFormatterProps extends TableCellProps {
-    value: any,
-    tableColumn: TableColumn,
-    tableRow: TableRow,
-}
+export type DataGridFormatterProps = FormatterProps
 
 export const DataGridFormatter = (props: DataGridFormatterProps) => {
     const { value, tableColumn, tableRow } = props

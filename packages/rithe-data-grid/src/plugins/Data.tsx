@@ -2,10 +2,10 @@ import { Plugin } from "@rithe/plugin";
 import { Maps } from "@rithe/utils";
 import React, { useCallback, useMemo } from "react";
 import { State } from "../State";
-import Column from "../types/Column";
-import DataType from "../types/DataType";
-import Row from "../types/Row";
-import RowId from "../types/RowId";
+import { Column } from "../types/Column";
+import { DataType } from "../types/DataType";
+import { Row } from "../types/Row";
+import { RowId } from "../types/RowId";
 import { TableRow } from "../types/TableRow";
 import { DATA_TYPE, HEADER_TYPE } from "../utils/constants";
 

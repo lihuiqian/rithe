@@ -1,6 +1,6 @@
 import React, { ComponentType, createContext, HTMLAttributes, ReactNode, TableHTMLAttributes, TdHTMLAttributes, ThHTMLAttributes, useContext } from "react"
 
-interface DataGridTheme {
+export interface DataGridTheme {
     containerComponent: ComponentType<HTMLAttributes<HTMLDivElement>> | 'div',
     tableComponent: ComponentType<TableHTMLAttributes<HTMLTableElement>> | 'table',
     tableHeadComponent: ComponentType<HTMLAttributes<HTMLTableSectionElement>> | 'thead',
@@ -32,13 +32,11 @@ const defaultTheme: DataGridTheme = {
 
 const ThemeContext = createContext<DataGridTheme>(defaultTheme)
 
-const useDataGridTheme = () => useContext(ThemeContext)
+export const useDataGridTheme = () => useContext(ThemeContext)
 
-const DataGridThemeProvider = ({ value, children }: { value: DataGridTheme, children: ReactNode | ReactNode[] }) => {
+export const DataGridThemeProvider = ({ value, children }: { value: DataGridTheme, children: ReactNode | ReactNode[] }) => {
     return <ThemeContext.Provider value={value}>
         {children}
     </ThemeContext.Provider>
 }
-
-export { useDataGridTheme, DataGridThemeProvider }
 

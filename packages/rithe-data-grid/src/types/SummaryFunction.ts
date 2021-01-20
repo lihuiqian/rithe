@@ -1,0 +1,1 @@
+export type SummaryFunction = 'count' | 'sum' | 'min' | 'max' | 'avg'

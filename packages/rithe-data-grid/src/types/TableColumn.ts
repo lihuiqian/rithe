@@ -1,6 +1,6 @@
-import Column from "./Column";
-import DataType from "./DataType";
-import Fixed from "./Fixed";
+import { Column } from "./Column";
+import { DataType } from "./DataType";
+import { Fixed } from "./Fixed";
 
 export interface TableColumn {
     key: string,

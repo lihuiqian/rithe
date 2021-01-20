@@ -1,5 +1,5 @@
-import Row from "./Row";
-import RowId from "./RowId";
+import { Row } from "./Row";
+import { RowId } from "./RowId";
 
 export interface TableRow {
     key: string,

@@ -1,12 +1,12 @@
-import BindOptions from "./BindOptions";
-import Column from "./Column";
-import DataType from "./DataType";
-import DragState from "./DragState";
-import Row from "./Row";
-import RowId from "./RowId";
+import { BindOptions } from "./BindOptions";
+import { Column } from "./Column";
+import { DataType } from "./DataType";
+import { DragState } from "./DragState";
+import { Row } from "./Row";
+import { RowId } from "./RowId";
 import { TableColumn } from "./TableColumn";
 import { TableRow } from "./TableRow";
-import Toggle from "./Toggle";
+import { Toggle } from "./Toggle";
 
 export interface StateSlice {
     // DataTypeProvider

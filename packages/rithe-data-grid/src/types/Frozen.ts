@@ -1,3 +1,1 @@
-type Frozen = 'start' | 'end'
-
-export default Frozen
+export type Frozen = 'start' | 'end'

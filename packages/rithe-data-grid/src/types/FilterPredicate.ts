@@ -1,7 +1,6 @@
-import FilterPredicator from "./FilterPredicator";
+import { FilterPredicator } from "./FilterPredicator";
 
-interface FilterPredicate {
+export interface FilterPredicate {
     predicator: FilterPredicator,
     argument: any
 }
-export default FilterPredicate

@@ -1,2 +1,1 @@
-type RowId = number | string
-export default RowId
+export type RowId = number | string

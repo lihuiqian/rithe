@@ -1,5 +1,3 @@
-interface Row {
+export interface Row {
     [field: string]: any,
 }
-
-export default Row

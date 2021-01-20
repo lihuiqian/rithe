@@ -1,9 +1,9 @@
 import { Comparator } from '@rithe/utils'
-import Align from "./Align"
-import FilterPredicate from './FilterPredicate'
-import FilterPredicator from './FilterPredicator'
+import { Align } from "./Align"
+import { FilterPredicate } from './FilterPredicate'
+import { FilterPredicator } from './FilterPredicator'
 
-interface DataTypeInfer {
+export interface DataTypeInfer {
     'unknown': unknown,
     'string': string,
     'number': number,
@@ -19,13 +19,10 @@ interface DataTypeInfer {
     'action': any,
 }
 
-interface DataType<T extends keyof DataTypeInfer> {
+export interface DataType<T extends keyof DataTypeInfer> {
     type: T,
     name: string,
     align: Align,
     comparator: Comparator<DataTypeInfer[T]>
     predicates: Partial<{ [predicator in FilterPredicator]: FilterPredicate }>,
 }
-
-export { DataTypeInfer }
-export default DataType

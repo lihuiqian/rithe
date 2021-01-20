@@ -1,3 +1,1 @@
-type Fixed = 'start' | 'end'
-
-export default Fixed
+export type Fixed = 'start' | 'end'

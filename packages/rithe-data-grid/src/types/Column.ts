@@ -1,6 +1,6 @@
-import Row from "./Row";
+import { Row } from "./Row";
 
-interface Column {
+export interface Column {
     field: string,
     dataTypeName: string,
     categories?: string[],
@@ -8,5 +8,3 @@ interface Column {
     width?: number,
     getCellValue?: (row: Row) => any,
 }
-
-export default Column

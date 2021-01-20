@@ -1,2 +1,1 @@
-type Toggle = 'on' | 'off' | 'toggle'
-export default Toggle
+export type Toggle = 'on' | 'off' | 'toggle'

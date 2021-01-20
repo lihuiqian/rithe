@@ -1,3 +1,1 @@
-type Align = 'start' | 'center' | 'end'
-
-export default Align
+export type Align = 'start' | 'center' | 'end'

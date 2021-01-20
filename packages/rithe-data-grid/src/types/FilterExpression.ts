@@ -1,5 +1,4 @@
-import FilterOperator from "./FilterOperator"
-import FilterPredicate from "./FilterPredicate"
+import { FilterOperator } from "./FilterOperator"
+import { FilterPredicate } from "./FilterPredicate"
 
-type FilterExpression = [FilterPredicate, FilterOperator, FilterPredicate]
-export default FilterExpression
+export type FilterExpression = [FilterPredicate, FilterOperator, FilterPredicate]

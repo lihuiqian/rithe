@@ -1,5 +1,4 @@
-interface BindOptions {
+export interface BindOptions {
     retainTarget: boolean,
     retainHandler: boolean
 }
-export default BindOptions
