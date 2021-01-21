@@ -9,22 +9,45 @@ export interface TemplateBaseProps {
     tableHeader: undefined,
     tableBody: undefined,
     tableFooter: undefined,
-    tableRow: TableRowProps,
-    tableCell: TableCellProps,
+    row: RowProps,
+    cell: CellProps,
+    cellContent: CellContentProps,
     pagination: undefined,
+    title: TitleProps,
+    menu: MenuProps,
+    menuItems: MenuItemsProps,
     formatter: FormatterProps,
     editor: EditorProps,
 }
 
-export interface TableRowProps {
+export interface RowProps {
     tableRow: TableRow,
 }
 
-export interface TableCellProps {
+export interface CellProps {
     tableColumn: TableColumn,
     tableRow: TableRow,
     colSpan?: number,
     rowSpan?: number,
+}
+
+export interface CellContentProps {
+    tableColumn: TableColumn,
+    tableRow: TableRow,
+}
+
+export interface TitleProps {
+    title: string,
+    tableColumn: TableColumn,
+    tableRow: TableRow,
+}
+
+export interface MenuProps {
+    tableColumn: TableColumn,
+}
+
+export interface MenuItemsProps {
+    tableColumn: TableColumn,
 }
 
 export interface FormatterProps {

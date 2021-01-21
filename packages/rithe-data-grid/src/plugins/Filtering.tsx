@@ -1,5 +1,5 @@
 import React, { ComponentType } from "react";
-import { DataGridSearchInputProps } from "../components/DataGridSearchInput";
+import { DataGridFilteringMenuItemProps } from "../components/DataGridFilteringMenuItem";
 import { FilterExpression } from "../types/FilterExpression";
 import { FilterPredicate } from "../types/FilterPredicate";
 
@@ -12,7 +12,7 @@ export interface FilteringProps {
         field: string,
         disableUserControl?: string,
     }
-    inputComponent?: ComponentType<DataGridSearchInputProps>,
+    menuItemComponent?: ComponentType<DataGridFilteringMenuItemProps>,
 }
 
 export const Filtering = (props: FilteringProps) => {

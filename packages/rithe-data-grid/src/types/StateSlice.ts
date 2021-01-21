@@ -1,7 +1,10 @@
 import { BindOptions } from "./BindOptions";
 import { Column } from "./Column";
 import { DataType } from "./DataType";
+import { Direction } from "./Direction";
 import { DragState } from "./DragState";
+import { FilterExpression } from "./FilterExpression";
+import { FilterPredicate } from "./FilterPredicate";
 import { Row } from "./Row";
 import { RowId } from "./RowId";
 import { TableColumn } from "./TableColumn";
@@ -35,6 +38,10 @@ export interface StateSlice {
     changeColumnOrder: (fields: string[], delta: number) => void,
     draftColumnOrder: (fields: string[], delta: number) => void,
     cancelColumnOrderDraft: (fields: string[]) => void,
+    // Filtering
+    filters: { field: string, filter: FilterExpression | FilterPredicate }[],
+    // Sorting
+    sortings: { field: string, direction: Direction }[],
     // Selection
     selectionEnabled: boolean,
     highlightSelectedRows: boolean,

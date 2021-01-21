@@ -5,7 +5,7 @@ import { DataGridTableBodyCell, DataGridTableBodyCellProps } from "../components
 import { DataGridTableBodyRow, DataGridTableBodyRowProps } from "../components/DataGridTableBodyRow";
 import { Render } from "../Render";
 import { Template } from "../Template";
-import { DATA_TYPE } from "../utils/constants";
+import { isBodyCell, isBodyRow } from "../utils/helpers";
 
 export interface TableBodyLayoutProps {
     bodyComponent?: ComponentType<DataGridTableBodyProps>,
@@ -23,15 +23,15 @@ export const TableBodyLayout = (props: TableBodyLayoutProps) => {
     return <Plugin>
         <Template name="tableBody" stateNames={['tableBodyRows']}>
             {(_, tableRows) => <BodyComponent>
-                {tableRows && tableRows.map(tableRow => <Render key={tableRow.key} name="tableRow" props={{ tableRow }} />)}
+                {tableRows && tableRows.map(tableRow => <Render key={tableRow.key} name="row" props={{ tableRow }} />)}
             </BodyComponent>}
         </Template>
-        <Template name="tableRow" stateNames={['tableColumns']} predicate={({ tableRow }) => tableRow.type === DATA_TYPE}>
+        <Template name="row" stateNames={['tableColumns']} predicate={({ tableRow }) => isBodyRow(tableRow)}>
             {({ tableRow }, tableColumns) => <RowComponent tableRow={tableRow}>
-                {tableColumns && tableColumns.map(tableColumn => <Render key={tableColumn.key} name="tableCell" props={{ tableColumn, tableRow }} />)}
+                {tableColumns && tableColumns.map(tableColumn => <Render key={tableColumn.key} name="cell" props={{ tableColumn, tableRow }} />)}
             </RowComponent>}
         </Template>
-        <Template name="tableCell" predicate={({ tableRow }) => tableRow.type === DATA_TYPE}>
+        <Template name="cell" predicate={({ tableRow }) => isBodyCell(tableRow)}>
             {({ tableColumn, tableRow, colSpan, rowSpan }) => <CellComponent tableColumn={tableColumn} tableRow={tableRow} colSpan={colSpan} rowSpan={rowSpan}>
                 {tableColumn.key + tableRow.key}
             </CellComponent>}

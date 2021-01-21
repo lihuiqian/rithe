@@ -1,5 +1,6 @@
 import React, { ComponentType } from "react";
-import { DataGridSearchInputProps } from "../components/DataGridSearchInput";
+import { DataGridSortingMenuItemProps } from "../components/DataGridSortingMenuItem";
+import { DataGridTitleProps } from "../components/DataGridTitle";
 import { Direction } from "../types/Direction";
 
 export interface SortingProps {
@@ -11,7 +12,8 @@ export interface SortingProps {
         field: string,
         disableUserControl?: string,
     }
-    inputComponent?: ComponentType<DataGridSearchInputProps>,
+    titleComponent?: ComponentType<DataGridTitleProps>,
+    menuItemComponent?: ComponentType<DataGridSortingMenuItemProps>,
 }
 
 export const Sorting = (props: SortingProps) => {

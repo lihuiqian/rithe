@@ -5,7 +5,7 @@ import { DataGridTableFooterCell, DataGridTableFooterCellProps } from "../compon
 import { DataGridTableFooterRow, DataGridTableFooterRowProps } from "../components/DataGridTableFooterRow";
 import { Render } from "../Render";
 import { Template } from "../Template";
-import { SUMMARY_TYPE } from "../utils/constants";
+import { isFooterCell, isFooterRow } from "../utils/helpers";
 
 export interface TableFooterLayoutProps {
     footerComponent?: ComponentType<DataGridTableFooterProps>,
@@ -23,15 +23,15 @@ export const TableFooterLayout = (props: TableFooterLayoutProps) => {
     return <Plugin>
         <Template name="tableFooter" stateNames={['tableFooterRows']}>
             {(_, tableRows) => <FooterComponent>
-                {tableRows && tableRows.map(tableRow => <Render key={tableRow.key} name="tableRow" props={{ tableRow }} />)}
+                {tableRows && tableRows.map(tableRow => <Render key={tableRow.key} name="row" props={{ tableRow }} />)}
             </FooterComponent>}
         </Template>
-        <Template name="tableRow" stateNames={['tableColumns']} predicate={({ tableRow }) => tableRow.type === SUMMARY_TYPE}>
+        <Template name="row" stateNames={['tableColumns']} predicate={({ tableRow }) => isFooterRow(tableRow)}>
             {({ tableRow }, tableColumns) => <RowComponent tableRow={tableRow}>
-                {tableColumns && tableColumns.map(tableColumn => <Render key={tableColumn.key} name="tableCell" props={{ tableColumn, tableRow }} />)}
+                {tableColumns && tableColumns.map(tableColumn => <Render key={tableColumn.key} name="cell" props={{ tableColumn, tableRow }} />)}
             </RowComponent>}
         </Template>
-        <Template name="tableCell" predicate={({ tableRow }) => tableRow.type === SUMMARY_TYPE}>
+        <Template name="cell" predicate={({ tableRow }) => isFooterCell(tableRow)}>
             {({ tableColumn, tableRow, colSpan, rowSpan }) => <CellComponent tableColumn={tableColumn} tableRow={tableRow} colSpan={colSpan} rowSpan={rowSpan}>
                 {tableColumn.key + tableRow.key}
             </CellComponent>}
