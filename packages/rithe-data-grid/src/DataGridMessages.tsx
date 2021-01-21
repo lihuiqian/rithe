@@ -9,6 +9,7 @@ export interface DataGridMessages {
     max: string,
     min: string,
     avg: string,
+    searchPlaceholder: string,
 }
 
 const defaultMessages: DataGridMessages = {
@@ -20,7 +21,7 @@ const defaultMessages: DataGridMessages = {
     max: 'Max',
     min: 'Min',
     avg: 'Avg',
-
+    searchPlaceholder: 'Search',
 }
 
 const MessagesContext = createContext<DataGridMessages>(defaultMessages)
