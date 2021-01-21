@@ -8,7 +8,7 @@ import { DataGridTableHeaderRow, DataGridTableHeaderRowProps } from "../componen
 import { DataGridTitle, DataGridTitleProps } from "../components/DataGridTitle";
 import { Render } from "../Render";
 import { Template } from "../Template";
-import { isHeaderCell, isHeaderRow } from "../utils/helpers";
+import { isHeaderCell, isHeaderContent, isHeaderRow } from "../utils/helpers";
 
 export interface TableHeaderLayoutProps {
     headerComponent?: ComponentType<DataGridTableHeaderProps>,
@@ -63,7 +63,7 @@ export const TableHeaderLayout = (props: TableHeaderLayoutProps) => {
                 </CellComponent>
             }
         </Template>
-        <Template name="cellContent">
+        <Template name="cellContent" predicate={({ tableRow }) => isHeaderContent(tableRow)}>
             {({ tableColumn, tableRow }) => {
                 const align = tableColumn.dataType?.align ?? 'start'
                 const title = tableColumn.column?.title ?? ''
@@ -90,6 +90,9 @@ export const TableHeaderLayout = (props: TableHeaderLayoutProps) => {
                     <Render name="menuItems" props={{ tableColumn }} />
                 </MenuComponent>
             }}
+        </Template>
+        <Template name="menuItems">
+            {() => <>A</>}
         </Template>
     </Plugin>
 }

@@ -1,4 +1,4 @@
-import { Data, DataGrid, PaginationLayout, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
+import { Data, DataGrid, Grouping, PaginationLayout, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
 import { Plugin, Render, State, Template } from '@rithe/plugin';
 import React, { useCallback, useState } from 'react';
 
@@ -8,7 +8,7 @@ function App() {
     <Data columns={[{
       field: 'a', dataTypeName: 'string', title: 'A',
     }, {
-      field: 'b', dataTypeName: 'string', title: 'B',
+      field: 'b', dataTypeName: 'number', title: 'B',
     }]} rows={[{
       a: 1, b: 2
     }, {
@@ -21,6 +21,7 @@ function App() {
       <TableFooterLayout />
     </TableLayout>
     <PaginationLayout />
+    <Grouping defaultGroupingFields={['a']} options={[{ field: 'a' }]} />
   </DataGrid>
 }
 

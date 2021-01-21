@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 
 export interface DataGridPopoverProps {
     open: boolean,
@@ -8,6 +8,13 @@ export interface DataGridPopoverProps {
 }
 
 export const DataGridPopover = (props: DataGridPopoverProps) => {
-    const { children } = props
-    return <div>{children}</div>
+    const { open, onClose, children } = props
+
+    useEffect(() => {
+        const onClick = () => { if (open) onClose() }
+        window.addEventListener('click', onClick)
+        return () => window.removeEventListener('click', onClick)
+    }, [onClose, open])
+
+    return <div>{open && children}</div>
 }

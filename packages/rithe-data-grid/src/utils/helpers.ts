@@ -8,6 +8,9 @@ export const isFooterRow = (tableRow: TableRow) => tableRow.type === SUMMARY_TYP
 export const isHeaderCell = (tableRow: TableRow) => tableRow.type === HEADER_TYPE
 export const isBodyCell = (tableRow: TableRow) => tableRow.type === DATA_TYPE
 export const isFooterCell = (tableRow: TableRow) => tableRow.type === SUMMARY_TYPE
+export const isHeaderContent = (tableRow: TableRow) => tableRow.type === HEADER_TYPE
+export const isBodyContent = (tableRow: TableRow) => tableRow.type === DATA_TYPE
+export const isFooterContent = (tableRow: TableRow) => tableRow.type === SUMMARY_TYPE
 
 
 export const isCurrentFormatter = (dataTypeName: string, tableColumn: TableColumn) => {

@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { CSSProperties, ReactNode, useMemo } from "react";
 
 export interface DataGridGroupingPanelProps {
     children?: ReactNode | ReactNode[]
@@ -6,5 +6,6 @@ export interface DataGridGroupingPanelProps {
 
 export const DataGridGroupingPanel = (props: DataGridGroupingPanelProps) => {
     const { children } = props
-    return <div>{children}</div>
+    const style = useMemo<CSSProperties>(() => ({ flexBasis: '100%' }), [])
+    return <div style={style}>{children}</div>
 }

@@ -1,5 +1,6 @@
 import Comparator from "../base/Comparator"
 import Iterables from "./Iterables"
+import Multiset from "./Multiset"
 import Multisets from "./Multisets"
 
 function empty<T>(): T[] {
@@ -25,6 +26,26 @@ function concat<T>(...arrs: T[][]): T[] {
 
 function zip<T>(...arrs: T[][]): T[][] {
     return from(Iterables.zip(...arrs))
+}
+
+function union<T>(arr1: T[], arr2: T[]): T[] {
+    const multiset = new Multiset(arr1)
+    return [...arr1, ...arr2.filter(value => !multiset.delete(value))]
+}
+
+function intersection<T>(arr1: T[], arr2: T[]): T[] {
+    const multiset = new Multiset(arr2)
+    return arr1.filter(value => multiset.delete(value))
+}
+
+function difference<T>(arr1: T[], arr2: T[]): T[] {
+    const multiset = new Multiset(arr2)
+    return arr1.filter(value => !multiset.delete(value))
+}
+
+function symmetricDifference<T>(arr1: T[], arr2: T[]): T[] {
+    const multiset1 = new Multiset(arr1), multiset2 = new Multiset(arr2)
+    return [...arr1.filter(value => !multiset2.delete(value)), ...arr2.filter(value => !multiset1.delete(value))]
 }
 
 function map<T, R>(arr: T[], project: (value: T, index: number) => R): R[] {
@@ -186,6 +207,10 @@ export default {
     repeat,
     concat,
     zip,
+    union,
+    intersection,
+    difference,
+    symmetricDifference,
     map,
     pairwise,
     scan,

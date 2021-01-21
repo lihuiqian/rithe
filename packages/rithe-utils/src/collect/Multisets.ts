@@ -56,18 +56,6 @@ function symmetricDifference<T>(multiset1: Multiset<T>, multiset2: Multiset<T>):
     return result
 }
 
-function sum<T>(multiset1: Multiset<T>, multiset2: Multiset<T>): Multiset<T> {
-    const result = new Multiset<T>(multiset1)
-    multiset2.forEachEntry((value, count) => result.setCount(value, result.count(value) + count))
-    return result
-}
-
-function removeOccurrences<T>(multiset1: Multiset<T>, multiset2: Multiset<T>): Multiset<T> {
-    const result = new Multiset<T>(multiset1)
-    multiset2.forEachEntry((value, count) => result.setCount(value, result.count(value) - count))
-    return result
-}
-
 function retainOccurrences<T>(multiset1: Multiset<T>, multiset2: Multiset<T>): Multiset<T> {
     const result = new Multiset<T>(multiset1)
     multiset2.forEachEntry((value, count) => result.setCount(value, Math.min(result.count(value), count)))
@@ -181,8 +169,6 @@ export default {
     intersection,
     difference,
     symmetricDifference,
-    sum,
-    removeOccurrences,
     retainOccurrences,
     map,
     flatMap,

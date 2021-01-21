@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { CSSProperties, ReactNode, useMemo } from "react";
 
 export interface DataGridToolbarProps {
     children?: ReactNode | ReactNode[]
@@ -6,5 +6,6 @@ export interface DataGridToolbarProps {
 
 export const DataGridToolbar = (props: DataGridToolbarProps) => {
     const { children } = props
-    return <div>{children}</div>
+    const style = useMemo<CSSProperties>(() => ({ display: 'flex', alignItems: 'center' }), [])
+    return <div style={style}>{children}</div>
 }

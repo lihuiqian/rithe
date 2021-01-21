@@ -6,7 +6,7 @@ export interface TableColumn {
     key: string,
     type: symbol,
     column?: Column,
-    dataType?: DataType<any>,
+    dataType?: DataType,
     width?: number,
     freeze?: Freeze,
 }

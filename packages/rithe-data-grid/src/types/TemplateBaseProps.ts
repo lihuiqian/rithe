@@ -5,6 +5,7 @@ import { TableRow } from "./TableRow";
 export interface TemplateBaseProps {
     root: undefined,
     toolbar: undefined,
+    toolbarContent: undefined,
     table: undefined,
     tableHeader: undefined,
     tableBody: undefined,

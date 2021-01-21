@@ -1,6 +1,7 @@
 import { PluginHost } from "@rithe/plugin"
 import React, { ComponentType, ReactNode } from 'react'
 import { DataGridContainer, DataGridContainerProps } from "./components/DataGridContainer"
+import { DataTypeProvider } from "./plugins/DataTypeProvider"
 import { Render } from "./Render"
 import { Template } from "./Template"
 
@@ -15,6 +16,8 @@ export const DataGrid = (props: DataGridProps) => {
         children } = props
 
     return <PluginHost>
+        <DataTypeProvider type="string" name="string" align="start" />
+        <DataTypeProvider type="number" name="number" align="end" />
         <Template name="root">
             {() => <RootComponent>
                 <Render name="toolbar" />

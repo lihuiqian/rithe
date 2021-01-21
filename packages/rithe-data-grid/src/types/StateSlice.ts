@@ -13,7 +13,7 @@ import { Toggle } from "./Toggle";
 
 export interface StateSlice {
     // DataTypeProvider
-    dataTypes: DataType<any>[],
+    dataTypes: DataType[],
     // Data
     columns: Column[],
     rows: Row[],

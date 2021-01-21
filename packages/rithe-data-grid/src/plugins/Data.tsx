@@ -43,7 +43,7 @@ const useGetRowIdValue = (rows: Row[], getRowId?: (row: Row) => RowId) => {
 }
 
 const useTableColumnsGenerated = (columns: Column[]) => {
-    return useCallback((dataTypes?: DataType<any>[]) => {
+    return useCallback((dataTypes?: DataType[]) => {
         const dataTypeMap = Maps.from((dataTypes ?? []).map(dt => [dt.name, dt]))
         return columns.map(column => ({
             key: column.field,
