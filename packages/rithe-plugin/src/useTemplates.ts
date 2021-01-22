@@ -17,7 +17,6 @@ export const useTemplates = (name: string, props: any) => {
 
     const diff = name !== latestName.current || props !== latestParam.current
     const templates = diff ? core.available(name, position, props) : latestTemplates.current
-    console.log(diff, templates)
 
     useLayoutEffect(() => {
         latestName.current = name

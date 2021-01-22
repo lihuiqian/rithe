@@ -1,33 +1,28 @@
+import { Data, DataGrid, Grouping, PaginationLayout, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
 import { Plugin, Render, State, Template } from '@rithe/plugin';
-import { Arrays, SetMultimaps } from '@rithe/utils';
 import React, { useCallback, useState } from 'react';
 
 function App() {
 
-  SetMultimaps.from(Arrays.range(0, 10).map(i => [i % 2, i])).forEachCollection((value, key) => {
-    console.log(key, value)
-  })
-
-  return <></>
-  // return <DataGrid >
-  //   <Data columns={[{
-  //     field: 'a', dataTypeName: 'string', title: 'A',
-  //   }, {
-  //     field: 'b', dataTypeName: 'number', title: 'B',
-  //   }]} rows={[{
-  //     a: 1, b: 2
-  //   }, {
-  //     a: 3, b: 4
-  //   }]} />
-  //   <ToolbarLayout />
-  //   <TableLayout>
-  //     <TableHeaderLayout />
-  //     <TableBodyLayout />
-  //     <TableFooterLayout />
-  //   </TableLayout>
-  //   <PaginationLayout />
-  //   <Grouping defaultGroupingFields={['a']} options={[{ field: 'a' }]} />
-  // </DataGrid>
+  return <DataGrid >
+    <Data columns={[{
+      field: 'a', dataTypeName: 'string', title: 'A',
+    }, {
+      field: 'b', dataTypeName: 'number', title: 'B',
+    }]} rows={[{
+      a: 1, b: 2
+    }, {
+      a: 3, b: 4
+    }]} />
+    <ToolbarLayout />
+    <TableLayout>
+      <TableHeaderLayout />
+      <TableBodyLayout />
+      <TableFooterLayout />
+    </TableLayout>
+    <PaginationLayout />
+    <Grouping defaultGroupingFields={['a']} options={[{ field: 'a' }]} />
+  </DataGrid>
 }
 
 function Part1() {
