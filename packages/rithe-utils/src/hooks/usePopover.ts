@@ -11,7 +11,7 @@ function usePopover() {
         setAnchorEl(null)
     }, [])
 
-    return [!!anchorEl, anchorEl, onOpen, onClose] as [open: boolean, anchorEl: HTMLElement | null, onOpen: (e: MouseEvent<HTMLElement>) => void, onClose: () => void]
+    return [!!anchorEl, anchorEl, onOpen, onClose] as [boolean, HTMLElement | null, (e: MouseEvent<HTMLElement>) => void, () => void]
 }
 
 export default usePopover

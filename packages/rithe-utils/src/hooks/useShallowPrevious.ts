@@ -8,7 +8,7 @@ function useShallowPrevious<T>(value: T, initialValue?: T): T | undefined {
     const ref = useRef<T | undefined>(initialValue)
     if (!Object.is(value, ref.current)) {
         if (value instanceof Array) {
-            if (ref.current === undefined || !Arrays.equals(value, ref.current as any)) {
+            if (ref.current === undefined || !Arrays.shallowEquals(value, ref.current as any)) {
                 ref.current = value
             }
         } else if (value instanceof Object) {

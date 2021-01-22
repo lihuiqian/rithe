@@ -151,7 +151,7 @@ function elementsEqual<T>(arr1: T[], arr2: T[]): boolean {
     return Multisets.elementsEqual(Multisets.from(arr1), Multisets.from(arr2))
 }
 
-function equals<T>(arr1: T[], arr2: T[]): boolean {
+function shallowEquals<T>(arr1: T[], arr2: T[]): boolean {
     if (arr1.length !== arr2.length) return false
     for (let i = 0; i < arr1.length; i++) {
         if (arr1[i] !== arr2[i]) return false
@@ -232,7 +232,7 @@ export default {
     min,
     has,
     elementsEqual,
-    equals,
+    shallowEquals,
     fill,
     push,
     pop,

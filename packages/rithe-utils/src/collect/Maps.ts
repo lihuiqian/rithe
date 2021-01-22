@@ -37,7 +37,7 @@ function set<K, V>(map: Map<K, V>, ...entries: [K, V][]): Map<K, V> {
 
 function delete_<K, V>(map: Map<K, V>, ...keys: K[]): Map<K, V> {
     const result = new Map<K, V>(map)
-    keys.forEach(result.delete)
+    keys.forEach(value => result.delete(value))
     return result
 }
 

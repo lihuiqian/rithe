@@ -19,7 +19,7 @@ function concat<T>(...sets: Set<T>[]): Set<T> {
 
 function union<T>(set1: Set<T>, set2: Set<T>): Set<T> {
     const result = new Set(set1)
-    set2.forEach(result.add)
+    set2.forEach(value => result.add(value))
     return result
 }
 
@@ -80,13 +80,13 @@ function elementsEqual<T>(set1: Set<T>, set2: Set<T>): boolean {
 
 function add<T>(set: Set<T>, ...items: T[]): Set<T> {
     const result = new Set(set)
-    items.forEach(result.add)
+    items.forEach(value => result.add(value))
     return result
 }
 
 function delete_<T>(set: Set<T>, ...items: T[]): Set<T> {
     const result = new Set(set)
-    items.forEach(result.delete)
+    items.forEach(value => result.delete(value))
     return result
 }
 

@@ -429,14 +429,6 @@ class FluentMultiset<T> {
         return this._call(Multisets.symmetricDifference, set)
     }
 
-    sum(set: Multiset<T>): FluentMultiset<T> {
-        return this._call(Multisets.sum, set)
-    }
-
-    removeOccurrences(set: Multiset<T>): FluentMultiset<T> {
-        return this._call(Multisets.removeOccurrences, set)
-    }
-
     retainOccurrences(set: Multiset<T>): FluentMultiset<T> {
         return this._call(Multisets.retainOccurrences, set)
     }

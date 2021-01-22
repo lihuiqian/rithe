@@ -43,7 +43,7 @@ class SetMultimap<K, V> implements Iterable<[K, V]> {
         }
 
         const prevSize = collection.size
-        values.forEach(collection.add)
+        values.forEach(value => (collection!).add(value))
         this._size += collection.size - prevSize
         return this
     }
@@ -61,7 +61,7 @@ class SetMultimap<K, V> implements Iterable<[K, V]> {
         }
 
         const prevSize = collection.size
-        values.forEach(collection.delete)
+        values.forEach(value => collection.delete(value))
         this._size -= prevSize - collection.size
         if (collection.size === 0) {
             map.delete(key)

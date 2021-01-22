@@ -278,7 +278,7 @@ function has<T>(iterable: Iterable<T>, value: T): boolean {
     return indexOf(iterable, value) >= 0
 }
 
-function equals<T>(iterable1: Iterable<T>, iterable2: Iterable<T>): boolean {
+function shallowEquals<T>(iterable1: Iterable<T>, iterable2: Iterable<T>): boolean {
     const iterator1 = iterable1[Symbol.iterator](), iterator2 = iterable2[Symbol.iterator]()
     let next1 = iterator1.next(), next2 = iterator2.next()
     while (!next1.done && !next2.done) {
@@ -320,5 +320,5 @@ export default {
     max,
     min,
     has,
-    equals,
+    equals: shallowEquals,
 }

@@ -14,7 +14,7 @@ export const useStates = (...names: string[]) => {
     const latestNames = useRef<string[]>([])
     const latestValues = useRef<(any | undefined)[]>([])
 
-    const diff = !Arrays.equals(names, latestNames.current)
+    const diff = !Arrays.shallowEquals(names, latestNames.current)
     const values = diff ? names.map(name => core.slice(name, position)?.value) : latestValues.current
 
     useLayoutEffect(() => {
@@ -25,7 +25,7 @@ export const useStates = (...names: string[]) => {
     useLayoutEffect(() => {
         const checkForUpdate = () => {
             const newValues = latestNames.current.map(name => core.slice(name, position)?.value)
-            if (!Arrays.equals(newValues, latestValues.current)) {
+            if (!Arrays.shallowEquals(newValues, latestValues.current)) {
                 latestValues.current = newValues
                 forceUpdate()
             }

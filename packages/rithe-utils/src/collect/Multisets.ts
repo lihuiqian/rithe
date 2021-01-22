@@ -142,13 +142,13 @@ function elementsEqual<T>(multiset1: Multiset<T>, multiset2: Multiset<T>): boole
 
 function add<T>(multiset: Multiset<T>, ...items: T[]): Multiset<T> {
     const result = new Multiset(multiset)
-    items.forEach(result.add)
+    items.forEach(value => result.add(value))
     return result
 }
 
 function delete_<T>(multiset: Multiset<T>, ...items: T[]): Multiset<T> {
     const result = new Multiset(multiset)
-    items.forEach(result.delete)
+    items.forEach(value => result.delete(value))
     return result
 }
 

@@ -30,7 +30,7 @@ export const useTemplates = (name: string, props: any) => {
             const newTemplates = core.available(latestName.current, position, latestParam.current)
             const same = newTemplates.length === latestTemplates.current.length
                 && Arrays.zip(newTemplates, latestTemplates.current)
-                    .map(([a, b]) => a.render === b.render && Arrays.equals(a.stateNames, b.stateNames))
+                    .map(([a, b]) => a.render === b.render && Arrays.shallowEquals(a.stateNames, b.stateNames))
                     .reduce((a, b) => a && b, true)
             if (!same) {
                 latestTemplates.current = newTemplates
