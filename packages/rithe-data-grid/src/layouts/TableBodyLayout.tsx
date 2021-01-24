@@ -6,7 +6,7 @@ import { DataGridTableBodyCellContent, DataGridTableBodyCellContentProps } from 
 import { DataGridTableBodyRow, DataGridTableBodyRowProps } from "../components/DataGridTableBodyRow";
 import { Render } from "../Render";
 import { Template } from "../Template";
-import { isBodyCell, isBodyContent, isBodyRow } from "../utils/helpers";
+import { isDataCell, isDataContent, isDataRow } from "../utils/helpers";
 
 export interface TableBodyLayoutProps {
     bodyComponent?: ComponentType<DataGridTableBodyProps>,
@@ -33,7 +33,7 @@ export const TableBodyLayout = (props: TableBodyLayoutProps) => {
                 </BodyComponent>
             }
         </Template>
-        <Template name="row" stateNames={['tableColumns']} predicate={({ tableRow }) => isBodyRow(tableRow)}>
+        <Template name="row" stateNames={['tableColumns']} predicate={({ tableRow }) => isDataRow(tableRow)}>
             {({ tableRow }, tableColumns) =>
                 <RowComponent tableRow={tableRow}>
                     {tableColumns && tableColumns.map(tableColumn =>
@@ -41,18 +41,20 @@ export const TableBodyLayout = (props: TableBodyLayoutProps) => {
                 </RowComponent>
             }
         </Template>
-        <Template name="cell" predicate={({ tableRow }) => isBodyCell(tableRow)}>
+        <Template name="cell" predicate={({ tableColumn, tableRow }) => isDataCell(tableColumn, tableRow)}>
             {({ tableColumn, tableRow, colSpan, rowSpan }) =>
                 <CellComponent
                     tableColumn={tableColumn}
                     tableRow={tableRow}
                     colSpan={colSpan}
-                    rowSpan={rowSpan}>
+                    rowSpan={rowSpan}
+                    freezePosition={0}
+                >
                     <Render name="cellContent" props={{ tableColumn, tableRow }} />
                 </CellComponent>
             }
         </Template>
-        <Template name="cellContent" predicate={({ tableRow }) => isBodyContent(tableRow)}>
+        <Template name="cellContent" predicate={({ tableColumn, tableRow }) => isDataContent(tableColumn, tableRow)}>
             {({ tableColumn, tableRow }) => {
                 const dataType = tableColumn.dataType, column = tableColumn.column, row = tableRow.row
                 const align = dataType?.align ?? 'start'

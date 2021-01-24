@@ -5,7 +5,7 @@ import { DataGridTableFooterCell, DataGridTableFooterCellProps } from "../compon
 import { DataGridTableFooterRow, DataGridTableFooterRowProps } from "../components/DataGridTableFooterRow";
 import { Render } from "../Render";
 import { Template } from "../Template";
-import { isFooterCell, isFooterRow } from "../utils/helpers";
+import { isSummaryCell, isSummaryRow } from "../utils/helpers";
 
 export interface TableFooterLayoutProps {
     footerComponent?: ComponentType<DataGridTableFooterProps>,
@@ -26,12 +26,12 @@ export const TableFooterLayout = (props: TableFooterLayoutProps) => {
                 {tableRows && tableRows.map(tableRow => <Render key={tableRow.key} name="row" props={{ tableRow }} />)}
             </FooterComponent>}
         </Template>
-        <Template name="row" stateNames={['tableColumns']} predicate={({ tableRow }) => isFooterRow(tableRow)}>
+        <Template name="row" stateNames={['tableColumns']} predicate={({ tableRow }) => isSummaryRow(tableRow)}>
             {({ tableRow }, tableColumns) => <RowComponent tableRow={tableRow}>
                 {tableColumns && tableColumns.map(tableColumn => <Render key={tableColumn.key} name="cell" props={{ tableColumn, tableRow }} />)}
             </RowComponent>}
         </Template>
-        <Template name="cell" predicate={({ tableRow }) => isFooterCell(tableRow)}>
+        <Template name="cell" predicate={({ tableColumn, tableRow }) => isSummaryCell(tableColumn, tableRow)}>
             {({ tableColumn, tableRow, colSpan, rowSpan }) => <CellComponent tableColumn={tableColumn} tableRow={tableRow} colSpan={colSpan} rowSpan={rowSpan}>
                 {tableColumn.key + tableRow.key}
             </CellComponent>}

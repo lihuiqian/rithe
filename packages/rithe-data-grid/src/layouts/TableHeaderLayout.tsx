@@ -48,7 +48,7 @@ export const TableHeaderLayout = (props: TableHeaderLayoutProps) => {
                 </RowComponent>
             }
         </Template>
-        <Template name="cell" predicate={({ tableRow }) => isHeaderCell(tableRow)}>
+        <Template name="cell" predicate={({ tableColumn, tableRow }) => isHeaderCell(tableColumn, tableRow)}>
             {({ tableColumn, tableRow, colSpan, rowSpan }) =>
                 <CellComponent
                     width={tableColumn.width ?? 120}
@@ -63,7 +63,7 @@ export const TableHeaderLayout = (props: TableHeaderLayoutProps) => {
                 </CellComponent>
             }
         </Template>
-        <Template name="cellContent" predicate={({ tableRow }) => isHeaderContent(tableRow)}>
+        <Template name="cellContent" predicate={({ tableColumn, tableRow }) => isHeaderContent(tableColumn, tableRow)}>
             {({ tableColumn, tableRow }) => {
                 const align = tableColumn.dataType?.align ?? 'start'
                 const title = tableColumn.column?.title ?? ''
