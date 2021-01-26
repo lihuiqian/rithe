@@ -16,6 +16,8 @@ export { default as Multisets } from './collect/Multisets';
 export { default as SetMultimap } from './collect/SetMultimap';
 export { default as SetMultimaps } from './collect/SetMultimaps';
 export { default as Sets } from './collect/Sets';
+// components
+export * from './components/DragDrop';
 // fp
 export { default as BiConsumer } from './fp/BiConsumer';
 export { default as BiOperator } from './fp/BiOperator';
@@ -33,4 +35,3 @@ export { default as useMeasure } from './hooks/useMeasure';
 export { default as usePopover } from './hooks/usePopover';
 export { default as usePrevious } from './hooks/usePrevious';
 export { default as useShallow } from './hooks/useShallow';
-

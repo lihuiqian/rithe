@@ -1,28 +1,36 @@
 import { Data, DataGrid, Grouping, PaginationLayout, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
 import { Plugin, Render, State, Template } from '@rithe/plugin';
+import { DragDropProvider, Draggable, Droppable } from '@rithe/utils';
 import React, { useCallback, useState } from 'react';
 
 function App() {
+  const [value, setValue] = useState<any>(undefined)
 
-  return <DataGrid >
-    <Data columns={[{
-      field: 'a', dataTypeName: 'string', title: 'A',
-    }, {
-      field: 'b', dataTypeName: 'number', title: 'B',
-    }]} rows={[{
-      a: 1, b: 2
-    }, {
-      a: 3, b: 4
-    }]} />
-    <ToolbarLayout />
-    <TableLayout>
-      <TableHeaderLayout />
-      <TableBodyLayout />
-      <TableFooterLayout />
-    </TableLayout>
-    <PaginationLayout />
-    <Grouping defaultGroupingFields={['a']} options={[{ field: 'a' }]} />
-  </DataGrid>
+  return <>
+    <DragDropProvider>
+      <Draggable payload={"ABC"}><div>Draggable</div></Draggable>
+      <Droppable onOver={(coordinate) => setValue(coordinate)} onDrop={(_, payload) => setValue(payload)}><div style={{ width: 100, height: 100, border: '1px solid red' }}>{JSON.stringify(value)}</div></Droppable>
+    </DragDropProvider>
+    <DataGrid >
+      <Data columns={[{
+        field: 'a', dataTypeName: 'string', title: 'A',
+      }, {
+        field: 'b', dataTypeName: 'number', title: 'B',
+      }]} rows={[{
+        a: 1, b: 2
+      }, {
+        a: 3, b: 4
+      }]} />
+      <ToolbarLayout />
+      <TableLayout>
+        <TableHeaderLayout />
+        <TableBodyLayout />
+        <TableFooterLayout />
+      </TableLayout>
+      <PaginationLayout />
+      <Grouping defaultGroupingFields={['a']} options={[{ field: 'a' }]} />
+    </DataGrid>
+  </>
 }
 
 function Part1() {
