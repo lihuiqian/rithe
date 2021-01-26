@@ -32,5 +32,5 @@ export { default as useAnimationThrottle } from './hooks/useAnimationThrottle';
 export { default as useMeasure } from './hooks/useMeasure';
 export { default as usePopover } from './hooks/usePopover';
 export { default as usePrevious } from './hooks/usePrevious';
-export { default as useShallowPrevious } from './hooks/useShallowPrevious';
+export { default as useShallow } from './hooks/useShallow';
 

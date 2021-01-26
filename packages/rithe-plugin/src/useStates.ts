@@ -1,11 +1,11 @@
-import { Arrays, useShallowPrevious } from "@rithe/utils"
+import { Arrays, useShallow } from "@rithe/utils"
 import { useContext, useLayoutEffect, useMemo, useReducer, useRef } from "react"
 import { PositionContext } from "./internal/PositionContext"
 import { StateContext } from "./internal/StateContext"
 import { Subscription } from "./internal/Subscription"
 
 export const useStates = (...names: string[]) => {
-    names = useShallowPrevious(names, names)
+    names = useShallow(names)
     const position = useContext(PositionContext)
     const core = useContext(StateContext)
     const [, forceUpdate] = useReducer(s => s + 1, 0)

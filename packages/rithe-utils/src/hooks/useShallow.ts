@@ -2,10 +2,8 @@ import { useRef } from "react"
 import Objects from "../base/Objects"
 import Arrays from "../collect/Arrays"
 
-function useShallowPrevious<T>(value: T): T | undefined
-function useShallowPrevious<T>(value: T, initialValue: T): T
-function useShallowPrevious<T>(value: T, initialValue?: T): T | undefined {
-    const ref = useRef<T | undefined>(initialValue)
+function useShallow<T>(value: T): T {
+    const ref = useRef<T>(value)
     if (!Object.is(value, ref.current)) {
         if (value instanceof Array) {
             if (ref.current === undefined || !Arrays.shallowEquals(value, ref.current as any)) {
@@ -23,4 +21,4 @@ function useShallowPrevious<T>(value: T, initialValue?: T): T | undefined {
     return ref.current
 }
 
-export default useShallowPrevious
+export default useShallow
