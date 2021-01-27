@@ -25,13 +25,19 @@ export const DataGridTableBodyCell = (props: DataGridTableBodyCellProps) => {
     const freezeLeft = (freeze === 'start' && ltr) || (freeze === 'end' && !ltr)
     const freezeRight = (freeze === 'start' && !ltr) || (freeze === 'end' && ltr)
 
-    const style = useMemo<CSSProperties>(() => ({
-        position: 'sticky',
-        left: freezeLeft ? freezePosition : undefined,
-        right: freezeRight ? freezePosition : undefined,
-    }), [freezeLeft, freezePosition, freezeRight])
+    const styles = useStyles(freezeLeft, freezeRight, freezePosition)
     const { tableBodyCellComponent: Td } = useDataGridTheme()
-    return <Td ref={ref} colSpan={colSpan} rowSpan={rowSpan} style={style}>
+    return <Td ref={ref} colSpan={colSpan} rowSpan={rowSpan} style={styles.root}>
         {children}
     </Td>
+}
+
+const useStyles = (freezeLeft: boolean, freezeRight: boolean, freezePosition: number) => {
+    return useMemo<Record<string, CSSProperties>>(() => ({
+        root: {
+            position: 'sticky',
+            left: freezeLeft ? freezePosition : undefined,
+            right: freezeRight ? freezePosition : undefined,
+        },
+    }), [freezeLeft, freezePosition, freezeRight])
 }

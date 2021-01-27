@@ -1,13 +1,13 @@
 import React, { ReactNode, useEffect } from "react";
 
-export interface DataGridPopoverProps {
+export interface PopoverProps {
     open: boolean,
     anchorEl: HTMLElement | null,
     onClose: () => void,
     children?: ReactNode | ReactNode[]
 }
 
-export const DataGridPopover = (props: DataGridPopoverProps) => {
+export const Popover = (props: PopoverProps) => {
     const { open, onClose, children } = props
 
     useEffect(() => {

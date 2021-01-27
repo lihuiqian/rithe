@@ -19,7 +19,11 @@ export const DataGridMenu = (props: DataGridMenuProps) => {
 
     const [open, anchorEl, onOpen, onClose] = usePopover()
 
-    const { iconButtonComponent: IconButton, popoverComponent: Popover } = useDataGridTheme()
+    const {
+        iconButtonComponent: IconButton,
+        popoverComponent: Popover,
+        menuComponent: Ul,
+    } = useDataGridTheme()
     return <>
         <IconButton onClick={onOpen}>
             {icon}
@@ -29,7 +33,9 @@ export const DataGridMenu = (props: DataGridMenuProps) => {
             anchorEl={anchorEl}
             onClose={onClose}
         >
-            {children}
+            <Ul>
+                {children}
+            </Ul>
         </Popover>
     </>
 }

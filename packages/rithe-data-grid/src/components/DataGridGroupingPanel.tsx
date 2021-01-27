@@ -6,6 +6,14 @@ export interface DataGridGroupingPanelProps {
 
 export const DataGridGroupingPanel = (props: DataGridGroupingPanelProps) => {
     const { children } = props
-    const style = useMemo<CSSProperties>(() => ({ flexBasis: '100%' }), [])
-    return <div style={style}>{children}</div>
+    const styles = useStyles()
+    return <div style={styles.root}>{children}</div>
+}
+
+const useStyles = () => {
+    return useMemo<Record<string, CSSProperties>>(() => ({
+        root: {
+            flexBasis: '100%',
+        },
+    }), [])
 }

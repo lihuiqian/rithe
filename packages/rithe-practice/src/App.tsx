@@ -1,4 +1,4 @@
-import { Data, DataGrid, Grouping, PaginationLayout, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
+import { ColumnFreeze, Data, DataGrid, Grouping, PaginationLayout, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
 import { Plugin, Render, State, Template } from '@rithe/plugin';
 import { DragDropProvider, Draggable, Droppable } from '@rithe/utils';
 import React, { useCallback, useState } from 'react';
@@ -28,6 +28,7 @@ function App() {
         <TableFooterLayout />
       </TableLayout>
       <PaginationLayout />
+      <ColumnFreeze defaultFreezeColumns={[{ field: 'a', freeze: 'start' }]} />
       <Grouping defaultGroupingFields={['a']} options={[{ field: 'a' }]} />
     </DataGrid>
   </>

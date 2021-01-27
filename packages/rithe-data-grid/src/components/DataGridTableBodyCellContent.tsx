@@ -10,14 +10,20 @@ export interface DataGridTableBodyCellContentProps extends CellContentProps {
 export const DataGridTableBodyCellContent = (props: DataGridTableBodyCellContentProps) => {
     const { align, children } = props
 
-    const style = useMemo<CSSProperties>(() => ({
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: align === 'center' ? 'center' : `flex-${align}`,
-        alignItems: 'center',
-    }), [align])
-    return <div style={style}>
+    const styles = useStyles(align)
+    return <div style={styles.root}>
         {children}
     </div>
+}
+
+const useStyles = (align: Align) => {
+    return useMemo<Record<string, CSSProperties>>(() => ({
+        root: {
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: align === 'center' ? 'center' : `flex-${align}`,
+            alignItems: 'center',
+        },
+    }), [align])
 }
