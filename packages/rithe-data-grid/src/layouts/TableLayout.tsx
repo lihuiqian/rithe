@@ -14,6 +14,7 @@ export const TableLayout = (props: TableLayoutProps) => {
         tableComponent: TableComponent = DataGridTable,
         children,
     } = props
+    console.log('TableLayout')
 
     return <Plugin>
         <Template name="table">

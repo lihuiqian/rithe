@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import React, { CSSProperties, ReactNode, useMemo } from "react";
 import { useDataGridTheme } from "../DataGridTheme";
 import { Freeze } from "../types/Freeze";
 import { CellProps } from "../types/TemplateBaseProps";
@@ -16,18 +16,12 @@ export const DataGridTableBodyCell = (props: DataGridTableBodyCellProps) => {
         colSpan, rowSpan,
         children } = props
 
-    const ref = useRef<HTMLTableHeaderCellElement>(null)
-    const [ltr, setLtr] = useState(true)
-    useEffect(() => {
-        if (!ref.current) return
-        setLtr(window.getComputedStyle(ref.current).direction === 'ltr')
-    }, [])
-    const freezeLeft = (freeze === 'start' && ltr) || (freeze === 'end' && !ltr)
-    const freezeRight = (freeze === 'start' && !ltr) || (freeze === 'end' && ltr)
+    const freezeLeft = freeze === 'start'
+    const freezeRight = freeze === 'end'
 
     const styles = useStyles(freezeLeft, freezeRight, freezePosition)
     const { tableBodyCellComponent: Td } = useDataGridTheme()
-    return <Td ref={ref} colSpan={colSpan} rowSpan={rowSpan} style={styles.root}>
+    return <Td colSpan={colSpan} rowSpan={rowSpan} style={styles.root}>
         {children}
     </Td>
 }
@@ -35,7 +29,7 @@ export const DataGridTableBodyCell = (props: DataGridTableBodyCellProps) => {
 const useStyles = (freezeLeft: boolean, freezeRight: boolean, freezePosition: number) => {
     return useMemo<Record<string, CSSProperties>>(() => ({
         root: {
-            position: 'sticky',
+            position: freezeLeft || freezeRight ? 'sticky' : undefined,
             left: freezeLeft ? freezePosition : undefined,
             right: freezeRight ? freezePosition : undefined,
         },

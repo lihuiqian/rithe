@@ -1,3 +1,4 @@
+import { shallowEquals } from "@rithe/utils"
 import React, { useContext } from "react"
 import { RenderContext } from "./internal/RenderContext"
 import { useStates } from "./useStates"
@@ -8,9 +9,10 @@ export interface RenderProps {
     props?: any,
 }
 
-export const Render = ({ name, props }: RenderProps) => {
+export const Render = React.memo(({ name, props }: RenderProps) => {
     return name === undefined ? <RenderPlaceholder /> : <RenderHost name={name} props={props} />
-}
+}, (a, b) => a.name === b.name && shallowEquals(a.props, b.props))
+Render.displayName = 'Render'
 
 const RenderHost = ({ name, props }: { name: string, props: any }) => {
     const templates = useTemplates(name, props)

@@ -29,6 +29,8 @@ export { default as Operator } from './fp/Operator';
 export { default as Predicate } from './fp/Predicate';
 export { default as Project } from './fp/Project';
 export { default as Supplier } from './fp/Supplier';
+// functons
+export { default as shallowEquals } from './functions/shallowEquals';
 // hooks
 export { default as useAnimationThrottle } from './hooks/useAnimationThrottle';
 export { default as useMeasure } from './hooks/useMeasure';
@@ -36,3 +38,4 @@ export { default as useMixed } from './hooks/useMixed';
 export { default as usePopover } from './hooks/usePopover';
 export { default as usePrevious } from './hooks/usePrevious';
 export { default as useShallow } from './hooks/useShallow';
+

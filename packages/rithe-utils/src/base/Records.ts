@@ -43,11 +43,11 @@ function keys<K extends keyof any>(record: Record<K, unknown>): Iterable<K> {
     const result: K[] = []
     for (const name of names) {
         const descriptor = descriptors[name]
-        descriptor.enumerable && descriptor.get && result.push(name as K)
+        descriptor.enumerable && result.push(name as K)
     }
     for (const symbol of symbols) {
         const descriptor = descriptors[symbol as K]
-        descriptor.enumerable && descriptor.get && result.push(symbol as K)
+        descriptor.enumerable && result.push(symbol as K)
     }
     return result
 }

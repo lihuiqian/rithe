@@ -16,5 +16,5 @@ export const Popover = (props: PopoverProps) => {
         return () => window.removeEventListener('click', onClick)
     }, [onClose, open])
 
-    return <div>{open && children}</div>
+    return <div style={{ position: 'absolute' }}>{open && children}</div>
 }

@@ -31,6 +31,7 @@ export const ColumnFreeze = (props: ColumnFreezeProps) => {
         iconComponent: IconComponent = DataGridColumnFreezeIcon,
         controlComponent: ControlComponent = DataGridColumnFreezeControl,
     } = props
+    console.log('ColumnFreeze')
     const [freezeColumns, setFreezeColumns] = useMixed(props.freezeColumns, props.onFreezeColumnsChange, props.defaultFreezeColumns)
     const setFreeze = useCallback((field: string, freeze?: Freeze) => {
         const freezeRecord = Records.from((freezeColumns ?? []).map(fc => [fc.field, fc.freeze]))
@@ -85,7 +86,7 @@ const useTableColumnsComputed = (freezeColumns?: { field: string, freeze: Freeze
             const field = tc.column?.field
             if (field === undefined) return tc
             const freeze = freezeRecord[field]
-            if (freeze === undefined) return tc
+            if (freeze === tc.freeze) return tc
             return { ...tc, freeze }
         })
     }, [freezeColumns])

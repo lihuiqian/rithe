@@ -22,6 +22,8 @@ export const TableBodyLayout = (props: TableBodyLayoutProps) => {
         cellComponent: CellComponent = DataGridTableBodyCell,
         contentComponent: ContentComponent = DataGridTableBodyCellContent,
     } = props
+    console.log('TableBodyLayout')
+
 
     return <Plugin>
         <Template name="tableBody" stateNames={['tableBodyRows']}>
@@ -34,16 +36,18 @@ export const TableBodyLayout = (props: TableBodyLayoutProps) => {
             }
         </Template>
         <Template name="row" stateNames={['tableColumns']} predicate={({ tableRow }) => isDataRow(tableRow)}>
-            {({ tableRow }, tableColumns) =>
-                <RowComponent tableRow={tableRow}>
+            {({ tableRow }, tableColumns) => {
+                console.log('rowTemplate')
+                return <RowComponent tableRow={tableRow}>
                     {tableColumns && tableColumns.map(tableColumn =>
                         <Render key={tableColumn.key} name="cell" props={{ tableColumn, tableRow }} />)}
                 </RowComponent>
-            }
+            }}
         </Template>
         <Template name="cell" predicate={({ tableColumn, tableRow }) => isDataCell(tableColumn, tableRow)}>
-            {({ tableColumn, tableRow, colSpan, rowSpan }) =>
-                <CellComponent
+            {({ tableColumn, tableRow, colSpan, rowSpan }) => {
+                console.log('cellTemplate')
+                return <CellComponent
                     tableColumn={tableColumn}
                     tableRow={tableRow}
                     colSpan={colSpan}
@@ -52,7 +56,7 @@ export const TableBodyLayout = (props: TableBodyLayoutProps) => {
                 >
                     <Render name="cellContent" props={{ tableColumn, tableRow }} />
                 </CellComponent>
-            }
+            }}
         </Template>
         <Template name="cellContent" predicate={({ tableColumn, tableRow }) => isDataContent(tableColumn, tableRow)}>
             {({ tableColumn, tableRow }) => {

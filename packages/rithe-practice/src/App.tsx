@@ -1,26 +1,40 @@
-import { ColumnFreeze, Data, DataGrid, Grouping, PaginationLayout, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
+import { ColumnFreeze, ColumnOrdering, Data, DataGrid, Grouping, PaginationLayout, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
 import { Plugin, Render, State, Template } from '@rithe/plugin';
-import { DragDropProvider, Draggable, Droppable } from '@rithe/utils';
+import { Arrays, DragDropProvider, Draggable, Droppable } from '@rithe/utils';
 import React, { useCallback, useState } from 'react';
 
 function App() {
+  console.log('App')
   const [value, setValue] = useState<any>(undefined)
-
   return <>
     <DragDropProvider>
       <Draggable payload={"ABC"}><div>Draggable</div></Draggable>
       <Droppable onOver={(coordinate) => setValue(coordinate)} onDrop={(_, payload) => setValue(payload)}><div style={{ width: 100, height: 100, border: '1px solid red' }}>{JSON.stringify(value)}</div></Droppable>
     </DragDropProvider>
     <DataGrid >
-      <Data columns={[{
-        field: 'a', dataTypeName: 'string', title: 'A',
-      }, {
-        field: 'b', dataTypeName: 'number', title: 'B',
-      }]} rows={[{
-        a: 1, b: 2
-      }, {
-        a: 3, b: 4
-      }]} />
+      <Data
+        columns={[{
+          field: 'a', dataTypeName: 'string', title: 'A',
+        }, {
+          field: 'b', dataTypeName: 'number', title: 'B',
+        }, {
+          field: 'c', dataTypeName: 'number', title: 'C',
+        }, {
+          field: 'd', dataTypeName: 'number', title: 'D',
+        }, {
+          field: 'e', dataTypeName: 'number', title: 'E',
+        }, {
+          field: 'f', dataTypeName: 'number', title: 'F',
+        }, {
+          field: 'g', dataTypeName: 'number', title: 'G',
+        }, {
+          field: 'h', dataTypeName: 'number', title: 'H',
+        }, {
+          field: 'i', dataTypeName: 'number', title: 'I',
+        }, {
+          field: 'j', dataTypeName: 'number', title: 'J',
+        }]}
+        rows={Arrays.range(0, 2).map(i => ({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8, i: 9, j: 10 }))} />
       <ToolbarLayout />
       <TableLayout>
         <TableHeaderLayout />
@@ -29,6 +43,7 @@ function App() {
       </TableLayout>
       <PaginationLayout />
       <ColumnFreeze defaultFreezeColumns={[{ field: 'a', freeze: 'start' }]} />
+      <ColumnOrdering />
       <Grouping defaultGroupingFields={['a']} options={[{ field: 'a' }]} />
     </DataGrid>
   </>
