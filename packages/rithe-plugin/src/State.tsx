@@ -1,4 +1,5 @@
-import { useContext, useEffect } from 'react'
+import { shallowEquals } from '@rithe/utils'
+import React, { useContext, useEffect } from 'react'
 import { PositionContext } from './internal/PositionContext'
 import { ComputedState, GeneratedState, ValueState } from './internal/State'
 import { StateContext } from './internal/StateContext'
@@ -22,7 +23,7 @@ export interface ComputedStateProps {
     lazy?: boolean,
 }
 
-export const State = (props: ValueStateProps | GeneratedStateProps | ComputedStateProps) => {
+export const State = React.memo((props: ValueStateProps | GeneratedStateProps | ComputedStateProps) => {
     const position = useContext(PositionContext)
     const core = useContext(StateContext)
     const { name, value, generated, computed, depNames, lazy } = props as ValueStateProps & GeneratedStateProps & ComputedStateProps
@@ -34,4 +35,13 @@ export const State = (props: ValueStateProps | GeneratedStateProps | ComputedSta
     }, [computed, core, depNames, generated, lazy, name, position, value])
 
     return null
-}
+}, (a, b) => {
+    const x = a as ValueStateProps & GeneratedStateProps & ComputedStateProps, y = b as ValueStateProps & GeneratedStateProps & ComputedStateProps
+    return Object.is(x.name, y.name)
+        && Object.is(x.value, y.value)
+        && Object.is(x.generated, y.generated)
+        && Object.is(x.computed, y.computed)
+        && shallowEquals(x.depNames, y.depNames)
+        && Object.is(x.lazy, y.lazy)
+})
+State.displayName = 'State'

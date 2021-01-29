@@ -1,3 +1,4 @@
+import { shallowEquals } from "@rithe/utils";
 import React, { useContext, useEffect } from "react";
 import { PositionContext } from "./internal/PositionContext";
 import { ConditionalTemplate, ReservedTemplate } from './internal/Template';
@@ -10,7 +11,7 @@ export interface TemplateProps {
     children: (props: any, ...states: any[]) => JSX.Element,
 }
 
-export const Template = ({ name, predicate, stateNames, children }: TemplateProps) => {
+export const Template = React.memo(({ name, predicate, stateNames, children }: TemplateProps) => {
     const position = useContext(PositionContext)
     const core = useContext(TemplateContext)
 
@@ -20,5 +21,8 @@ export const Template = ({ name, predicate, stateNames, children }: TemplateProp
         return () => core.unregister(template)
     }, [children, core, name, position, predicate, stateNames])
 
-    return <></>
-}
+    return null
+}, (a, b) => {
+    return a.name === b.name && a.predicate === b.predicate && shallowEquals(a.stateNames, b.stateNames) && a.children === b.children
+})
+Template.displayName === 'displayName'

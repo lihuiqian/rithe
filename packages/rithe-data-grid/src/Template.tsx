@@ -1,5 +1,4 @@
 import { Template as PluginTemplate } from '@rithe/plugin'
-import React from "react"
 import { StateSlice } from './types/StateSlice'
 import { TemplateBaseProps } from './types/TemplateBaseProps'
 
@@ -15,6 +14,4 @@ export interface TemplateProps<T extends keyof TemplateBaseProps, DS extends Key
     children: (props: TemplateBaseProps[T], ...states: OptionalValues<DS>) => JSX.Element,
 }
 
-export const Template = <T extends keyof TemplateBaseProps, DS extends Key[]>(props: TemplateProps<T, DS>) => {
-    return <PluginTemplate {...props as any} />
-}
+export const Template = PluginTemplate as <T extends keyof TemplateBaseProps, DS extends Key[]>(props: TemplateProps<T, DS>) => null

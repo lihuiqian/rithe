@@ -1,5 +1,4 @@
 import { State as PluginState } from '@rithe/plugin';
-import React from 'react';
 import { StateSlice } from "./types/StateSlice";
 
 type Key = keyof StateSlice
@@ -24,6 +23,4 @@ export interface ComputedStateProps<T extends Key, DS extends Key[]> {
     lazy?: boolean,
 }
 
-export const State = <T extends Key, DS extends Key[]>(props: ValueStateProps<T> | GeneratedStateProps<T, DS> | ComputedStateProps<T, DS>) => {
-    return <PluginState {...props as any} />
-}
+export const State = PluginState as <T extends Key, DS extends Key[]>(props: ValueStateProps<T> | GeneratedStateProps<T, DS> | ComputedStateProps<T, DS>) => null
