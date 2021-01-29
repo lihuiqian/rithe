@@ -18,12 +18,12 @@ export interface DataProps {
 
 export const Data = (props: DataProps) => {
     const { columns, rows, getRowId } = props
+    console.log('Data')
 
     const getRowIdValue = useGetRowIdValue(rows, getRowId)
     const tableColumnsGenerated = useTableColumnsGenerated(columns)
     const tableHeaderRowsValue = useTableHeaderRowsValue()
     const tableBodyRowsValue = useTableBodyRowsValue(rows, getRowIdValue)
-
     return <Plugin>
         <State name="columns" value={columns} />
         <State name="rows" value={rows} />

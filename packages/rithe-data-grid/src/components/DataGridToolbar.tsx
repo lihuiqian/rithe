@@ -6,6 +6,15 @@ export interface DataGridToolbarProps {
 
 export const DataGridToolbar = (props: DataGridToolbarProps) => {
     const { children } = props
-    const style = useMemo<CSSProperties>(() => ({ display: 'flex', alignItems: 'center' }), [])
-    return <div style={style}>{children}</div>
+    const styles = useStyles()
+    return <div style={styles.root}>{children}</div>
+}
+
+const useStyles = () => {
+    return useMemo<Record<string, CSSProperties>>(() => ({
+        root: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+    }), [])
 }

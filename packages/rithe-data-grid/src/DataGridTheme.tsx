@@ -1,5 +1,5 @@
-import React, { ButtonHTMLAttributes, ComponentType, createContext, HTMLAttributes, ReactNode, TableHTMLAttributes, TdHTMLAttributes, ThHTMLAttributes, useContext } from "react"
-import { DataGridPopover, DataGridPopoverProps } from "./components/DataGridPopover"
+import React, { ButtonHTMLAttributes, ComponentType, createContext, HTMLAttributes, LiHTMLAttributes, ReactNode, TableHTMLAttributes, TdHTMLAttributes, ThHTMLAttributes, useContext } from "react"
+import { Popover, PopoverProps } from "./basics/Popover"
 
 export interface DataGridTheme {
     containerComponent: ComponentType<HTMLAttributes<HTMLDivElement>> | 'div',
@@ -15,8 +15,10 @@ export interface DataGridTheme {
     tableFootCellComponent: ComponentType<TdHTMLAttributes<HTMLTableDataCellElement>> | 'td',
     buttonComponent: ComponentType<ButtonHTMLAttributes<HTMLButtonElement>> | 'button',
     iconButtonComponent: ComponentType<ButtonHTMLAttributes<HTMLButtonElement>> | 'button',
-    popoverComponent: ComponentType<DataGridPopoverProps>,
     typographyComponent: ComponentType<HTMLAttributes<HTMLSpanElement>> | 'span',
+    menuComponent: ComponentType<HTMLAttributes<HTMLUListElement>> | 'ul',
+    menuItemComponent: ComponentType<LiHTMLAttributes<HTMLLIElement>> | 'li',
+    popoverComponent: ComponentType<PopoverProps>,
 }
 
 const defaultTheme: DataGridTheme = {
@@ -33,8 +35,10 @@ const defaultTheme: DataGridTheme = {
     tableFootCellComponent: 'td',
     buttonComponent: 'button',
     iconButtonComponent: 'button',
-    popoverComponent: DataGridPopover,
     typographyComponent: 'span',
+    menuComponent: 'ul',
+    menuItemComponent: 'li',
+    popoverComponent: Popover,
 }
 
 const ThemeContext = createContext<DataGridTheme>(defaultTheme)

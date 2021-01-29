@@ -15,7 +15,7 @@ export function insertItem<T extends {
     for (let i = 0; i < items.length; i++) {
         const cmp = positionComparator(item.position, items[i].position)
         if (cmp > 0) continue
-        items.splice(i, cmp === 0 ? 1 : 0, item)
+        items.splice(i, 0, item)
         return
     }
     items.push(item)
@@ -25,15 +25,8 @@ export function removeItem<T extends {
     readonly name: string
     readonly position: number[]
 }>(items: T[], item: T) {
-    for (let i = 0; i < items.length; i++) {
-        const cmp = positionComparator(item.position, items[i].position)
-        if (cmp < 0) break
-        if (cmp === 0) {
-            const [result] = items.splice(i, 1)
-            return result
-        }
-    }
-    return undefined
+    const index = items.indexOf(item)
+    return index < 0 ? undefined : items.splice(index, 1)
 }
 
 export function itemsPrev<T extends {

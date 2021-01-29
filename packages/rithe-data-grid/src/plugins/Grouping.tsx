@@ -1,5 +1,5 @@
 import { Plugin } from "@rithe/plugin"
-import { Arrays } from "@rithe/utils"
+import { Arrays, useMixed } from "@rithe/utils"
 import React, { ComponentType, useCallback } from "react"
 import { DataGridGroupingCellProps } from "../components/DataGridGroupingCell"
 import { DataGridGroupingContentProps } from "../components/DataGridGroupingContent"
@@ -7,7 +7,6 @@ import { DataGridGroupingExpandButtonProps } from "../components/DataGridGroupin
 import { DataGridGroupingPanelProps } from "../components/DataGridGroupingPanel"
 import { DataGridGroupingPanelItemProps } from "../components/DataGridGroupingPanelItem"
 import { DataGridGroupingRowProps } from "../components/DataGridGroupingRow"
-import useMixed from "../hooks/useMixed"
 import { State } from "../State"
 import { TableColumn } from "../types/TableColumn"
 

@@ -1,8 +1,8 @@
 import React, { ComponentType } from "react";
+import { PopoverProps } from "../basics/Popover";
 import { DataGridColumnVisibilityMenuProps } from "../components/DataGridColumnVisibilityMenu";
 import { DataGridColumnVisibilityMenuItemProps } from "../components/DataGridColumnVisibilityMenuItem";
 import { DataGridColumnVisibilityToolbarButtonProps } from "../components/DataGridColumnVisibilityToolbarButton";
-import { DataGridPopoverProps } from "../components/DataGridPopover";
 
 export interface ColumnVisibilityProps {
     hiddenFields?: string[],
@@ -13,7 +13,7 @@ export interface ColumnVisibilityProps {
         field: string,
         disableUserControl?: string,
     }
-    popoverComponent?: ComponentType<DataGridPopoverProps>,
+    popoverComponent?: ComponentType<PopoverProps>,
     toolbarButtonComponent?: ComponentType<DataGridColumnVisibilityToolbarButtonProps>,
     menuComponent?: ComponentType<DataGridColumnVisibilityMenuProps>,
     menuItemComponent?: ComponentType<DataGridColumnVisibilityMenuItemProps>,
