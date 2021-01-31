@@ -1,5 +1,5 @@
 import { Plugin } from "@rithe/plugin";
-import { Maps } from "@rithe/utils";
+import { Arrays, Maps } from "@rithe/utils";
 import React, { useCallback, useMemo } from "react";
 import { State } from "../State";
 import { Column } from "../types/Column";
@@ -18,11 +18,10 @@ export interface DataProps {
 
 export const Data = (props: DataProps) => {
     const { columns, rows, getRowId } = props
-    console.log('Data')
 
     const getRowIdValue = useGetRowIdValue(rows, getRowId)
     const tableColumnsGenerated = useTableColumnsGenerated(columns)
-    const tableHeaderRowsValue = useTableHeaderRowsValue()
+    const tableHeaderRowsValue = useTableHeaderRowsValue(columns)
     const tableBodyRowsValue = useTableBodyRowsValue(rows, getRowIdValue)
     return <Plugin>
         <State name="columns" value={columns} />
@@ -50,16 +49,18 @@ const useTableColumnsGenerated = (columns: Column[]) => {
             type: DATA_TYPE,
             column,
             dataType: dataTypeMap.get(column.dataTypeName),
-            width: column.width,
+            width: column.width ?? 120,
         }))
     }, [columns])
 }
 
-const useTableHeaderRowsValue = () => {
-    return useMemo<TableRow[]>(() => [{
-        key: 'header',
+const useTableHeaderRowsValue = (columns: Column[]) => {
+    const rowCount = columns.filter(c => c.categories).map(c => c.categories!.length).reduce((a, b) => Math.max(a, b), 0) + 1
+    return useMemo<TableRow[]>(() => Arrays.range(0, rowCount).map(i => ({
+        key: `header${i}`,
         type: HEADER_TYPE,
-    }], [])
+        height: 48,
+    })), [rowCount])
 }
 
 const useTableBodyRowsValue = (rows: Row[], getRowId: (row: Row) => RowId) => {
@@ -68,6 +69,7 @@ const useTableBodyRowsValue = (rows: Row[], getRowId: (row: Row) => RowId) => {
         return {
             key: `${rowId}`,
             type: DATA_TYPE,
+            height: 48,
             row,
             rowId,
         }

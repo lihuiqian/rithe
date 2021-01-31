@@ -25,7 +25,7 @@ export const DataGridMenu = (props: DataGridMenuProps) => {
         menuComponent: Ul,
     } = useDataGridTheme()
     return <>
-        <IconButton onClick={onOpen}>
+        <IconButton onClick={onOpen} onMouseDown={e => e.stopPropagation()}>
             {icon}
         </IconButton>
         <Popover

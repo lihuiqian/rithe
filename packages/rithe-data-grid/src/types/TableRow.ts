@@ -6,8 +6,10 @@ export interface TableRow {
     type: symbol,
     row?: Row,
     rowId?: RowId,
-    height?: number,
-    selected?: boolean,
+    height: number,
     level?: number,
+    group?: any[],
     expanded?: boolean,
+    hidden?: boolean,
+    selected?: boolean,
 }

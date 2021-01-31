@@ -7,7 +7,6 @@ import { State } from "../State"
 import { Template } from "../Template"
 import { Align } from "../types/Align"
 import { DataType, DataTypeInfer } from "../types/DataType"
-import { isCurrentEditor, isCurrentFormatter } from "../utils/helpers"
 
 export interface DataTypeProviderProps<T extends keyof DataTypeInfer> {
     type: T,
@@ -29,12 +28,12 @@ export const DataTypeProvider = (props: DataTypeProviderProps<any>) => {
 
     return <Plugin>
         <State name="dataTypes" computed={dataTypesComputed} />
-        <Template name="formatter" predicate={({ tableColumn }) => isCurrentFormatter(name, tableColumn)}>
+        <Template name="formatter" predicate={({ dataType }) => name === dataType.name}>
             {props => {
                 return <FormatterComponent {...props} />
             }}
         </Template>
-        <Template name="editor" predicate={({ tableColumn }) => isCurrentEditor(name, tableColumn)}>
+        <Template name="editor" predicate={({ dataType }) => name === dataType.name}>
             {props => {
                 return <EditorComponent {...props} />
             }}

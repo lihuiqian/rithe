@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { useDataGridTheme } from "../DataGridTheme";
 
 export interface DataGridColumnVisibilityMenuProps {
     children?: ReactNode | ReactNode[]
@@ -6,5 +7,8 @@ export interface DataGridColumnVisibilityMenuProps {
 
 export const DataGridColumnVisibilityMenu = (props: DataGridColumnVisibilityMenuProps) => {
     const { children } = props
-    return <div>{children}</div>
+    const { menuComponent: Menu } = useDataGridTheme()
+    return <Menu>
+        {children}
+    </Menu>
 }

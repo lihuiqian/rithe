@@ -38,4 +38,5 @@ export { default as useMixed } from './hooks/useMixed';
 export { default as usePopover } from './hooks/usePopover';
 export { default as usePrevious } from './hooks/usePrevious';
 export { default as useShallow } from './hooks/useShallow';
-
+export { default as useStable } from './hooks/useStable';
+export { default as useWhoChanged } from './hooks/useWhoChanged';

@@ -1,10 +1,9 @@
-import { ColumnFreeze, ColumnOrdering, Data, DataGrid, Grouping, PaginationLayout, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
-import { Plugin, Render, State, Template } from '@rithe/plugin';
+import { ColumnFreeze, ColumnOrdering, Data, DataGrid, PaginationLayout, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
+import { Debug, Plugin, Render, State, Template } from '@rithe/plugin';
 import { Arrays, DragDropProvider, Draggable, Droppable } from '@rithe/utils';
 import React, { useCallback, useState } from 'react';
 
 function App() {
-  console.log('App')
   const [value, setValue] = useState<any>(undefined)
   return <>
     <DragDropProvider>
@@ -14,11 +13,13 @@ function App() {
     <DataGrid >
       <Data
         columns={[{
-          field: 'a', dataTypeName: 'string', title: 'A',
+          field: 'index', dataTypeName: 'number', title: 'INDEX',
         }, {
-          field: 'b', dataTypeName: 'number', title: 'B',
+          field: 'a', dataTypeName: 'number', title: 'A', categories: ['grouping'],
         }, {
-          field: 'c', dataTypeName: 'number', title: 'C',
+          field: 'b', dataTypeName: 'number', title: 'B', categories: ['grouping'],
+        }, {
+          field: 'c', dataTypeName: 'number', title: 'C', categories: [{ value: 'grouping', merge: false }],
         }, {
           field: 'd', dataTypeName: 'number', title: 'D',
         }, {
@@ -34,7 +35,7 @@ function App() {
         }, {
           field: 'j', dataTypeName: 'number', title: 'J',
         }]}
-        rows={Arrays.range(0, 2).map(i => ({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8, i: 9, j: 10 }))} />
+        rows={Arrays.range(0, 10).map(i => ({ index: i, a: 1 + i % 3, b: 2 + i % 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8, i: 9, j: 10 }))} />
       <ToolbarLayout />
       <TableLayout>
         <TableHeaderLayout />
@@ -44,7 +45,8 @@ function App() {
       <PaginationLayout />
       <ColumnFreeze defaultFreezeColumns={[{ field: 'a', freeze: 'start' }]} />
       <ColumnOrdering />
-      <Grouping defaultGroupingFields={['a']} options={[{ field: 'a' }]} />
+      {/* <Grouping defaultGroupingFields={['a', 'b']} defaultExpandedGroups={[[1], [1, 2], [1, 3]]} /> */}
+      <Debug />
     </DataGrid>
   </>
 }

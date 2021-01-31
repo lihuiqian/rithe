@@ -1,13 +1,12 @@
 import React, { CSSProperties, ReactNode, useMemo } from "react";
 import { Align } from "../types/Align";
-import { CellContentProps } from "../types/TemplateBaseProps";
+import { FooterContentProps } from "../types/TemplateBaseProps";
 
-export interface DataGridTableBodyCellContentProps extends CellContentProps {
-    align: Align,
+export interface DataGridTableFooterContentProps extends FooterContentProps {
     children?: ReactNode | ReactNode[],
 }
 
-export const DataGridTableBodyCellContent = (props: DataGridTableBodyCellContentProps) => {
+export const DataGridTableFooterContent = (props: DataGridTableFooterContentProps) => {
     const { align, children } = props
 
     const styles = useStyles(align)

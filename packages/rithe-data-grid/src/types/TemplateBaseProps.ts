@@ -1,60 +1,172 @@
 import { KeyboardEvent } from "react";
-import { TableColumn } from "./TableColumn";
-import { TableRow } from "./TableRow";
+import { Align } from "./Align";
+import { Column } from "./Column";
+import { DataType } from "./DataType";
+import { Freeze } from "./Freeze";
+import { Row } from "./Row";
+import { RowId } from "./RowId";
 
 export interface TemplateBaseProps {
     root: undefined,
     toolbar: undefined,
     toolbarContent: undefined,
     table: undefined,
+
     tableHeader: undefined,
-    tableBody: undefined,
-    tableFooter: undefined,
-    row: RowProps,
-    cell: CellProps,
-    cellContent: CellContentProps,
-    pagination: undefined,
+    headerRow: HeaderRowProps,
+    headerCell: HeaderCellProps,
+    headerContent: HeaderContentProps,
     title: TitleProps,
     menu: MenuProps,
     menuItems: MenuItemsProps,
+
+    tableBody: undefined,
+    bodyRow: BodyRowProps,
+    bodyCell: BodyCellProps,
+    bodyContent: BodyContentProps,
     formatter: FormatterProps,
     editor: EditorProps,
+
+    tableFooter: undefined,
+    footerRow: FooterRowProps,
+    footerCell: FooterCellProps,
+    footerContent: FooterContentProps,
+
+    pagination: undefined,
 }
 
-export interface RowProps {
-    tableRow: TableRow,
+export interface HeaderRowProps {
+    index: number,
+    top: number,
+    height: number,
+
+    rowType: symbol,
 }
 
-export interface CellProps {
-    tableColumn: TableColumn,
-    tableRow: TableRow,
-    colSpan?: number,
-    rowSpan?: number,
+export interface BodyRowProps {
+    height: number,
+
+    rowType: symbol,
+
+    row?: Row,
+    rowId?: RowId,
 }
 
-export interface CellContentProps {
-    tableColumn: TableColumn,
-    tableRow: TableRow,
+export interface FooterRowProps {
+    index: number,
+    height: number,
+
+    rowType: symbol,
+}
+
+export interface HeaderCellProps {
+    title: string,
+    width: number,
+    colSpan: number,
+    rowSpan: number,
+    freeze?: Freeze,
+    freezePosition?: number,
+
+    colType: symbol,
+    rowType: symbol,
+
+    columns?: Column[],
+    dataTypes?: DataType[],
+}
+
+export interface BodyCellProps {
+    colSpan: number,
+    rowSpan: number,
+
+    colType: symbol,
+    rowType: symbol,
+
+    row?: Row,
+    rowId?: RowId,
+
+    column?: Column,
+    dataType?: DataType,
+}
+
+export interface FooterCellProps {
+    colSpan: number,
+    rowSpan: number,
+
+    colType: symbol,
+    rowType: symbol,
+
+    column?: Column,
+    dataType?: DataType,
+}
+
+export interface HeaderContentProps {
+    title: string,
+    align: Align,
+
+    colType: symbol,
+    rowType: symbol,
+
+    columns?: Column[],
+    dataTypes?: DataType[],
+}
+
+export interface BodyContentProps {
+    align: Align,
+
+    colType: symbol,
+    rowType: symbol,
+
+    row?: Row,
+    rowId?: RowId,
+
+    column?: Column,
+    dataType?: DataType,
+}
+
+export interface FooterContentProps {
+    align: Align,
+
+    colType: symbol,
+    rowType: symbol,
+
+    column?: Column,
+    dataType?: DataType,
 }
 
 export interface TitleProps {
     title: string,
-    tableColumn: TableColumn,
-    tableRow: TableRow,
+
+    colType: symbol,
+    rowType: symbol,
 }
 
 export interface MenuProps {
-    tableColumn: TableColumn,
+    column: Column,
+    dataType: DataType,
+
+    colType: symbol,
+    rowType: symbol,
 }
 
 export interface MenuItemsProps {
-    tableColumn: TableColumn,
+    column: Column,
+    dataType: DataType,
+
+    colType: symbol,
+    rowType: symbol,
 }
 
 export interface FormatterProps {
     value: any,
-    tableColumn: TableColumn,
-    tableRow: TableRow,
+
+    colType: symbol,
+    rowType: symbol,
+
+    row: Row,
+    rowId: RowId,
+
+    column: Column,
+    dataType: DataType,
 }
 
 export interface EditorProps {
@@ -65,6 +177,8 @@ export interface EditorProps {
     onFocus: (event: FocusEvent) => void,
     onBlur: (event: FocusEvent) => void,
     onKeyDown: (event: KeyboardEvent) => void,
-    tableColumn: TableColumn,
-    tableRow: TableRow,
+    row: Row,
+    rowId: RowId,
+    column: Column,
+    dataType: DataType,
 }

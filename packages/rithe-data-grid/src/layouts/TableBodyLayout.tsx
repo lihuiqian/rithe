@@ -1,18 +1,21 @@
 import { Plugin } from "@rithe/plugin";
-import React, { ComponentType } from "react";
+import React, { ComponentType, useCallback } from "react";
 import { DataGridTableBody, DataGridTableBodyProps } from "../components/DataGridTableBody";
 import { DataGridTableBodyCell, DataGridTableBodyCellProps } from "../components/DataGridTableBodyCell";
-import { DataGridTableBodyCellContent, DataGridTableBodyCellContentProps } from "../components/DataGridTableBodyCellContent";
+import { DataGridTableBodyContent, DataGridTableBodyContentProps } from "../components/DataGridTableBodyContent";
 import { DataGridTableBodyRow, DataGridTableBodyRowProps } from "../components/DataGridTableBodyRow";
 import { Render } from "../Render";
 import { Template } from "../Template";
+import { TableColumn } from "../types/TableColumn";
+import { TableRow } from "../types/TableRow";
+import { BodyCellProps, BodyContentProps, BodyRowProps } from "../types/TemplateBaseProps";
 import { isDataCell, isDataContent, isDataRow } from "../utils/helpers";
 
 export interface TableBodyLayoutProps {
     bodyComponent?: ComponentType<DataGridTableBodyProps>,
     rowComponent?: ComponentType<DataGridTableBodyRowProps>,
     cellComponent?: ComponentType<DataGridTableBodyCellProps>,
-    contentComponent?: ComponentType<DataGridTableBodyCellContentProps>,
+    contentComponent?: ComponentType<DataGridTableBodyContentProps>,
 }
 
 export const TableBodyLayout = (props: TableBodyLayoutProps) => {
@@ -20,55 +23,91 @@ export const TableBodyLayout = (props: TableBodyLayoutProps) => {
         bodyComponent: BodyComponent = DataGridTableBody,
         rowComponent: RowComponent = DataGridTableBodyRow,
         cellComponent: CellComponent = DataGridTableBodyCell,
-        contentComponent: ContentComponent = DataGridTableBodyCellContent,
+        contentComponent: ContentComponent = DataGridTableBodyContent,
     } = props
-    console.log('TableBodyLayout')
 
+    const tableBodyTemplate = useCallback((_: undefined, tableRows?: TableRow[]) => {
+        return <BodyComponent>
+            {tableRows && tableRows.filter(tableRow => !tableRow.hidden).map(tableRow => {
+                const { type: rowType, height, row, rowId } = tableRow
+                return <Render key={tableRow.key} name="bodyRow" props={{
+                    height,
+                    rowType,
+                    row,
+                    rowId,
+                }} />
+            })}
+        </BodyComponent>
+    }, [BodyComponent])
+
+    const bodyRowTemplate = useCallback((props: BodyRowProps, tableColumns?: TableColumn[]) => {
+        const { rowType, row, rowId } = props
+        return <RowComponent {...props}>
+            {tableColumns && tableColumns.map(tableColumn => {
+                const { type: colType, column, dataType } = tableColumn
+                return <Render key={tableColumn.key} name="bodyCell" props={{
+                    colSpan: 1,
+                    rowSpan: 1,
+                    colType,
+                    rowType,
+                    row,
+                    rowId,
+                    column,
+                    dataType,
+                }} />
+            })}
+        </RowComponent>
+    }, [RowComponent])
+
+    const bodyCellTemplate = useCallback((props: BodyCellProps) => {
+        const { colType, rowType, row, rowId, column, dataType } = props
+        const align = dataType?.align ?? 'start'
+        return <CellComponent
+            {...props}
+        >
+            <Render name="bodyContent" props={{
+                align,
+                colType,
+                rowType,
+                row,
+                rowId,
+                column,
+                dataType
+            }} />
+        </CellComponent>
+    }, [CellComponent])
+
+    const bodyContentTemplate = useCallback((props: BodyContentProps) => {
+        const { colType, rowType, row, rowId, column, dataType } = props
+        const align = dataType?.align ?? 'start'
+        const getCellValue = column?.getCellValue
+        const value = row ? getCellValue ? getCellValue(row) : column ? row[column.field] : undefined : undefined
+
+        return <ContentComponent {...props} align={align}>
+            {row && rowId !== undefined && column && dataType && <Render name="formatter" props={{
+                value,
+                colType,
+                rowType,
+                row,
+                rowId,
+                column,
+                dataType,
+            }} />}
+        </ContentComponent>
+    }, [ContentComponent])
 
     return <Plugin>
         <Template name="tableBody" stateNames={['tableBodyRows']}>
-            {(_, tableRows) =>
-                <BodyComponent>
-                    {tableRows && tableRows.map(tableRow =>
-                        <Render key={tableRow.key} name="row" props={{ tableRow }} />
-                    )}
-                </BodyComponent>
-            }
+            {tableBodyTemplate}
         </Template>
-        <Template name="row" stateNames={['tableColumns']} predicate={({ tableRow }) => isDataRow(tableRow)}>
-            {({ tableRow }, tableColumns) => {
-                console.log('rowTemplate')
-                return <RowComponent tableRow={tableRow}>
-                    {tableColumns && tableColumns.map(tableColumn =>
-                        <Render key={tableColumn.key} name="cell" props={{ tableColumn, tableRow }} />)}
-                </RowComponent>
-            }}
+        <Template name="bodyRow" stateNames={['tableColumns']} predicate={({ rowType }) => isDataRow(rowType)}>
+            {bodyRowTemplate}
         </Template>
-        <Template name="cell" predicate={({ tableColumn, tableRow }) => isDataCell(tableColumn, tableRow)}>
-            {({ tableColumn, tableRow, colSpan, rowSpan }) => {
-                console.log('cellTemplate')
-                return <CellComponent
-                    tableColumn={tableColumn}
-                    tableRow={tableRow}
-                    colSpan={colSpan}
-                    rowSpan={rowSpan}
-                    freezePosition={0}
-                >
-                    <Render name="cellContent" props={{ tableColumn, tableRow }} />
-                </CellComponent>
-            }}
+        <Template name="bodyCell" predicate={({ colType, rowType }) => isDataCell(colType, rowType)}>
+            {bodyCellTemplate}
         </Template>
-        <Template name="cellContent" predicate={({ tableColumn, tableRow }) => isDataContent(tableColumn, tableRow)}>
-            {({ tableColumn, tableRow }) => {
-                const dataType = tableColumn.dataType, column = tableColumn.column, row = tableRow.row
-                const align = dataType?.align ?? 'start'
-                const getCellValue = column?.getCellValue
-                const value = row ? getCellValue ? getCellValue(row) : column ? row[column.field] : undefined : undefined
-
-                return <ContentComponent tableColumn={tableColumn} tableRow={tableRow} align={align}>
-                    <Render name="formatter" props={{ value, tableColumn, tableRow }} />
-                </ContentComponent>
-            }}
+        <Template name="bodyContent" predicate={({ colType, rowType }) => isDataContent(colType, rowType)}>
+            {bodyContentTemplate}
         </Template>
     </Plugin>
 }

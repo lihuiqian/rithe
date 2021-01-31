@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { CSSProperties, ReactNode, useMemo } from "react";
 
 export interface DataGridColumnResizingHandleProps {
     children?: ReactNode | ReactNode[]
@@ -6,5 +6,19 @@ export interface DataGridColumnResizingHandleProps {
 
 export const DataGridColumnResizingHandle = (props: DataGridColumnResizingHandleProps) => {
     const { children } = props
-    return <div>{children}</div>
+    const styles = useStyles()
+    return <div style={styles.root}>{children}</div>
 }
+
+const useStyles = () => useMemo<Record<string, CSSProperties>>(() => ({
+    root: {
+        width: 4,
+        height: '100%',
+        boxSizing: 'border-box',
+        borderStyle: 'solid',
+        borderColor: 'cyan',
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        marginRight: -2,
+    }
+}), [])

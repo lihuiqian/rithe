@@ -2,11 +2,11 @@ import React, { ReactNode } from "react";
 import { useDataGridTheme } from "../DataGridTheme";
 import { BodyCellProps } from "../types/TemplateBaseProps";
 
-export interface DataGridGroupingCellProps extends BodyCellProps {
+export interface DataGridGroupingExpandCellProps extends BodyCellProps {
     children?: ReactNode | ReactNode[]
 }
 
-export const DataGridGroupingCell = React.memo((props: DataGridGroupingCellProps) => {
+export const DataGridGroupingExpandCell = React.memo((props: DataGridGroupingExpandCellProps) => {
     const {
         colSpan, rowSpan,
         children } = props
@@ -15,4 +15,4 @@ export const DataGridGroupingCell = React.memo((props: DataGridGroupingCellProps
         {children}
     </Td>
 })
-DataGridGroupingCell.displayName = 'DataGridGroupingCell'
+DataGridGroupingExpandCell.displayName = 'DataGridGroupingExpandCell'

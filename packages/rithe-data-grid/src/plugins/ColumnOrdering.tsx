@@ -27,7 +27,6 @@ export const ColumnOrdering = (props: ColumnOrderingProps) => {
         options,
         dragLabelComponent: DragLabelComponent = DataGridColumnOrderingDragLabel,
     } = props
-    console.log('ColumnOrdering')
     const [fieldsOrder, setFieldsOrder] = useMixed(props.fieldsOrder, props.onFieldsOrderChange, props.defaultFieldsOrder)
 
     const tableColumnsComputed = useTableColumnsComputed(fieldsOrder)
