@@ -1,10 +1,10 @@
 import React, { ReactNode } from "react";
 
-export interface DataGridGroupingPanelItemProps {
+export interface GroupingPanelItemProps {
     children?: ReactNode | ReactNode[]
 }
 
-export const DataGridGroupingPanelItem = (props: DataGridGroupingPanelItemProps) => {
+export const GroupingPanelItem = (props: GroupingPanelItemProps) => {
     const { children } = props
     return <div>{children}</div>
 }

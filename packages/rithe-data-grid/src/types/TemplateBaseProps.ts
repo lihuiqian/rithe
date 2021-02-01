@@ -1,10 +1,8 @@
 import { KeyboardEvent } from "react";
 import { Align } from "./Align";
-import { Column } from "./Column";
-import { DataType } from "./DataType";
 import { Freeze } from "./Freeze";
-import { Row } from "./Row";
-import { RowId } from "./RowId";
+import { TableColumn } from "./TableColumn";
+import { TableRow } from "./TableRow";
 
 export interface TemplateBaseProps {
     root: undefined,
@@ -13,172 +11,67 @@ export interface TemplateBaseProps {
     table: undefined,
 
     tableHeader: undefined,
-    headerRow: HeaderRowProps,
-    headerCell: HeaderCellProps,
-    headerContent: HeaderContentProps,
+    tableBody: undefined,
+    tableFooter: undefined,
+    row: RowProps,
+    cell: CellProps,
+    content: ContentProps,
     title: TitleProps,
     menu: MenuProps,
     menuItems: MenuItemsProps,
-
-    tableBody: undefined,
-    bodyRow: BodyRowProps,
-    bodyCell: BodyCellProps,
-    bodyContent: BodyContentProps,
     formatter: FormatterProps,
     editor: EditorProps,
-
-    tableFooter: undefined,
-    footerRow: FooterRowProps,
-    footerCell: FooterCellProps,
-    footerContent: FooterContentProps,
 
     pagination: undefined,
 }
 
-export interface HeaderRowProps {
-    index: number,
-    top: number,
+export interface RowProps {
     height: number,
-
-    rowType: symbol,
+    tableRow: TableRow,
 }
 
-export interface BodyRowProps {
-    height: number,
-
-    rowType: symbol,
-
-    row?: Row,
-    rowId?: RowId,
-}
-
-export interface FooterRowProps {
-    index: number,
-    height: number,
-
-    rowType: symbol,
-}
-
-export interface HeaderCellProps {
-    title: string,
+export interface CellProps {
     width: number,
     colSpan: number,
     rowSpan: number,
-    freeze?: Freeze,
-    freezePosition?: number,
-
-    colType: symbol,
-    rowType: symbol,
-
-    columns?: Column[],
-    dataTypes?: DataType[],
+    freeze: Freeze,
+    left: number,
+    right: number,
+    tableColumns: TableColumn[],
+    tableRows: TableRow[],
 }
 
-export interface BodyCellProps {
-    colSpan: number,
-    rowSpan: number,
-
-    colType: symbol,
-    rowType: symbol,
-
-    row?: Row,
-    rowId?: RowId,
-
-    column?: Column,
-    dataType?: DataType,
-}
-
-export interface FooterCellProps {
-    colSpan: number,
-    rowSpan: number,
-
-    colType: symbol,
-    rowType: symbol,
-
-    column?: Column,
-    dataType?: DataType,
-}
-
-export interface HeaderContentProps {
-    title: string,
+export interface ContentProps {
     align: Align,
-
-    colType: symbol,
-    rowType: symbol,
-
-    columns?: Column[],
-    dataTypes?: DataType[],
-}
-
-export interface BodyContentProps {
-    align: Align,
-
-    colType: symbol,
-    rowType: symbol,
-
-    row?: Row,
-    rowId?: RowId,
-
-    column?: Column,
-    dataType?: DataType,
-}
-
-export interface FooterContentProps {
-    align: Align,
-
-    colType: symbol,
-    rowType: symbol,
-
-    column?: Column,
-    dataType?: DataType,
+    tableColumns: TableColumn[],
+    tableRows: TableRow[],
 }
 
 export interface TitleProps {
     title: string,
-
-    colType: symbol,
-    rowType: symbol,
+    tableColumn: TableColumn,
 }
 
 export interface MenuProps {
-    column: Column,
-    dataType: DataType,
-
-    colType: symbol,
-    rowType: symbol,
+    tableColumn: TableColumn,
 }
 
 export interface MenuItemsProps {
-    column: Column,
-    dataType: DataType,
-
-    colType: symbol,
-    rowType: symbol,
+    tableColumn: TableColumn,
 }
 
 export interface FormatterProps {
     value: any,
-
-    colType: symbol,
-    rowType: symbol,
-
-    row: Row,
-    rowId: RowId,
-
-    column: Column,
-    dataType: DataType,
+    tableColumn: TableColumn,
+    tableRows: TableRow[],
 }
 
 export interface EditorProps {
-    readonly: boolean,
-    disabled: boolean,
     value: any,
     onValueChange: (newValue: any) => void,
     onFocus: (event: FocusEvent) => void,
     onBlur: (event: FocusEvent) => void,
     onKeyDown: (event: KeyboardEvent) => void,
-    row: Row,
-    rowId: RowId,
-    column: Column,
-    dataType: DataType,
+    tableColumn: TableColumn,
+    tableRows: TableRow[],
 }

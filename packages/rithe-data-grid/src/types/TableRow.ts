@@ -7,9 +7,5 @@ export interface TableRow {
     row?: Row,
     rowId?: RowId,
     height: number,
-    level?: number,
-    group?: any[],
-    expanded?: boolean,
     hidden?: boolean,
-    selected?: boolean,
 }

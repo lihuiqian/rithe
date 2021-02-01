@@ -1,8 +1,8 @@
 import { Plugin } from "@rithe/plugin";
 import React, { ComponentType } from "react";
-import { DataGridTableFooter, DataGridTableFooterProps } from "../components/DataGridTableFooter";
 import { DataGridTableFooterCell, DataGridTableFooterCellProps } from "../components/DataGridTableFooterCell";
 import { DataGridTableFooterRow, DataGridTableFooterRowProps } from "../components/DataGridTableFooterRow";
+import { DataGridTableFooter, DataGridTableFooterProps } from "../components/TableFooter";
 import { Render } from "../Render";
 import { Template } from "../Template";
 import { isSummaryCell, isSummaryRow } from "../utils/helpers";

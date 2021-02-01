@@ -3,19 +3,20 @@ import { Arrays, Records, useMixed } from "@rithe/utils"
 import React, { ComponentType, useCallback, useEffect, useMemo, useRef } from "react"
 import { DataGridGroupingCell, DataGridGroupingCellProps } from "../components/DataGridGroupingCell"
 import { DataGridGroupingContent, DataGridGroupingContentProps } from "../components/DataGridGroupingContent"
-import { DataGridGroupingExpandButton, DataGridGroupingExpandButtonProps } from "../components/DataGridGroupingExpandButton"
-import { DataGridGroupingExpandCell, DataGridGroupingExpandCellProps } from "../components/DataGridGroupingExpandCell"
-import { DataGridGroupingExpandContent, DataGridGroupingExpandContentProps } from "../components/DataGridGroupingExpandContent"
-import { DataGridGroupingPanel, DataGridGroupingPanelProps } from "../components/DataGridGroupingPanel"
-import { DataGridGroupingPanelItem, DataGridGroupingPanelItemProps } from "../components/DataGridGroupingPanelItem"
-import { DataGridGroupingRow, DataGridGroupingRowProps } from "../components/DataGridGroupingRow"
+import { DataGridGroupingPanelProps, GroupingPanel, GroupingPanelProps } from "../components/GroupingPanel"
+import { GroupingPanelItem, GroupingPanelItemProps } from "../components/GroupingPanelItem"
+import { TableBodyCell, TableBodyCellProps } from "../components/TableBodyCell"
+import { TableBodyRow, TableBodyRowProps } from "../components/TableBodyRow"
+import { TableCellContent, TableCellContentProps } from "../components/TableCellContent"
+import { TableExpandButton, TableExpandButtonProps } from "../components/TableExpandButton"
+import { TableHeaderCell, TableHeaderCellProps } from "../components/TableHeaderCell"
 import { Render } from "../Render"
 import { State } from "../State"
 import { Template } from "../Template"
 import { Column } from "../types/Column"
 import { TableColumn } from "../types/TableColumn"
 import { TableRow } from "../types/TableRow"
-import { BodyRowProps, HeaderCellProps } from "../types/TemplateBaseProps"
+import { BodyContentProps, CellProps, ContentProps, RowProps } from "../types/TemplateBaseProps"
 import { DATA_TYPE, GROUPING_TYPE } from "../utils/constants"
 import { isGroupingCell, isGroupingContent, isGroupingExpandCell, isGroupingExpandContent, isGroupingRow, isHeaderGroupingExpandCell, isHeaderGroupingExpandContent } from "../utils/helpers"
 
@@ -35,35 +36,42 @@ export interface GroupingProps {
     defaultExpandedGroups?: any[][],
     disableUserControl?: boolean,
     options?: GroupingOption[],
-    panelComponent?: ComponentType<DataGridGroupingPanelProps>,
-    panelItemComponent?: ComponentType<DataGridGroupingPanelItemProps>,
-    rowComponent?: ComponentType<DataGridGroupingRowProps>,
+    panelComponent?: ComponentType<GroupingPanelProps>,
+    panelItemComponent?: ComponentType<GroupingPanelItemProps>,
+    headerExpandCellComponent?: ComponentType<TableHeaderCellProps>,
+    headerExpandContentComponent?: ComponentType<TableCellContentProps>,
+    groupingRowComponent?: ComponentType<TableBodyRowProps>,
+    expandCellComponent?: ComponentType<TableBodyCellProps>,
+    expandContentComponent?: ComponentType<TableCellContentProps>,
+    expandButtonComponent?: ComponentType<TableExpandButtonProps>,
     cellComponent?: ComponentType<DataGridGroupingCellProps>,
-    expandCellComponent?: ComponentType<DataGridGroupingExpandCellProps>,
     contentComponent?: ComponentType<DataGridGroupingContentProps>,
-    expandContentComponent?: ComponentType<DataGridGroupingExpandContentProps>,
-    expandButtonComponent?: ComponentType<DataGridGroupingExpandButtonProps>,
 }
 
 export const Grouping = (props: GroupingProps) => {
     const {
         disableUserControl,
         options,
-        panelComponent: PanelComponent = DataGridGroupingPanel,
-        panelItemComponent: PanelItemComponent = DataGridGroupingPanelItem,
-        rowComponent: RowComponent = DataGridGroupingRow,
+        panelComponent: Panel = GroupingPanel,
+        panelItemComponent: PanelItem = GroupingPanelItem,
+        headerExpandCellComponent: HeaderExpandCell = TableHeaderCell,
+        headerExpandContentComponent: HeaderExpandContent = TableCellContent,
+        groupingRowComponent: GroupingRow = TableBodyRow,
+        expandCellComponent: ExpandCell = TableBodyCell,
+        expandContentComponent: ExpandContent = TableCellContent,
+        expandButtonComponent: ExpandButton = TableExpandButton,
         cellComponent: CellComponent = DataGridGroupingCell,
-        expandCellComponent: ExpandCellComponent = DataGridGroupingExpandCell,
         contentComponent: ContentComponent = DataGridGroupingContent,
-        expandContentComponent: ExpandContentComponent = DataGridGroupingExpandContent,
-        expandButtonComponent: ExpandButtonComponent = DataGridGroupingExpandButton,
     } = props
     const [groupingFields, setGroupingFields] = useMixed(props.groupingFields, props.onGroupingFieldsChange, props.defaultGroupingFields)
     const [expandedGroups, setExpandedGroups] = useMixed(props.expandedGroups, props.onExpandedGroupsChange, props.defaultExpandedGroups)
 
     const expandedGroupsRef = useRef(expandedGroups)
     useEffect(() => { expandedGroupsRef.current = expandedGroups }, [expandedGroups])
-    const onExpandedChange = useCallback((group: any[], expanded: boolean) => {
+    const expandedRecord = useMemo(() => {
+
+    }, [])
+    const onExpandedChange = useCallback((expandKey: string, expanded: boolean) => {
         const expandedGroups = expandedGroupsRef.current
         if (expanded) {
             if (expandedGroups) {
@@ -81,52 +89,27 @@ export const Grouping = (props: GroupingProps) => {
     }, [setExpandedGroups])
 
     const expandTableColumn = useExpandTableColumn()
-    const virtualTableColumn = useVirtualTableColumn()
     const tableColumnsComputed = useTableColumnsComputed(expandTableColumn, groupingFields, options)
     const tableRowsComputed = useTableRowsComputed(groupingFields, options)
     const expandedComputed = useExpandedComputed(expandedGroups)
 
-    const toolbarContentTempalte = useCallback(() => {
-        return <>
-            <Render />
-            <PanelComponent>GROUP PANEL</PanelComponent>
-        </>
-    }, [PanelComponent])
+    const toolbarContentTempalte = useToolbarContentTempalte(Panel)
+    const headerExpandCellTemplate = useHeaderExpandCellTemplate(HeaderExpandCell)
+    const headerExpandContentTemplate = useHeaderExpandContentTemplate(HeaderExpandContent)
+    const groupingRowTemplate = useGroupingRowTemplate(GroupingRow, expandTableColumn)
+    const expandCellTemplate = useExpandCellTemplate(ExpandCell)
+    const expandContentTemplate = useExpandContentTemplate(ExpandContent, ExpandButton,)
 
-    const groupingRowTemplate = useCallback((props: BodyRowProps) => {
-        const { height, rowType } = props
-        return <RowComponent height={height}>
-            <Render name="bodyCell" props={{
-                colSpan: 1,
-                rowSpan: 1,
-                colType: GROUPING_TYPE,
-                rowType,
-            }} />
-            <Render name="bodyCell" props={{
-                colSpan: Number.MAX_SAFE_INTEGER,
-                rowSpan: 1,
-                colType: DATA_TYPE,
-                rowType,
-            }} />
-        </RowComponent>
-    }, [RowComponent])
-
-    const headerExpandCellTemplate = useCallback((props: HeaderCellProps) => {
-        const { title, colSpan, rowSpan, colType, rowType } = props
-        return <CellComponent // TODO change component
-            colSpan={colSpan}
-            rowSpan={rowSpan}
-            colType={colType}
-            rowType={rowType}
-        >
-            <Render name="headerContent" props={{
-                title,
-                align: 'start',
-                colType,
-                rowType,
-            }} />
-        </CellComponent>
-    }, [CellComponent])
+    const expandContentTemplate = useCallback((props: BodyContentProps) => {
+        const { } = props
+        return <ExpandContentComponent level>
+            <ExpandButtonComponent
+                group={tableRow.group!}
+                expanded={!!tableRow.expanded}
+                onExpandedChange={onExpandedChange}
+            />
+        </ExpandContentComponent>
+    }, [])
 
     return <Plugin>
         <State name="tableColumns" computed={tableColumnsComputed} />
@@ -141,17 +124,14 @@ export const Grouping = (props: GroupingProps) => {
         <Template name="headerCell" predicate={({ colType, rowType }) => isHeaderGroupingExpandCell(colType, rowType)}>
             {headerExpandCellTemplate}
         </Template>
+        <Template name="headerContent" predicate={({ colType, rowType }) => isHeaderGroupingExpandContent(colType, rowType)}>
+            {headerExpandContentTemplate}
+        </Template>
         <Template name="bodyCell" predicate={({ colType, rowType }) => isGroupingExpandCell(colType, rowType)}>
-            {({ tableColumn, tableRow, colSpan, rowSpan }) => {
-                return <CellComponent
-                    tableColumn={tableColumn}
-                    tableRow={tableRow}
-                    colSpan={colSpan}
-                    rowSpan={rowSpan}
-                >
-                    <Render name="cellContent" props={{ tableColumn, tableRow }} />
-                </CellComponent>
-            }}
+            {expandCellTemplate}
+        </Template>
+        <Template name="bodyContent" predicate={({ colType, rowType }) => isGroupingExpandContent(colType, rowType)}>
+            {expandContentTemplate}
         </Template>
         <Template name="bodyCell" predicate={({ colType, rowType }) => isGroupingCell(colType, rowType)}>
             {({ tableColumn, tableRow, colSpan, rowSpan }) => {
@@ -165,24 +145,6 @@ export const Grouping = (props: GroupingProps) => {
                 </ExpandCellComponent>
             }}
         </Template>
-        <Template name="headerContent" predicate={({ colType, rowType }) => isHeaderGroupingExpandContent(colType, rowType)}>
-            {({ tableColumn, tableRow }) => {// TODO change component
-                return <ExpandContentComponent>
-                    {'GROUP'}
-                </ExpandContentComponent>
-            }}
-        </Template>
-        <Template name="bodyContent" predicate={({ colType, rowType }) => isGroupingExpandContent(colType, rowType)}>
-            {({ tableColumn, tableRow }) => {
-                return <ExpandContentComponent>
-                    <ExpandButtonComponent
-                        group={tableRow.group!}
-                        expanded={!!tableRow.expanded}
-                        onExpandedChange={onExpandedChange}
-                    />
-                </ExpandContentComponent>
-            }}w
-        </Template>
         <Template name="bodyContent" predicate={({ colType, rowType }) => isGroupingContent(colType, rowType)}>
             {({ tableColumn, tableRow }) => {
                 return <ContentComponent>
@@ -193,11 +155,19 @@ export const Grouping = (props: GroupingProps) => {
     </Plugin>
 }
 
+const useExpandTableColumn = () => {
+    return useMemo<TableColumn>(() => ({
+        key: '_GROUPING_EXPAND_',
+        type: GROUPING_TYPE,
+        width: 120, // TODO
+    }), [])
+}
 
 const useVirtualTableColumn = () => {
     return useMemo<TableColumn>(() => ({
-        key: '_grouping_',
+        key: '_GROUPING_VIRTUAL_',
         type: DATA_TYPE,
+        width: 120, // TODO
     }), [])
 }
 
@@ -254,7 +224,7 @@ const useExpandedComputed = (expandedGroups?: any[][]) => {
         return tableRows.map(tr => {
             const level = tr.level!
             const hidden = !control.slice(0, level - 1).reduce((acc, ctrl) => acc && ctrl, true)
-            if (isGroupingRow(tr)) {
+            if (isGroupingRow(tr.type)) {
                 const group = tr.group!
                 let expanded = false
                 if (expandedGroups) {
@@ -274,59 +244,126 @@ const useExpandedComputed = (expandedGroups?: any[][]) => {
     }, [expandedGroups])
 }
 
-class Tree {
+const useToolbarContentTempalte = (PanelComponent: ComponentType<DataGridGroupingPanelProps>) => {
+    return useCallback(() => {
+        return <>
+            <Render />
+            <PanelComponent>GROUP PANEL</PanelComponent>
+        </>
+    }, [PanelComponent])
+}
 
-    private _root: Node[]
-    private _key: number
+const useHeaderExpandCellTemplate = (HeaderExpandCell: ComponentType<TableHeaderCellProps>) => {
+    return useCallback(({ width, colSpan, rowSpan, freeze, left, right, tableColumns, tableRows }: CellProps) => {
+        return <HeaderExpandCell
+            width={width}
+            colSpan={colSpan}
+            rowSpan={rowSpan}
+            freeze={freeze}
+            left={left}
+            right={right}
+            tableColumns={tableColumns}
+            tableRows={tableRows}
+        >
+            <Render name="content" props={{
+                align: 'start',
+                tableColumns,
+                tableRows,
+            }} />
+        </HeaderExpandCell>
+    }, [HeaderExpandCell])
+}
 
-    constructor() {
-        this._root = []
-        this._key = 0
-    }
+const useHeaderExpandContentTemplate = (HeaderExpandContent: ComponentType<TableCellContentProps>) => {
+    return useCallback(({ align, tableColumns, tableRows }: ContentProps) => {
+        return <HeaderExpandContent
+            align={align}
+            tableColumns={tableColumns}
+            tableRows={tableRows}
+        >
+            {'TODO'}
+        </HeaderExpandContent>
+    }, [HeaderExpandContent])
+}
 
-    append(group: any[], tableRow: TableRow) {
-        let currentNodes = this._root
-        const currentGroup: any[] = []
-        for (const groupValue of group) {
-            currentGroup.push(groupValue)
-            let node = currentNodes.find(n => isGroupingRow(n.tableRow) && Arrays.shallowEquals(currentGroup, n.tableRow.group!))
-            if (!node) {
-                node = {
-                    tableRow: {
-                        key: `_group_${this._key++}`,
-                        type: GROUPING_TYPE,
-                        level: currentGroup.length,
-                        group: currentGroup.slice(),
-                        expanded: false,
-                    },
-                    children: [],
-                    isLeaf: false,
-                }
-                currentNodes.push(node)
-            }
-            currentNodes = node.children
-        }
-        currentNodes.push({
-            tableRow: {
-                ...tableRow,
-                level: currentGroup.length + 1,
-            },
-            children: [],
-            isLeaf: true,
-        })
-    }
+const useGroupingRowTemplate = (GroupingRow: ComponentType<TableBodyRowProps>, expandTableColumn: TableColumn) => {
+    return useCallback(({ height, tableRow }: RowProps, tableColumns: TableColumn[]) => {
+        const index = tableColumns.indexOf(expandTableColumn)
+        const leftTableColumns = tableColumns.slice(0, index)
+        const rightTableColumns = tableColumns.slice(index + 1)
+        const left = leftTableColumns.map(tc => tc.width).reduce((a, b) => a + b, 0)
+        const right = rightTableColumns.map(tc => tc.width).reduce((a, b) => a + b, 0)
+        return <GroupingRow
+            height={height}
+            tableRow={tableRow}
+        >
+            <Render name="cell" props={{
+                width: expandTableColumn.width,
+                colSpan: 1,
+                rowSpan: 1,
+                freeze: 'none',
+                left,
+                right,
+                tableColumns: [expandTableColumn],
+                tableRows: [tableRow],
+            }} />
+            <Render name="cell" props={{
+                width: right,
+                colSpan: rightTableColumns.length,
+                rowSpan: 1,
+                freeze: 'none',
+                left: left + expandTableColumn.width,
+                right: 0,
+                tableColumns: rightTableColumns,
+                tableRows: [tableRow],
+            }} />
+        </GroupingRow>
+    }, [GroupingRow, expandTableColumn])
+}
 
-    output(): TableRow[] {
-        const result = []
-        const stack = []
-        stack.push(...this._root.slice().reverse())
-        for (let current = stack.pop(); current !== undefined; current = stack.pop()) {
-            result.push(current.tableRow)
-            current.isLeaf || stack.push(...current.children.slice().reverse())
-        }
-        return result
-    }
+const useExpandCellTemplate = (ExpandCell: ComponentType<TableBodyCellProps>) => {
+    return useCallback(({ width, colSpan, rowSpan, freeze, left, right, tableColumns, tableRows }: CellProps) => {
+        return <ExpandCell
+            width={width}
+            colSpan={colSpan}
+            rowSpan={rowSpan}
+            freeze={freeze}
+            left={left}
+            right={right}
+            tableColumns={tableColumns}
+            tableRows={tableRows}
+        >
+            <Render name="content" props={{
+                align: 'start',
+                tableColumns,
+                tableRows,
+            }} />
+        </ExpandCell>
+    }, [ExpandCell])
+}
 
+const useExpandContentTemplate = (
+    ExpandContent: ComponentType<TableCellContentProps>,
+    ExpandButton: ComponentType<TableExpandButtonProps>,
+    expandedRecord: Record<string, boolean>,
+    onExpandedChange: (expandKey: string, expanded: boolean) => void,
+) => {
+    return useCallback(({ align, tableColumns, tableRows }: ContentProps) => {
+        const { key } = tableRows[0]
+        const expandKey = key
+        const expanded = expandedRecord[key]
+        return <ExpandContent
+            align={align}
+            tableColumns={tableColumns}
+            tableRows={tableRows}
+        >
+            <ExpandButton
+                expandKey={expandKey}
+                expanded={expanded}
+                onExpandedChange={onExpandedChange}
+            />
+        </ExpandContent>
+    }, [ExpandButton, ExpandContent, expandedRecord, onExpandedChange])
 }
 
 interface Node {

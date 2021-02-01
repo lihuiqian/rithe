@@ -1,12 +1,16 @@
 import React, { CSSProperties, ReactNode, useMemo } from "react";
 import { Align } from "../types/Align";
-import { HeaderContentProps } from "../types/TemplateBaseProps";
+import { TableColumn } from "../types/TableColumn";
+import { TableRow } from "../types/TableRow";
 
-export interface DataGridTableHeaderContentProps extends HeaderContentProps {
+export interface TableCellContentProps {
+    align: Align,
+    tableColumns: TableColumn[],
+    tableRows: TableRow[],
     children?: ReactNode | ReactNode[],
 }
 
-export const DataGridTableHeaderContent = (props: DataGridTableHeaderContentProps) => {
+export const TableCellContent = (props: TableCellContentProps) => {
     const { align, children } = props
 
     const styles = useStyles(align)

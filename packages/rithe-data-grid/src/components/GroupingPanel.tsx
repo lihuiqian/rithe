@@ -1,10 +1,10 @@
 import React, { CSSProperties, ReactNode, useMemo } from "react";
 
-export interface DataGridGroupingPanelProps {
+export interface GroupingPanelProps {
     children?: ReactNode | ReactNode[]
 }
 
-export const DataGridGroupingPanel = (props: DataGridGroupingPanelProps) => {
+export const GroupingPanel = (props: GroupingPanelProps) => {
     const { children } = props
     const styles = useStyles()
     return <div style={styles.root}>{children}</div>

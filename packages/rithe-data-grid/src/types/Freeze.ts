@@ -1,1 +1,1 @@
-export type Freeze = 'start' | 'end'
+export type Freeze = 'start' | 'none' | 'end'

@@ -6,7 +6,7 @@ export interface DataGridGroupingExpandCellProps extends BodyCellProps {
     children?: ReactNode | ReactNode[]
 }
 
-export const DataGridGroupingExpandCell = React.memo((props: DataGridGroupingExpandCellProps) => {
+export const DataGridGroupingExpandCell = (props: DataGridGroupingExpandCellProps) => {
     const {
         colSpan, rowSpan,
         children } = props
@@ -14,5 +14,4 @@ export const DataGridGroupingExpandCell = React.memo((props: DataGridGroupingExp
     return <Td colSpan={colSpan} rowSpan={rowSpan} >
         {children}
     </Td>
-})
-DataGridGroupingExpandCell.displayName = 'DataGridGroupingExpandCell'
+}

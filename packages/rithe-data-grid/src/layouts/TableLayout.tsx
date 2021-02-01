@@ -1,6 +1,6 @@
 import { Plugin } from "@rithe/plugin";
 import React, { ComponentType, ReactNode } from "react";
-import { DataGridTable, DataGridTableProps } from "../components/DataGridTable";
+import { DataGridTable, DataGridTableProps } from "../components/Table";
 import { Render } from "../Render";
 import { Template } from "../Template";
 

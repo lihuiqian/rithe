@@ -5,11 +5,11 @@ import { DataGridBanding, DataGridBandingProps } from "../components/DataGridBan
 import { DataGridBandingContent, DataGridBandingContentProps } from "../components/DataGridBandingContent";
 import { DataGridMenu, DataGridMenuProps } from "../components/DataGridMenu";
 import { DataGridBandingCell, DataGridBandingCellProps } from "../components/DataGridTableBandingCell";
-import { DataGridTableHeader, DataGridTableHeaderProps } from "../components/DataGridTableHeader";
-import { DataGridTableHeaderCell, DataGridTableHeaderCellProps } from "../components/DataGridTableHeaderCell";
 import { DataGridTableHeaderContent, DataGridTableHeaderContentProps } from "../components/DataGridTableHeaderContent";
-import { DataGridTableHeaderRow, DataGridTableHeaderRowProps } from "../components/DataGridTableHeaderRow";
 import { DataGridTitle, DataGridTitleProps } from "../components/DataGridTitle";
+import { DataGridTableHeader, DataGridTableHeaderProps } from "../components/TableHeader";
+import { DataGridTableHeaderCell, DataGridTableHeaderCellProps } from "../components/TableHeaderCell";
+import { DataGridTableHeaderRow, DataGridTableHeaderRowProps } from "../components/TableHeaderRow";
 import { Render } from "../Render";
 import { Template } from "../Template";
 import { Align } from "../types/Align";

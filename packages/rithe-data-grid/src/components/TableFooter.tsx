@@ -1,11 +1,11 @@
 import React, { ReactNode } from "react";
 import { useDataGridTheme } from "../DataGridTheme";
 
-export interface DataGridTableFooterProps {
+export interface TableFooterProps {
     children?: ReactNode | ReactNode[]
 }
 
-export const DataGridTableFooter = (props: DataGridTableFooterProps) => {
+export const TableFooter = (props: TableFooterProps) => {
     const { children } = props
     const { tableFootComponent: Tfoot } = useDataGridTheme()
     return <Tfoot>{children}</Tfoot>

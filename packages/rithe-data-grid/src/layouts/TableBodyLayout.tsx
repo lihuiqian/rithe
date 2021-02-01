@@ -1,9 +1,9 @@
 import { Plugin } from "@rithe/plugin";
 import React, { ComponentType, useCallback } from "react";
-import { DataGridTableBody, DataGridTableBodyProps } from "../components/DataGridTableBody";
 import { DataGridTableBodyCell, DataGridTableBodyCellProps } from "../components/DataGridTableBodyCell";
-import { DataGridTableBodyContent, DataGridTableBodyContentProps } from "../components/DataGridTableBodyContent";
 import { DataGridTableBodyRow, DataGridTableBodyRowProps } from "../components/DataGridTableBodyRow";
+import { DataGridTableBody, DataGridTableBodyProps } from "../components/TableBody";
+import { DataGridTableBodyContent, DataGridTableBodyContentProps } from "../components/TableCellContent";
 import { Render } from "../Render";
 import { Template } from "../Template";
 import { TableColumn } from "../types/TableColumn";
