@@ -1,5 +1,5 @@
 import { Plugin, Render } from "@rithe/plugin";
-import { Arrays, Records, useMixed } from "@rithe/utils";
+import { Arrays, Records, useMixed, useStable } from "@rithe/utils";
 import React, { ComponentType, useCallback } from "react";
 import { DataGridColumnFreezeControl, DataGridColumnFreezeControlProps } from "../components/DataGridColumnFreezeControl";
 import { DataGridColumnFreezeIcon, DataGridColumnFreezeIconProps } from "../components/DataGridColumnFreezeIcon";
@@ -8,6 +8,7 @@ import { State } from "../State";
 import { Template } from "../Template";
 import { Freeze } from "../types/Freeze";
 import { TableColumn } from "../types/TableColumn";
+import { MenuItemsProps } from "../types/TemplateBaseProps";
 
 export interface ColumnFreezeProps {
     freezeColumns?: { field: string, freeze: Freeze }[],
@@ -31,9 +32,10 @@ export const ColumnFreeze = (props: ColumnFreezeProps) => {
         iconComponent: IconComponent = DataGridColumnFreezeIcon,
         controlComponent: ControlComponent = DataGridColumnFreezeControl,
     } = props
-    console.log('ColumnFreeze')
     const [freezeColumns, setFreezeColumns] = useMixed(props.freezeColumns, props.onFreezeColumnsChange, props.defaultFreezeColumns)
+    const stableFreezeColumns = useStable(freezeColumns)
     const setFreeze = useCallback((field: string, freeze?: Freeze) => {
+        const freezeColumns = stableFreezeColumns.current
         const freezeRecord = Records.from((freezeColumns ?? []).map(fc => [fc.field, fc.freeze]))
         if (!freeze && freezeRecord[field]) {
             setFreezeColumns((freezeColumns!).filter(fc => fc.field !== field))
@@ -42,30 +44,33 @@ export const ColumnFreeze = (props: ColumnFreezeProps) => {
         } else if (freeze && !freezeRecord[field]) {
             setFreezeColumns(freezeColumns ? [...freezeColumns, { field, freeze }] : [{ field, freeze }])
         }
-    }, [freezeColumns, setFreezeColumns])
+    }, [setFreezeColumns, stableFreezeColumns])
 
     const tableColumnsComputed = useTableColumnsComputed(freezeColumns)
+
+    const menuItemsTemplate = useCallback((props: MenuItemsProps) => {
+        const { column } = props
+        const field = column.field
+        if (disableUserControl || field === undefined) return <Render />
+
+        const optionRecord = Records.from((options ?? []).map(o => [o.field, o.disableUserControl]))
+        if (optionRecord[field]) return <Render />
+
+        const freezeRecord = Records.from((freezeColumns ?? []).map(fc => [fc.field, fc.freeze]))
+        const freeze = freezeRecord[field]
+
+        return <>
+            <Render />
+            <MenuItemComponent icon={<IconComponent freeze={freeze} />}>
+                <ControlComponent field={field} freeze={freeze} setFreeze={setFreeze} />
+            </MenuItemComponent>
+        </>
+    }, [ControlComponent, IconComponent, MenuItemComponent, disableUserControl, freezeColumns, options, setFreeze])
 
     return <Plugin>
         <State name="tableColumns" computed={tableColumnsComputed} />
         <Template name="menuItems">
-            {({ tableColumn }) => {
-                const field = tableColumn.column?.field
-                if (disableUserControl || field === undefined) return <Render />
-
-                const optionRecord = Records.from((options ?? []).map(o => [o.field, o.disableUserControl]))
-                if (optionRecord[field]) return <Render />
-
-                const freezeRecord = Records.from((freezeColumns ?? []).map(fc => [fc.field, fc.freeze]))
-                const freeze = freezeRecord[field]
-
-                return <>
-                    <Render />
-                    <MenuItemComponent icon={<IconComponent freeze={freeze} />}>
-                        <ControlComponent field={field} freeze={freeze} setFreeze={setFreeze} />
-                    </MenuItemComponent>
-                </>
-            }}
+            {menuItemsTemplate}
         </Template>
     </Plugin>
 }

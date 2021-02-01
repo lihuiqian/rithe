@@ -1,13 +1,20 @@
-import React, { ReactNode } from "react";
+import React, { CSSProperties, ReactNode, useMemo } from "react";
 import { useDataGridTheme } from "../DataGridTheme";
-import { RowProps } from "../types/TemplateBaseProps";
+import { BodyRowProps } from "../types/TemplateBaseProps";
 
-export interface DataGridTableBodyRowProps extends RowProps {
+export interface DataGridTableBodyRowProps extends BodyRowProps {
     children?: ReactNode | ReactNode[],
 }
 
 export const DataGridTableBodyRow = (props: DataGridTableBodyRowProps) => {
-    const { children } = props
+    const { height, children } = props
+    const styles = useStyles(height)
     const { tableBodyRowComponent: Tr } = useDataGridTheme()
-    return <Tr>{children}</Tr>
+    return <Tr style={styles.root}>{children}</Tr>
 }
+
+const useStyles = (height: number) => useMemo<Record<string, CSSProperties>>(() => ({
+    root: {
+        height
+    }
+}), [height])

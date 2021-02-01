@@ -2,11 +2,11 @@ import React, { CSSProperties, ReactNode, useMemo } from "react";
 import { useDataGridTheme } from "../DataGridTheme";
 import { HeaderCellProps } from "../types/TemplateBaseProps";
 
-export interface DataGridTableHeaderCellProps extends HeaderCellProps {
+export interface DataGridBandingCellProps extends HeaderCellProps {
     children?: ReactNode | ReactNode[],
 }
 
-export const DataGridTableHeaderCell = (props: DataGridTableHeaderCellProps) => {
+export const DataGridBandingCell = (props: DataGridBandingCellProps) => {
     const {
         width,
         freeze,

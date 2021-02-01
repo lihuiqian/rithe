@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
 import { useDataGridTheme } from "../DataGridTheme";
-import { RowProps } from "../types/TemplateBaseProps";
+import { FooterRowProps } from "../types/TemplateBaseProps";
 
-export interface DataGridTableFooterRowProps extends RowProps {
+export interface DataGridTableFooterRowProps extends FooterRowProps {
     children?: ReactNode | ReactNode[],
 }
 

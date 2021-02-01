@@ -1,10 +1,19 @@
-import React, { ReactNode } from "react";
+import React, { useCallback } from "react";
+import { useDataGridTheme } from "../DataGridTheme";
+import { RowId } from "../types/RowId";
 
 export interface DataGridDetailExpandButtonProps {
-    children?: ReactNode | ReactNode[]
+    rowId: RowId,
+    expanded: boolean,
+    onExpandedChange: (rowId: RowId, expanded: boolean) => void,
 }
 
 export const DataGridDetailExpandButton = (props: DataGridDetailExpandButtonProps) => {
-    const { children } = props
-    return <div>{children}</div>
+    const { rowId, expanded, onExpandedChange } = props
+    const onClick = useCallback(() => {
+        onExpandedChange(rowId, !expanded)
+    }, [expanded, onExpandedChange, rowId])
+
+    const { iconButtonComponent: IconButton } = useDataGridTheme()
+    return <IconButton onClick={onClick}>{expanded ? 'E' : 'C'}</IconButton>
 }

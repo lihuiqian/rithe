@@ -1,10 +1,12 @@
-import React, { ReactNode } from "react";
+import React from "react";
+import { useDataGridTheme } from "../DataGridTheme";
 
 export interface DataGridColumnVisibilityToolbarButtonProps {
-    children?: ReactNode | ReactNode[]
+    onClick: () => void,
 }
 
 export const DataGridColumnVisibilityToolbarButton = (props: DataGridColumnVisibilityToolbarButtonProps) => {
-    const { children } = props
-    return <div>{children}</div>
+    const { onClick } = props
+    const { iconButtonComponent: IconButton } = useDataGridTheme()
+    return <IconButton onClick={onClick}>V</IconButton>
 }

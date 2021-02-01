@@ -1,10 +1,14 @@
 import React, { ReactNode } from "react";
+import { useDataGridTheme } from "../DataGridTheme";
 
 export interface DataGridDetailCellProps {
-    children?: ReactNode | ReactNode[]
+    children?: ReactNode | ReactNode[],
 }
 
 export const DataGridDetailCell = (props: DataGridDetailCellProps) => {
     const { children } = props
-    return <div>{children}</div>
+    const { tableBodyCellComponent: Td } = useDataGridTheme()
+    return <Td colSpan={Number.MAX_SAFE_INTEGER}>
+        {children}
+    </Td>
 }

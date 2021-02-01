@@ -1,10 +1,13 @@
-import React, { ReactNode } from "react";
+import React from "react";
+import { Row } from "../types/Row";
+import { RowId } from "../types/RowId";
 
 export interface DataGridDetailContentProps {
-    children?: ReactNode | ReactNode[]
+    row?: Row,
+    rowId?: RowId,
 }
 
 export const DataGridDetailContent = (props: DataGridDetailContentProps) => {
-    const { children } = props
-    return <div>{children}</div>
+    const { rowId } = props
+    return <div>{`Detail ${rowId}`}</div>
 }

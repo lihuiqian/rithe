@@ -1,11 +1,11 @@
 import React, { CSSProperties, ReactNode, useMemo } from "react";
 import { useDataGridTheme } from "../DataGridTheme";
 import { Freeze } from "../types/Freeze";
-import { CellProps } from "../types/TemplateBaseProps";
+import { BodyCellProps } from "../types/TemplateBaseProps";
 
-export interface DataGridTableBodyCellProps extends CellProps {
+export interface DataGridTableBodyCellProps extends BodyCellProps {
     freeze?: Freeze,
-    freezePosition: number,
+    freezePosition?: number,
     children?: ReactNode | ReactNode[],
 }
 
@@ -19,7 +19,7 @@ export const DataGridTableBodyCell = (props: DataGridTableBodyCellProps) => {
     const freezeLeft = freeze === 'start'
     const freezeRight = freeze === 'end'
 
-    const styles = useStyles(freezeLeft, freezeRight, freezePosition)
+    const styles = useStyles(freezeLeft, freezeRight, freezePosition ?? 0)
     const { tableBodyCellComponent: Td } = useDataGridTheme()
     return <Td colSpan={colSpan} rowSpan={rowSpan} style={styles.root}>
         {children}
