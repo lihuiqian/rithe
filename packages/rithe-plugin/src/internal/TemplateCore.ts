@@ -1,3 +1,4 @@
+import { Comparators, iter } from "@rithe/utils"
 import { insertItem, itemsNext, itemsPrev, removeItem } from "./helpers"
 import { Subscription } from "./Subscription"
 import { Template } from './Template'
@@ -40,6 +41,10 @@ export class TemplateCore {
     available(name: string, position: number[], props: any) {
         const templates = this._templates
         // find prev templates which match the props
-        return itemsPrev(templates, position, name).filter(template => template.test(props)).reverse()
+        return iter(itemsPrev(templates, position, name))
+            .sort(Comparators.compare((template: Template) => template.reserved, Comparators.reverseOrder()))
+            .filter(template => template.test(props))
+            .reverse()
+            .value
     }
 }
