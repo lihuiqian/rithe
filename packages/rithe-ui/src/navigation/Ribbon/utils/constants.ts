@@ -1,0 +1,24 @@
+export const TAB_HEIGHT = 30
+export const TAB_BUTTON_PADDING = 3
+export const TAB_ICON_SIZE = 24
+
+export const PANEL_HEIGHT = 100
+export const GROUP_HEIGHT = 90
+export const GROUP_SIDE_PADDING = 8
+export const GROUP_TITLE_HEIGHT = 18
+export const GROUP_CONTENT_HEIGHT = 72
+export const GROUP_FONT_SIZE = 12
+
+export const ONE_LINE_ITEM_HEIGHT = 24
+export const ONE_LINE_ITEM_MAX_WIDTH = 192
+export const THREE_LINE_ITEM_HEIGHT = 72
+export const THREE_LINE_ITEM_MIN_WIDTH = 48
+export const THREE_LINE_ITEM_MAX_WIDTH = 192
+
+export const ONE_LINE_BUTTON_ICON_SIZE = 24
+export const ONE_LINE_BUTTON_DROPDOWN_WIDTH = 12
+export const ONE_LINE_BUTTON_TEXT_PADDING = 4
+export const THREE_LINE_BUTTON_ICON_SIZE = 32
+export const THREE_LINE_BUTTON_TEXT_HEIGHT = 36
+export const THREE_LINE_BUTTON_DROPDOWN_WIDTH = 12
+export const THREE_LINE_BUTTON_TEXT_PADDING = 4

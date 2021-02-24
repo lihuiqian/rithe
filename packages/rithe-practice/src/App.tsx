@@ -1,90 +1,145 @@
-import { ColumnFreeze, ColumnOrdering, Data, DataGrid, PaginationLayout, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout } from '@rithe/data-grid';
-import { Debug, Plugin, Render, State, Template } from '@rithe/plugin';
-import { Arrays, DragDropProvider, Draggable, Droppable } from '@rithe/utils';
-import React, { useCallback, useState } from 'react';
+import { ThemeProvider } from '@material-ui/core';
+import { createTheme, Ribbon, RibbonAction, RibbonButton, RibbonControl, RibbonDropDownButton, RibbonGroup, RibbonTab, RibbonTabButton, RibbonTitle, RibbonToggleButton } from '@rithe/ui';
+import React, { useState } from 'react';
+import { Icon } from './Icon';
 
 function App() {
-  const [value, setValue] = useState<any>(undefined)
-  return <>
-    <DragDropProvider>
-      <Draggable payload={"ABC"}><div>Draggable</div></Draggable>
-      <Droppable onOver={(coordinate) => setValue(coordinate)} onDrop={(_, payload) => setValue(payload)}><div style={{ width: 100, height: 100, border: '1px solid red' }}>{JSON.stringify(value)}</div></Droppable>
-    </DragDropProvider>
-    <DataGrid >
-      <Data
-        columns={[{
-          field: 'index', dataTypeName: 'number', title: 'INDEX',
-        }, {
-          field: 'a', dataTypeName: 'number', title: 'A', categories: ['grouping'],
-        }, {
-          field: 'b', dataTypeName: 'number', title: 'B', categories: ['grouping'],
-        }, {
-          field: 'c', dataTypeName: 'number', title: 'C', categories: [{ value: 'grouping', merge: false }],
-        }, {
-          field: 'd', dataTypeName: 'number', title: 'D',
-        }, {
-          field: 'e', dataTypeName: 'number', title: 'E',
-        }, {
-          field: 'f', dataTypeName: 'number', title: 'F',
-        }, {
-          field: 'g', dataTypeName: 'number', title: 'G',
-        }, {
-          field: 'h', dataTypeName: 'number', title: 'H',
-        }, {
-          field: 'i', dataTypeName: 'number', title: 'I',
-        }, {
-          field: 'j', dataTypeName: 'number', title: 'J',
-        }]}
-        rows={Arrays.range(0, 10).map(i => ({ index: i, a: 1 + i % 3, b: 2 + i % 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8, i: 9, j: 10 }))} />
-      <ToolbarLayout />
-      <TableLayout>
-        <TableHeaderLayout />
-        <TableBodyLayout />
-        <TableFooterLayout />
-      </TableLayout>
-      <PaginationLayout />
-      <ColumnFreeze defaultFreezeColumns={[{ field: 'a', freeze: 'start' }]} />
-      <ColumnOrdering />
-      {/* <Grouping defaultGroupingFields={['a', 'b']} defaultExpandedGroups={[[1], [1, 2], [1, 3]]} /> */}
-      <Debug />
-    </DataGrid>
-  </>
-}
+  const [theme] = useState(createTheme('#0097a7', '#a71100', 8))
 
-function Part1() {
-  const [arr, setArr] = useState([1, 2])
-  const onClick = useCallback(() => {
-    setArr(arr => [0, ...arr])
-  }, [])
+  return <ThemeProvider theme={theme}>
+    <Ribbon>
+      <RibbonAction>
+        <RibbonTabButton
+          tooltip="Auto Save"
+          text="Auto Save"
+          icon={<Icon />}
+          selected
+        />
+        <RibbonTabButton
+          tooltip="Save"
+          icon={<Icon />}
+        />
+        <RibbonTabButton
+          tooltip="Undo"
+          icon={<Icon />}
+        />
+        <RibbonTabButton
+          tooltip="Redo"
+          icon={<Icon />}
+          disabled
+        />
+      </RibbonAction>
+      <RibbonTab label="File" index={0}>
+        <RibbonGroup title="Clipboard">
+          <RibbonButton
+            icon={<Icon />}
+            text="Paste"
+            sizes="large"
+          />
+          <RibbonButton
+            icon={<Icon />}
+            text="Cut"
+            sizes={[{ from: 0, to: 650, value: 'small' }, { from: 650, to: Number.MAX_SAFE_INTEGER, value: 'middle' }]}
+          />
+          <RibbonButton
+            icon={<Icon />}
+            text="Copy"
+            sizes={[{ from: 0, to: 650, value: 'small' }, { from: 650, to: Number.MAX_SAFE_INTEGER, value: 'middle' }]}
+          />
+          <RibbonButton
+            icon={<Icon />}
+            text="Format Brush"
+            sizes={[{ from: 0, to: 650, value: 'small' }, { from: 650, to: Number.MAX_SAFE_INTEGER, value: 'middle' }]}
+          />
+        </RibbonGroup>
+      </RibbonTab>
+      <RibbonTab label="Insert" index={1}>
+        <RibbonGroup title="Insert">
 
-  return <Plugin>
-    <button onClick={onClick}>append</button>
-    <State name="arr" value={arr} />
-    <Template name="disp" stateNames={['arr']}>
-      {(props, arr) => <div>{"render1" + JSON.stringify(props)} + {JSON.stringify(arr)}</div>}
-    </Template>
-    <Render name="disp" props={1} />
-  </Plugin>
-}
-
-function Part2() {
-  const [num, setNum] = useState(1)
-  const onClick = useCallback(() => {
-    setNum(num => num + 1)
-  }, [])
-  return <Plugin>
-    <button onClick={onClick}>add</button>
-    <State name="num" value={num} />
-    <State name="arr" computed={(prev?: number[], num?: number) => prev ? [...prev, num] : [num]} depNames={['num']} />
-    <Template name="num" stateNames={['num']}>
-      {(_, num) => <div>{JSON.stringify(num)}</div>}
-    </Template>
-    <Template name="disp" predicate={props => props === 'join'} stateNames={['arr']}>
-      {(props, arr) => <div>{"render2" + JSON.stringify(props)} + {JSON.stringify(arr)}</div>}
-    </Template>
-    <Render name="num" props={2} />
-    <Render name="disp" props={'join'} />
-  </Plugin>
+        </RibbonGroup>
+      </RibbonTab>
+      <RibbonTab label="Layout" index={2}>
+        <RibbonGroup title="Page">
+          <RibbonDropDownButton
+            icon={<Icon />}
+            text="Size"
+            sizes="large"
+          />
+          <RibbonDropDownButton
+            icon={<Icon />}
+            text="Orientation "
+            sizes={[{ from: 0, to: 650, value: 'middle' }, { from: 650, to: Number.MAX_SAFE_INTEGER, value: 'large' }]}
+          />
+          <RibbonDropDownButton
+            icon={<Icon />}
+            text="Margins "
+            sizes={[{ from: 0, to: 650, value: 'middle' }, { from: 650, to: Number.MAX_SAFE_INTEGER, value: 'large' }]}
+          >
+          </RibbonDropDownButton>
+          <RibbonDropDownButton
+            icon={<Icon />}
+            text="Direction "
+            sizes={[{ from: 0, to: 650, value: 'middle' }, { from: 650, to: Number.MAX_SAFE_INTEGER, value: 'large' }]}
+          >
+          </RibbonDropDownButton>
+        </RibbonGroup>
+      </RibbonTab>
+      <RibbonTab label="View" index={3}>
+        <RibbonGroup title="View">
+          <RibbonToggleButton
+            icon={<Icon />}
+            text="Edit "
+            sizes="large"
+            selected
+          />
+          <RibbonToggleButton
+            icon={<Icon />}
+            text="View "
+            sizes="large"
+          />
+        </RibbonGroup>
+        <RibbonGroup title="Scale">
+          <RibbonDropDownButton
+            icon={<Icon />}
+            text="Scale "
+            sizes="large"
+          />
+          <RibbonButton
+            icon={<Icon />}
+            text="100% "
+            sizes="large"
+          />
+          <RibbonToggleButton
+            icon={<Icon />}
+            text="Grid Line"
+            sizes="middle"
+            selected
+          />
+          <RibbonToggleButton
+            icon={<Icon />}
+            text="Ruler "
+            sizes="middle"
+            selected
+          />
+          <RibbonToggleButton
+            icon={<Icon />}
+            text="Navigation "
+            sizes="middle"
+            selected
+          />
+        </RibbonGroup>
+      </RibbonTab>
+      <RibbonTitle>
+        Title
+      </RibbonTitle>
+      <RibbonControl>
+        <RibbonTabButton
+          icon="🪟"
+          tooltip="max"
+        />
+      </RibbonControl>
+    </Ribbon>
+  </ThemeProvider>
 }
 
 export default App;
