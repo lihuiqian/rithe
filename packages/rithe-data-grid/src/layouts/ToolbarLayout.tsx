@@ -1,30 +1,44 @@
 import { Plugin } from "@rithe/plugin";
-import React, { ComponentType } from "react";
-import { DataGridToolbar, DataGridToolbarProps } from "../components/DataGridToolbar";
-import { DataGridToolbarContent, DataGridToolbarContentProps } from "../components/DataGridToolbarContent";
+import React, { ComponentType, useCallback } from "react";
+import { DataGridToolbar, DataGridToolbarProps } from "../components/basic/DataGridToolbar";
+import { DataGridToolbarContent, DataGridToolbarContentProps } from "../components/basic/DataGridToolbarContent";
 import { Render } from "../Render";
 import { Template } from "../Template";
 
 export interface ToolbarLayoutProps {
-    toolbarComponent?: ComponentType<DataGridToolbarProps>,
-    contentComponent?: ComponentType<DataGridToolbarContentProps>,
+    Toolbar?: ComponentType<DataGridToolbarProps>,
+    Content?: ComponentType<DataGridToolbarContentProps>,
 }
 
 export const ToolbarLayout = (props: ToolbarLayoutProps) => {
     const {
-        toolbarComponent: ToolbarComponent = DataGridToolbar,
-        contentComponent: ContentComponent = DataGridToolbarContent,
+        Toolbar = DataGridToolbar,
+        Content = DataGridToolbarContent,
     } = props
+
+    const toolbarTemplate = useCallback(() => {
+        return <Toolbar>
+            <Render name="toolbarContent" />
+        </Toolbar>
+    }, [Toolbar])
+
+    const toolbarContent = useCallback(() => {
+        return <Content>
+            <span>
+                <Render name="toolbarItem" />
+            </span>
+            <span>
+                <Render name="toolbarAction" />
+            </span>
+        </Content>
+    }, [Content])
 
     return <Plugin>
         <Template name="toolbar">
-            {() => <ToolbarComponent>
-                <Render name="toolbarContent" />
-            </ToolbarComponent>}
+            {toolbarTemplate}
         </Template>
         <Template name="toolbarContent">
-            {() => <ContentComponent>
-            </ContentComponent>}
+            {toolbarContent}
         </Template>
     </Plugin>
 }

@@ -1,17 +1,26 @@
 import React, { createContext, ReactNode, useContext, useRef } from "react";
 
-export interface DragDropCoordinate {
+export interface DragDropEvent {
     clientX: number,
     clientY: number,
     pageX: number,
     pageY: number,
     screenX: number,
     screenY: number,
+    deltaX: number,
+    deltaY: number,
+    altKey: boolean,
+    ctrlKey: boolean,
+    metaKey: boolean,
+    shiftKey: boolean,
+    target: EventTarget | null,
+    sourceTarget: EventTarget | null,
+    sourceRect: DOMRect,
 }
 
 export type DragDropType = 'drag' | 'move' | 'drop'
 
-export type DragDropNext = (type: DragDropType, coordinate: DragDropCoordinate, payload: any) => void
+export type DragDropNext = (type: DragDropType, event: DragDropEvent, payload: any) => void
 
 export class DragDropObserver {
 
@@ -23,23 +32,23 @@ export class DragDropObserver {
         this._subscribers = []
     }
 
-    start(coordinate: DragDropCoordinate, payload: any) {
+    start(event: DragDropEvent, payload: any) {
         this._payload = payload
-        this._publish('drag', coordinate)
+        this._publish('drag', event)
     }
 
-    move(coordinate: DragDropCoordinate) {
-        this._publish('move', coordinate)
+    move(event: DragDropEvent) {
+        this._publish('move', event)
     }
 
-    end(coordinate: DragDropCoordinate) {
-        this._publish('drop', coordinate)
+    end(event: DragDropEvent) {
+        this._publish('drop', event)
     }
 
-    private _publish(type: DragDropType, coordinate: DragDropCoordinate) {
+    private _publish(type: DragDropType, event: DragDropEvent) {
         const payload = this._payload
         this._subscribers.forEach(next => {
-            next(type, coordinate, payload)
+            next(type, event, payload)
         })
     }
 

@@ -4,10 +4,10 @@ export function createTheme(primary: string, secondary: string, spacing: number,
     return createMuiTheme({
         palette: {
             primary: {
-                main: '#0097a7',
+                main: primary,
             },
             secondary: {
-                main: '#a71100',
+                main: secondary,
             },
             action: {
                 hoverOpacity: 0.12,

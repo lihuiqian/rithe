@@ -1,12 +1,12 @@
 import { Column } from "./Column";
-import { DataType } from "./DataType";
-import { Freeze } from "./Freeze";
+import { FreezePosition } from "./FreezePosition";
 
 export interface TableColumn {
-    key: string,
     type: symbol,
     column?: Column,
-    dataType?: DataType,
+    field: string,
     width: number,
-    freeze?: Freeze,
+    freezePosition?: FreezePosition,
+    freezeOffset?: number,
+    actions?: string[],
 }

@@ -2,11 +2,11 @@ import { Button, makeStyles, Popover } from "@material-ui/core";
 import { usePopover } from "@rithe/utils";
 import clsx from 'clsx';
 import React, { ReactNode, useCallback, useState } from "react";
-import { useButtonSize } from "./hooks/useButtonSize";
 import { useLargeButtonLines } from "./hooks/useLargeButtonLines";
+import { useMediaQuery } from "./hooks/useMediaQuery";
 import { MediaQuery } from "./types/MediaQuerySize";
 import { Size } from "./types/Size";
-import { GROUP_FONT_SIZE, ONE_LINE_BUTTON_DROPDOWN_WIDTH, ONE_LINE_BUTTON_ICON_SIZE, ONE_LINE_BUTTON_TEXT_PADDING, ONE_LINE_ITEM_HEIGHT, ONE_LINE_ITEM_MAX_WIDTH, THREE_LINE_BUTTON_ICON_SIZE, THREE_LINE_BUTTON_TEXT_HEIGHT, THREE_LINE_BUTTON_TEXT_PADDING, THREE_LINE_ITEM_HEIGHT, THREE_LINE_ITEM_MIN_WIDTH } from "./utils/constants";
+import { GROUP_FONT_SIZE, ONE_LINE_BUTTON_DROPDOWN_WIDTH, ONE_LINE_BUTTON_ICON_SIZE, ONE_LINE_ITEM_HEIGHT, ONE_LINE_ITEM_MAX_WIDTH, ONE_LINE_ITEM_TEXT_PADDING, THREE_LINE_BUTTON_ICON_SIZE, THREE_LINE_BUTTON_TEXT_HEIGHT, THREE_LINE_BUTTON_TEXT_PADDING, THREE_LINE_ITEM_HEIGHT, THREE_LINE_ITEM_MIN_WIDTH } from "./utils/constants";
 
 export interface RibbonSplitButtonProps {
     icon: ReactNode,
@@ -14,8 +14,9 @@ export interface RibbonSplitButtonProps {
     text: string,
     sizes: Size | MediaQuery<Size>[],
     disabled?: boolean,
+    selected?: boolean,
     onClick?: () => void,
-    children?: ReactNode | ReactNode[],
+    children?: (onClose: () => void) => ReactNode | ReactNode[],
 }
 
 export const RibbonSplitButton = (props: RibbonSplitButtonProps) => {
@@ -25,21 +26,22 @@ export const RibbonSplitButton = (props: RibbonSplitButtonProps) => {
         text,
         sizes,
         disabled,
+        selected,
         onClick,
         children,
     } = props
 
-    const size = useButtonSize(sizes)
+    const size = useMediaQuery(sizes, 'middle')
+
+    const [hover1, setHover1] = useState(false)
+    const onEnter1 = useCallback(() => setHover1(true), [])
+    const onLeave1 = useCallback(() => setHover1(false), [])
+    const [hover2, setHover2] = useState(false)
+    const onEnter2 = useCallback(() => setHover2(true), [])
+    const onLeave2 = useCallback(() => setHover2(false), [])
+
     const [linesRef, lines] = useLargeButtonLines(text, false)
-    const [open, anchorEl, onOpen, onClose] = usePopover()
-
-    const [hoverFirst, setHoverFirst] = useState(false)
-    const onEnterFirst = useCallback(() => setHoverFirst(true), [])
-    const onLeaveFirst = useCallback(() => setHoverFirst(false), [])
-    const [hoverSecond, setHoverSecond] = useState(false)
-    const onEnterSecond = useCallback(() => setHoverSecond(true), [])
-    const onLeaveSecond = useCallback(() => setHoverSecond(false), [])
-
+    const { open, anchorEl, onOpen, onClose } = usePopover()
     const styles = useStyles()
     return <>
         <div
@@ -54,9 +56,13 @@ export const RibbonSplitButton = (props: RibbonSplitButtonProps) => {
             <Button
                 disabled={disabled}
                 onClick={onClick}
-                onMouseEnter={onEnterFirst}
-                onMouseLeave={onLeaveFirst}
-                className={styles.first}
+                onMouseEnter={onEnter1}
+                onMouseLeave={onLeave1}
+                className={clsx(
+                    styles.first,
+                    hover1 && styles.hover,
+                    selected && styles.selected,
+                )}
             >
                 <div className={clsx(
                     size === 'small' && styles.firstSmall,
@@ -67,16 +73,21 @@ export const RibbonSplitButton = (props: RibbonSplitButtonProps) => {
                     {size === 'middle' && <span>{text}</span>}
                 </div>
                 <div className={clsx(
-                    styles.cover,
-                    hoverSecond && styles.anotherHover,
+                    styles.border,
+                    selected && styles.borderSelected,
+                    hover2 && !selected && styles.borderAnotherHover,
                 )} />
             </Button>
             <Button
                 disabled={disabled}
                 onClick={onOpen}
-                onMouseEnter={onEnterSecond}
-                onMouseLeave={onLeaveSecond}
-                className={styles.second}
+                onMouseEnter={onEnter2}
+                onMouseLeave={onLeave2}
+                className={clsx(
+                    styles.second,
+                    hover2 && styles.hover,
+                    selected && styles.selected,
+                )}
             >
                 <div className={clsx(
                     size === 'small' && styles.secondSmall,
@@ -87,11 +98,12 @@ export const RibbonSplitButton = (props: RibbonSplitButtonProps) => {
                     {size === 'large' && <span><div>{lines[0]}</div><div>{lines[1]}∨</div></span>}
                 </div>
                 <div className={clsx(
-                    styles.cover,
-                    hoverFirst && styles.anotherHover,
+                    styles.border,
+                    selected && styles.borderSelected,
+                    hover1 && !selected && styles.borderAnotherHover,
                 )} />
             </Button>
-            {open && <div className={styles.active} />}
+            {!selected && open && <div className={styles.active} />}
         </div>
         <Popover
             open={open}
@@ -99,7 +111,7 @@ export const RibbonSplitButton = (props: RibbonSplitButtonProps) => {
             onClose={onClose}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         >
-            {open && children}
+            {open && children && children(onClose)}
         </Popover>
     </>
 }
@@ -120,6 +132,17 @@ const useStyles = makeStyles(theme => ({
         minWidth: THREE_LINE_ITEM_MIN_WIDTH,
         display: 'flex',
         flexDirection: 'column',
+    },
+    hover: {
+        '&:hover': {
+            backgroundColor: theme.palette.action.hover,
+        },
+    },
+    selected: {
+        backgroundColor: theme.palette.action.selected,
+        '&:hover': {
+            backgroundColor: theme.palette.action.selected,
+        },
     },
     first: {
         position: 'relative',
@@ -154,8 +177,8 @@ const useStyles = makeStyles(theme => ({
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            paddingLeft: ONE_LINE_BUTTON_TEXT_PADDING,
-            paddingRight: ONE_LINE_BUTTON_TEXT_PADDING,
+            paddingLeft: ONE_LINE_ITEM_TEXT_PADDING,
+            paddingRight: ONE_LINE_ITEM_TEXT_PADDING,
         },
     },
     firstLarge: {
@@ -218,7 +241,7 @@ const useStyles = makeStyles(theme => ({
         height: '100%',
         backgroundColor: theme.palette.action.active,
     },
-    cover: {
+    border: {
         position: 'absolute',
         left: 0,
         top: 0,
@@ -228,10 +251,14 @@ const useStyles = makeStyles(theme => ({
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: 'transparent',
-        pointerEvents: 'none',
         transition: `border ${theme.transitions.duration.short}ms ${theme.transitions.easing.easeInOut}`,
     },
-    anotherHover: {
+    borderSelected: {
+        '&:hover': {
+            borderColor: theme.palette.action.hover,
+        },
+    },
+    borderAnotherHover: {
         borderColor: theme.palette.action.hover,
     },
 }))

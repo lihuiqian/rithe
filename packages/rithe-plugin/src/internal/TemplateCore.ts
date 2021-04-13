@@ -20,7 +20,9 @@ export class TemplateCore {
 
     unregister(template: Template) {
         removeItem(this._templates, template)
-        this._nofity(template)
+        setTimeout(() => {
+            this._nofity(template)
+        })
     }
 
     private _nofity(template: Template) {

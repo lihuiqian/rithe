@@ -1,0 +1,1 @@
+export type Layout = 'column' | '2row' | '3row'

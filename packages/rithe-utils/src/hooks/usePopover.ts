@@ -1,17 +1,29 @@
-import { MouseEvent, useCallback, useState } from "react";
+import { RefObject, SyntheticEvent, useCallback, useState } from "react";
 
-function usePopover() {
+function usePopover(ref?: RefObject<HTMLElement>) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
-    const onOpen = useCallback((e: MouseEvent<HTMLElement>) => {
-        setAnchorEl(e.currentTarget)
-    }, [])
+    const onOpen = useCallback((e: SyntheticEvent<HTMLElement>) => {
+        setAnchorEl(ref && ref.current ? ref.current : e.currentTarget)
+    }, [ref])
 
     const onClose = useCallback(() => {
         setAnchorEl(null)
     }, [])
 
-    return [!!anchorEl, anchorEl, onOpen, onClose] as [boolean, HTMLElement | null, (e: MouseEvent<HTMLElement>) => void, () => void]
+    const onSwitch = useCallback((e: SyntheticEvent<HTMLElement>) => {
+        setAnchorEl(anchorEl => {
+            return anchorEl ? null : (ref && ref.current ? ref.current : e.currentTarget)
+        })
+    }, [ref])
+
+    return {
+        open: !!anchorEl,
+        anchorEl,
+        onOpen,
+        onClose,
+        onSwitch,
+    }
 }
 
 export default usePopover

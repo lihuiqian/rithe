@@ -1,22 +1,29 @@
 import { Plugin } from "@rithe/plugin";
-import React, { ComponentType } from "react";
-import { DataGridPagination, DataGridPaginationProps } from "../components/DataGridPagination";
+import React, { ComponentType, useCallback } from "react";
+import { DataGridPagination, DataGridPaginationProps } from "../components/basic/DataGridPagination";
+import { Render } from "../Render";
 import { Template } from "../Template";
 
 export interface PaginationLayoutProps {
-    paginationComponent?: ComponentType<DataGridPaginationProps>,
+    Pagination?: ComponentType<DataGridPaginationProps>,
 }
 
 export const PaginationLayout = (props: PaginationLayoutProps) => {
     const {
-        paginationComponent: PaginationComponent = DataGridPagination,
+        Pagination = DataGridPagination,
     } = props
+
+    const paginationTemplate = useCallback(() => {
+        return <Pagination>
+            <Render name="pageInfo" />
+            <Render name="pageSelect" />
+            <Render name="pageSizeSelect" />
+        </Pagination>
+    }, [Pagination])
 
     return <Plugin>
         <Template name="pagination">
-            {() => <PaginationComponent>
-                Pagination
-        </PaginationComponent>}
+            {paginationTemplate}
         </Template>
     </Plugin>
 }

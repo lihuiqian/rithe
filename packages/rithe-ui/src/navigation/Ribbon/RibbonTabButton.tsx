@@ -1,6 +1,7 @@
 import { Button, makeStyles } from "@material-ui/core"
+import clsx from 'clsx'
 import React, { ReactNode } from "react"
-import { TAB_BUTTON_PADDING, TAB_ICON_SIZE } from "./utils/constants"
+import { TAB_BUTTON_PADDING, TAB_FONT_SIZE, TAB_ICON_SIZE } from "./utils/constants"
 
 export interface RibbonTabButtonProps {
     icon?: ReactNode,
@@ -26,12 +27,14 @@ export const RibbonTabButton = (props: RibbonTabButtonProps) => {
         disabled={disabled}
         title={tooltip}
         onClick={onClick}
-        className={styles.root}
+        className={clsx(
+            styles.root,
+            selected && styles.selected,
+        )}
     >
         {icon && <span className={styles.icon}>{icon}</span>}
         {icon && text && <span className={styles.space} />}
-        {text && <span>{text}</span>}
-        {selected && <div className={styles.selected} />}
+        {text && <span className={styles.text}>{text}</span>}
     </Button>
 }
 
@@ -40,6 +43,10 @@ const useStyles = makeStyles(theme => ({
         height: '100%',
         position: 'relative',
         padding: TAB_BUTTON_PADDING,
+        color: theme.palette.primary.contrastText,
+    },
+    selected: {
+        backgroundColor: theme.palette.action.selected,
     },
     icon: {
         width: TAB_ICON_SIZE,
@@ -48,12 +55,8 @@ const useStyles = makeStyles(theme => ({
     space: {
         marginRight: theme.spacing(0.5),
     },
-    selected: {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: theme.palette.action.selected,
+    text: {
+        fontSize: TAB_FONT_SIZE,
+        fontWeight: 100,
     },
 }))

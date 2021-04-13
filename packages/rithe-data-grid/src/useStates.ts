@@ -1,5 +1,5 @@
 import { useStates as usePluginStates } from '@rithe/plugin';
-import { StateSlice } from "./types/StateSlice";
+import { StateSlice } from "./StateSlice";
 
 type Key = keyof StateSlice
 type OptionalValues<KS extends Key[]> = {

@@ -26,12 +26,11 @@ export const useLargeButtonLines = (text: string, dropdown?: boolean) => {
         }
 
         const dropdownWidth = dropdown ? THREE_LINE_BUTTON_DROPDOWN_WIDTH : 0
-        const ellipsisWidth = context.measureText('...').width
         const spaceWidth = context.measureText(' ').width
         const hasSpace = text.indexOf(' ') > 0
         const words = hasSpace ? text.split(' ') : text.split('')
         const widths = words.map(word => context.measureText(word).width)
-        const [first, second] = distribute(maxWidth, widths, dropdownWidth, hasSpace ? spaceWidth : 0, ellipsisWidth)
+        const [first, second] = distribute(maxWidth, widths, dropdownWidth, hasSpace ? spaceWidth : 0)
 
         if (first + second === words.length) {
             setLines([words.slice(0, first).join(hasSpace ? ' ' : ''), words.slice(first).join(hasSpace ? ' ' : '')])
@@ -43,7 +42,7 @@ export const useLargeButtonLines = (text: string, dropdown?: boolean) => {
     return [ref, lines] as [RefObject<HTMLElement | null>, string[]]
 }
 
-function distribute(maxWidth: number, widths: number[], dropdownWidth: number, spaceWidth: number, ellipsisWidth: number) {
+function distribute(maxWidth: number, widths: number[], dropdownWidth: number, spaceWidth: number) {
     let first = 1, second = 1
     while (sum(widths.slice(0, first), spaceWidth) <= maxWidth && first <= widths.length) {
         first++

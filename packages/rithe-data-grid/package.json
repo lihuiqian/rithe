@@ -1,6 +1,6 @@
 {
   "name": "@rithe/data-grid",
-  "version": "0.1.6",
+  "version": "0.1.9",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "MIT",
@@ -11,15 +11,21 @@
     "build": "./../../node_modules/.bin/tsc"
   },
   "peerDependencies": {
+    "@date-io/moment": "1.x",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@material-ui/pickers": "^3.3.10",
     "@rithe/plugin": "^0.1.6",
     "@rithe/utils": "^0.1.6",
+    "@types/autosuggest-highlight": "^3.1.1",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
+    "autosuggest-highlight": "^3.1.1",
+    "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-flip-toolkit": "^7.0.13",
-    "react-use-gesture": "^9.0.0-beta.11",
-    "typescript": "^4.0.3"
+    "typescript": "^4.2.3"
   }
 }

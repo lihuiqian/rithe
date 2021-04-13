@@ -28,6 +28,12 @@ function concat<K extends keyof any, V>(...records: Record<K, V>[]): Record<K, V
     return result
 }
 
+function forEach<K extends keyof any, V>(record: Record<K, V>, callbackFn: (value: V, key: K, record: Record<K, V>) => void) {
+    for (const key of keys(record)) {
+        callbackFn(record[key], key, record)
+    }
+}
+
 function entries<K extends keyof any, V>(record: Record<K, V>): Iterable<[K, V]> {
     const result: [K, V][] = []
     for (const key of keys(record)) {
@@ -112,6 +118,7 @@ export default {
     of,
     from,
     concat,
+    forEach,
     entries,
     keys,
     values,

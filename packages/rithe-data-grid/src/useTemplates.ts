@@ -1,6 +1,6 @@
 import { useTemplates as usePluginTemplates } from '@rithe/plugin';
-import { StateSlice } from "./types/StateSlice";
-import { TemplateBaseProps } from './types/TemplateBaseProps';
+import { StateSlice } from "./StateSlice";
+import { TemplateBaseProps } from './TemplateBaseProps';
 
 type Key = keyof StateSlice
 type OptionalValues<KS extends Key[]> = {

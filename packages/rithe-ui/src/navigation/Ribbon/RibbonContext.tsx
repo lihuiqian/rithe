@@ -8,18 +8,18 @@ interface Tab {
 }
 
 interface Context {
-    action: ReactNode | ReactNode[],
-    registerAction: (action: ReactNode | ReactNode[]) => void,
-    unregisterAction: () => void,
+    applicationButton: ReactNode | ReactNode[],
+    registerApplicationButton: (applicationButton: ReactNode | ReactNode[]) => void,
+    unregisterApplicationButton: () => void,
+    quickAccess: ReactNode | ReactNode[],
+    registerQuickAccess: (quickAccess: ReactNode | ReactNode[]) => void,
+    unregisterQuickAccess: () => void,
     tabs: (Tab | undefined)[],
     registerTab: (label: string, index: number, panel: ReactNode | ReactNode[]) => void,
     unregisterTab: (index: number) => void,
     title: ReactNode | ReactNode[],
     registerTitle: (title: ReactNode | ReactNode[]) => void,
     unregisterTitle: () => void,
-    control: ReactNode | ReactNode[],
-    registerControl: (control: ReactNode | ReactNode[]) => void,
-    unregisterControl: () => void,
 }
 
 const RibbonContext = createContext<Context>(undefined as any)
@@ -27,12 +27,20 @@ const RibbonContext = createContext<Context>(undefined as any)
 export const useRibbonContext = () => useContext(RibbonContext)
 
 export const RibbonContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
-    const [action, setAction] = useState<ReactNode | ReactNode[]>(undefined)
-    const registerAction = useCallback((action: ReactNode | ReactNode[]) => {
-        setAction(action)
+    const [applicationButton, setApplicationButton] = useState<ReactNode | ReactNode[]>(undefined)
+    const registerApplicationButton = useCallback((applicationButton: ReactNode | ReactNode[]) => {
+        setApplicationButton(applicationButton)
     }, [])
-    const unregisterAction = useCallback(() => {
-        setAction(undefined)
+    const unregisterApplicationButton = useCallback(() => {
+        setApplicationButton(undefined)
+    }, [])
+
+    const [quickAccess, setQuickAccess] = useState<ReactNode | ReactNode[]>(undefined)
+    const registerQuickAccess = useCallback((quickAccess: ReactNode | ReactNode[]) => {
+        setQuickAccess(quickAccess)
+    }, [])
+    const unregisterQuickAccess = useCallback(() => {
+        setQuickAccess(undefined)
     }, [])
 
     const [tabs, setTabs] = useState<(Tab | undefined)[]>([])
@@ -63,28 +71,20 @@ export const RibbonContextProvider = ({ children }: { children: ReactNode | Reac
         setTitle(undefined)
     }, [])
 
-    const [control, setControl] = useState<ReactNode | ReactNode[]>(undefined)
-    const registerControl = useCallback((control: ReactNode | ReactNode[]) => {
-        setControl(control)
-    }, [])
-    const unregisterControl = useCallback(() => {
-        setControl(undefined)
-    }, [])
-
     const value = useMemo<Context>(() => ({
-        action,
-        registerAction,
-        unregisterAction,
+        applicationButton,
+        registerApplicationButton,
+        unregisterApplicationButton,
+        quickAccess,
+        registerQuickAccess,
+        unregisterQuickAccess,
         tabs,
         registerTab,
         unregisterTab,
         title,
         registerTitle,
         unregisterTitle,
-        control,
-        registerControl,
-        unregisterControl,
-    }), [action, control, registerAction, registerControl, registerTab, registerTitle, tabs, title, unregisterAction, unregisterControl, unregisterTab, unregisterTitle])
+    }), [applicationButton, quickAccess, registerApplicationButton, registerQuickAccess, registerTab, registerTitle, tabs, title, unregisterApplicationButton, unregisterQuickAccess, unregisterTab, unregisterTitle])
 
     return <RibbonContext.Provider value={value}>
         {children}

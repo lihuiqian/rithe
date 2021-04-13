@@ -1,6 +1,6 @@
 {
   "name": "@rithe/ui",
-  "version": "0.1.6",
+  "version": "0.1.9",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "MIT",
@@ -12,15 +12,13 @@
   },
   "peerDependencies": {
     "@material-ui/core": "^4.11.3",
-    "@rithe/plugin": "^0.1.6",
-    "@rithe/utils": "^0.1.6",
+    "@rithe/plugin": "^0.1.7",
+    "@rithe/utils": "^0.1.7",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-flip-toolkit": "^7.0.13",
-    "react-use-gesture": "^9.0.0-beta.11",
-    "typescript": "^4.0.3"
+    "typescript": "^4.2.3"
   }
 }

@@ -1,145 +1,99 @@
-import { ThemeProvider } from '@material-ui/core';
-import { createTheme, Ribbon, RibbonAction, RibbonButton, RibbonControl, RibbonDropDownButton, RibbonGroup, RibbonTab, RibbonTabButton, RibbonTitle, RibbonToggleButton } from '@rithe/ui';
-import React, { useState } from 'react';
-import { Icon } from './Icon';
+import { Action, ColumnFreeze, ColumnOrdering, ColumnResizing, ColumnVisibility, Data, DataGrid, DataTypePreset, Detail, Editing, Expanding, Grouping, KeysTypeProvider, KeyTypeProvider, Numbering, PaginationLayout, Paging, Searching, Selection, Sorting, Summary, TableBodyLayout, TableFooterLayout, TableHeaderLayout, TableLayout, ToolbarLayout, Tree } from '@rithe/data-grid';
+import { TableRow } from '@rithe/data-grid/dist/types/TableRow';
+import { Arrays } from '@rithe/utils';
+import React, { useCallback, useState } from 'react';
+
+const options = [1, 2, 3, 4]
+const formatter = {
+  format: (value: number) => String.fromCharCode('A'.charCodeAt(0) + value - 1) + '-' + value,
+  group: (value: number) => Math.ceil(value / 2) + '',
+}
+const columns = [{
+  field: 'index', dataTypeName: 'string', title: 'INDEX',
+}, {
+  field: 'a', dataTypeName: 'string', title: 'A', categories: [{ value: 'grouping', key: '1' }],
+}, {
+  field: 'b', dataTypeName: 'number', title: 'B', categories: [{ value: 'grouping', key: '1' }],
+}, {
+  field: 'c', dataTypeName: 'bigint', title: 'C', categories: [{ value: 'grouping', key: '2' }],
+}, {
+  field: 'd', dataTypeName: 'date', title: 'D',
+}, {
+  field: 'e', dataTypeName: 'time', title: 'E',
+}, {
+  field: 'f', dataTypeName: 'datetime', title: 'F', width: 240,
+}, {
+  field: 'g', dataTypeName: 'key', title: 'G',
+}, {
+  field: 'h', dataTypeName: 'keys', title: 'H', width: 320,
+},]
 
 function App() {
-  const [theme] = useState(createTheme('#0097a7', '#a71100', 8))
+  const [rows, setRows] = useState(() => {
+    return Arrays.range(0, 10).map(i => ({ index: i, a: `string-${i}`, b: i % 5, c: BigInt(i % 3), d: new Date(), e: new Date(), f: new Date(), g: options[i % 4], h: [options[i % 4], options[(i + 1) % 4]] }))
+  })
 
-  return <ThemeProvider theme={theme}>
-    <Ribbon>
-      <RibbonAction>
-        <RibbonTabButton
-          tooltip="Auto Save"
-          text="Auto Save"
-          icon={<Icon />}
-          selected
-        />
-        <RibbonTabButton
-          tooltip="Save"
-          icon={<Icon />}
-        />
-        <RibbonTabButton
-          tooltip="Undo"
-          icon={<Icon />}
-        />
-        <RibbonTabButton
-          tooltip="Redo"
-          icon={<Icon />}
-          disabled
-        />
-      </RibbonAction>
-      <RibbonTab label="File" index={0}>
-        <RibbonGroup title="Clipboard">
-          <RibbonButton
-            icon={<Icon />}
-            text="Paste"
-            sizes="large"
-          />
-          <RibbonButton
-            icon={<Icon />}
-            text="Cut"
-            sizes={[{ from: 0, to: 650, value: 'small' }, { from: 650, to: Number.MAX_SAFE_INTEGER, value: 'middle' }]}
-          />
-          <RibbonButton
-            icon={<Icon />}
-            text="Copy"
-            sizes={[{ from: 0, to: 650, value: 'small' }, { from: 650, to: Number.MAX_SAFE_INTEGER, value: 'middle' }]}
-          />
-          <RibbonButton
-            icon={<Icon />}
-            text="Format Brush"
-            sizes={[{ from: 0, to: 650, value: 'small' }, { from: 650, to: Number.MAX_SAFE_INTEGER, value: 'middle' }]}
-          />
-        </RibbonGroup>
-      </RibbonTab>
-      <RibbonTab label="Insert" index={1}>
-        <RibbonGroup title="Insert">
+  const [addingRows, setAddingRows] = useState<TableRow[]>([])
+  const [editingRows, setEditingRows] = useState<TableRow[]>([])
 
-        </RibbonGroup>
-      </RibbonTab>
-      <RibbonTab label="Layout" index={2}>
-        <RibbonGroup title="Page">
-          <RibbonDropDownButton
-            icon={<Icon />}
-            text="Size"
-            sizes="large"
-          />
-          <RibbonDropDownButton
-            icon={<Icon />}
-            text="Orientation "
-            sizes={[{ from: 0, to: 650, value: 'middle' }, { from: 650, to: Number.MAX_SAFE_INTEGER, value: 'large' }]}
-          />
-          <RibbonDropDownButton
-            icon={<Icon />}
-            text="Margins "
-            sizes={[{ from: 0, to: 650, value: 'middle' }, { from: 650, to: Number.MAX_SAFE_INTEGER, value: 'large' }]}
-          >
-          </RibbonDropDownButton>
-          <RibbonDropDownButton
-            icon={<Icon />}
-            text="Direction "
-            sizes={[{ from: 0, to: 650, value: 'middle' }, { from: 650, to: Number.MAX_SAFE_INTEGER, value: 'large' }]}
-          >
-          </RibbonDropDownButton>
-        </RibbonGroup>
-      </RibbonTab>
-      <RibbonTab label="View" index={3}>
-        <RibbonGroup title="View">
-          <RibbonToggleButton
-            icon={<Icon />}
-            text="Edit "
-            sizes="large"
-            selected
-          />
-          <RibbonToggleButton
-            icon={<Icon />}
-            text="View "
-            sizes="large"
-          />
-        </RibbonGroup>
-        <RibbonGroup title="Scale">
-          <RibbonDropDownButton
-            icon={<Icon />}
-            text="Scale "
-            sizes="large"
-          />
-          <RibbonButton
-            icon={<Icon />}
-            text="100% "
-            sizes="large"
-          />
-          <RibbonToggleButton
-            icon={<Icon />}
-            text="Grid Line"
-            sizes="middle"
-            selected
-          />
-          <RibbonToggleButton
-            icon={<Icon />}
-            text="Ruler "
-            sizes="middle"
-            selected
-          />
-          <RibbonToggleButton
-            icon={<Icon />}
-            text="Navigation "
-            sizes="middle"
-            selected
-          />
-        </RibbonGroup>
-      </RibbonTab>
-      <RibbonTitle>
-        Title
-      </RibbonTitle>
-      <RibbonControl>
-        <RibbonTabButton
-          icon="🪟"
-          tooltip="max"
-        />
-      </RibbonControl>
-    </Ribbon>
-  </ThemeProvider>
+  const onEditingCellCommit = useCallback((column, editingRow) => {
+    setRows(rows => rows.map(row => row.index === editingRow.index ? editingRow as any : row))
+    return true
+  }, [])
+
+  return <>
+    {/* <Button onClick={() => setFixed(f => !f)}>Fix</Button> */}
+    {/* <DragDropProvider>
+      <Draggable payload={"ABC"}>
+        <div>Draggable</div>
+      </Draggable>
+      <Droppable
+        onOver={(event) => setValue(Records.delete(event as any, 'target'))}
+        onDrop={(_, payload) => setValue(payload)}>
+        <div style={{ width: 100, height: 100, border: '1px solid red', position: 'relative', }}>
+          {JSON.stringify(value)}
+        </div>
+      </Droppable>
+    </DragDropProvider> */}
+    <DataGrid>
+      <ToolbarLayout />
+      <TableLayout>
+        <TableHeaderLayout sticky />
+        <TableBodyLayout />
+        <TableFooterLayout sticky />
+      </TableLayout>
+      <PaginationLayout />
+      <DataTypePreset />
+      <KeyTypeProvider name="key" formatter={formatter} options={options} align="end" />
+      <KeysTypeProvider name="keys" formatter={formatter} options={options} />
+      <Data
+        columns={columns}
+        rows={rows} />
+      <ColumnFreeze />
+      <ColumnOrdering defaultOrder={['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']} />
+      <ColumnResizing defaultSize={{ a: 80, b: 80, c: 80, d: 80, e: 80, f: 80, g: 80, h: 80 }} maxWidth={400} minWidth={20} />
+      <ColumnVisibility columnSettings={{ 'index': { disableUserControl: true } }} />
+      <Detail />
+      <Tree getParentRowId={rowId => rowId === 0 || rowId === 1 ? null : rowId as number % 2} />
+      <Grouping defaultGroupingFields={['a']} />
+      <Editing showAddAction showEditAction showDeleteAction
+        enableInlineEdit
+        addingRows={addingRows}
+        editingRows={editingRows}
+        onAddingRowsChange={setAddingRows}
+        onEditingRowsChange={setEditingRows}
+        onEditingCellCommit={onEditingCellCommit} />
+      <Numbering />
+      <Selection showSelectAll highlightSelectedRow selectByRowClick />
+      <Expanding showExpandAll expandByRowClick />
+      {/* <Filtering /> */}
+      <Paging />
+      <Searching ignoreCase columnSettings={{ g: { valueToString: formatter.format } }} />
+      <Sorting defaultSortings={[{ field: 'a', direction: 'desc' }, { field: 'b', direction: 'desc' }]} />
+      <Summary columnSettings={{ a: { summaryFunction: 'count' }, b: { summaryFunction: 'count' } }} />
+      <Action width={150} />
+    </DataGrid>
+  </>
 }
 
 export default App;

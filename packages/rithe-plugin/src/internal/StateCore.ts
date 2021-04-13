@@ -20,7 +20,9 @@ export class StateCore {
 
     unregister(state: State) {
         removeItem(this._states, state)
-        this._markAndNotify(state)
+        setTimeout(() => {
+            this._markAndNotify(state)
+        })
     }
 
     private _markAndNotify(state: State) {

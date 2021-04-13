@@ -1,1 +1,0 @@
-export type Freeze = 'start' | 'none' | 'end'

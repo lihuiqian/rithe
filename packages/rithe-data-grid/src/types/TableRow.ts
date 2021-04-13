@@ -2,10 +2,13 @@ import { Row } from "./Row";
 import { RowId } from "./RowId";
 
 export interface TableRow {
-    key: string,
     type: symbol,
     row?: Row,
-    rowId?: RowId,
+    rowId: RowId,
     height: number,
-    hidden?: boolean,
+    actions?: string[],
+    selected?: boolean,
+    level?: number,
+    expanded?: boolean,
+    childRows?: TableRow[],
 }

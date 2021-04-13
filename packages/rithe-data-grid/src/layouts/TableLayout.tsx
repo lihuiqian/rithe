@@ -1,27 +1,33 @@
 import { Plugin } from "@rithe/plugin";
-import React, { ComponentType, ReactNode } from "react";
-import { DataGridTable, DataGridTableProps } from "../components/Table";
+import React, { ComponentType, ReactNode, RefObject, useCallback } from "react";
+import { DataGridTableContainer, DataGridTableContainerProps } from "../components/basic/DataGridTableContainer";
 import { Render } from "../Render";
 import { Template } from "../Template";
 
 export interface TableLayoutProps {
-    tableComponent?: ComponentType<DataGridTableProps>,
+    Container?: ComponentType<DataGridTableContainerProps>,
     children?: ReactNode | ReactNode[],
 }
 
 export const TableLayout = (props: TableLayoutProps) => {
     const {
-        tableComponent: TableComponent = DataGridTable,
-        children,
+        Container = DataGridTableContainer,
+        children
     } = props
+
+    const tableTemplate = useCallback((templateProps: { ref?: RefObject<any> }) => {
+        return <Container>
+            <div ref={templateProps.ref}>
+                <Render name="header" />
+                <Render name="body" />
+                <Render name="footer" />
+            </div>
+        </Container>
+    }, [Container])
 
     return <Plugin>
         <Template name="table">
-            {() => <TableComponent>
-                <Render name="tableHeader" />
-                <Render name="tableBody" />
-                <Render name="tableFooter" />
-            </TableComponent>}
+            {tableTemplate}
         </Template>
         {children}
     </Plugin>

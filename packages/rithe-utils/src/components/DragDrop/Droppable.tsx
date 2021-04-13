@@ -1,19 +1,20 @@
+/* eslint-disable react/prop-types */
 import React, { ReactElement, useEffect, useRef } from "react"
-import { DragDropCoordinate, DragDropType, useDragDropObserver } from "./DragDropContext"
+import { DragDropEvent, DragDropType, useDragDropObserver } from "./DragDropContext"
 
 export interface DroppableProps {
-    onEnter?: (coordinate: DragDropCoordinate, payload: any) => void,
-    onOver?: (coordinate: DragDropCoordinate, payload: any) => void,
-    onLeave?: (coordinate: DragDropCoordinate, payload: any) => void,
-    onDrop?: (coordinate: DragDropCoordinate, payload: any) => void,
+    onEnter?: (event: DragDropEvent, payload: any) => void,
+    onOver?: (event: DragDropEvent, payload: any) => void,
+    onLeave?: (event: DragDropEvent, payload: any) => void,
+    onDrop?: (event: DragDropEvent, payload: any) => void,
     children: ReactElement,
 }
 
-export const Droppable = (props: DroppableProps) => {
+export const Droppable = React.forwardRef<HTMLElement, DroppableProps>((props, forwardRef) => {
     const { onEnter, onOver, onLeave, onDrop, children } = props
 
     const dragDropObserver = useDragDropObserver()
-    const ref = useRef<HTMLElement>()
+    const ref = useRef<HTMLElement | null>(null)
 
     const overRef = useRef(false)
 
@@ -22,22 +23,22 @@ export const Droppable = (props: DroppableProps) => {
         const element = ref.current
         if (!element) return
         if (!(element instanceof HTMLElement)) return
-        const next = (type: DragDropType, coordinate: DragDropCoordinate, payload: any) => {
+        const next = (type: DragDropType, event: DragDropEvent, payload: any) => {
             const { top, bottom, left, right } = element.getBoundingClientRect()
-            const { clientX, clientY } = coordinate
+            const { clientX, clientY } = event
             const over = top <= clientY && clientY <= bottom && left <= clientX && clientX <= right
             if (type === 'drag' && over) {
-                onOver && onOver(coordinate, payload)
+                onOver && onOver(event, payload)
             } else if (type === 'move') {
                 if (!overRef.current && over) {
-                    onEnter && onEnter(coordinate, payload)
+                    onEnter && onEnter(event, payload)
                 } else if (overRef.current && over) {
-                    onOver && onOver(coordinate, payload)
+                    onOver && onOver(event, payload)
                 } else if (overRef.current && !over) {
-                    onLeave && onLeave(coordinate, payload)
+                    onLeave && onLeave(event, payload)
                 }
             } else if (type === 'drop' && over) {
-                onDrop && onDrop(coordinate, payload)
+                onDrop && onDrop(event, payload)
             }
             overRef.current = over
         }
@@ -47,5 +48,15 @@ export const Droppable = (props: DroppableProps) => {
         }
     }, [dragDropObserver, onDrop, onEnter, onLeave, onOver])
 
-    return React.cloneElement(children, { ref: ref })
-}
+    return React.cloneElement(children, {
+        ref: (instance: HTMLElement | null) => {
+            ref.current = instance
+            if (typeof forwardRef === 'function') {
+                forwardRef(ref.current)
+            } else if (forwardRef !== null) {
+                forwardRef.current = ref.current
+            }
+        }
+    })
+})
+Droppable.displayName = 'Droppable'

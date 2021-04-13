@@ -1,4 +1,3 @@
-import { Align } from "./Align";
 
 export interface DataTypeInfer {
     'unknown': unknown,
@@ -13,11 +12,4 @@ export interface DataTypeInfer {
     // eslint-disable-next-line @typescript-eslint/ban-types
     'object': object,
     'array': any[],
-    'action': any,
-}
-
-export interface DataType {
-    type: keyof DataTypeInfer,
-    name: string,
-    align: Align,
 }

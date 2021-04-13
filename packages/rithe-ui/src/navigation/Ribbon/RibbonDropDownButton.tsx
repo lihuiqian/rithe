@@ -2,11 +2,11 @@ import { Button, makeStyles, Popover } from "@material-ui/core";
 import { usePopover } from "@rithe/utils";
 import clsx from 'clsx';
 import React, { ReactNode } from "react";
-import { useButtonSize } from "./hooks/useButtonSize";
 import { useLargeButtonLines } from "./hooks/useLargeButtonLines";
+import { useMediaQuery } from "./hooks/useMediaQuery";
 import { MediaQuery } from "./types/MediaQuerySize";
 import { Size } from "./types/Size";
-import { GROUP_FONT_SIZE, ONE_LINE_BUTTON_ICON_SIZE, ONE_LINE_BUTTON_TEXT_PADDING, ONE_LINE_ITEM_HEIGHT, ONE_LINE_ITEM_MAX_WIDTH, THREE_LINE_BUTTON_ICON_SIZE, THREE_LINE_BUTTON_TEXT_HEIGHT, THREE_LINE_BUTTON_TEXT_PADDING, THREE_LINE_ITEM_HEIGHT, THREE_LINE_ITEM_MIN_WIDTH } from "./utils/constants";
+import { GROUP_FONT_SIZE, ONE_LINE_BUTTON_ICON_SIZE, ONE_LINE_ITEM_HEIGHT, ONE_LINE_ITEM_MAX_WIDTH, ONE_LINE_ITEM_TEXT_PADDING, THREE_LINE_BUTTON_ICON_SIZE, THREE_LINE_BUTTON_TEXT_HEIGHT, THREE_LINE_BUTTON_TEXT_PADDING, THREE_LINE_ITEM_HEIGHT, THREE_LINE_ITEM_MIN_WIDTH } from "./utils/constants";
 
 export interface RibbonDropDownButtonProps {
     icon: ReactNode,
@@ -14,7 +14,7 @@ export interface RibbonDropDownButtonProps {
     text: string,
     sizes: Size | MediaQuery<Size>[],
     disabled?: boolean,
-    children?: ReactNode | ReactNode[],
+    children?: (onClose: () => void) => ReactNode | ReactNode[],
 }
 
 export const RibbonDropDownButton = (props: RibbonDropDownButtonProps) => {
@@ -27,9 +27,9 @@ export const RibbonDropDownButton = (props: RibbonDropDownButtonProps) => {
         children,
     } = props
 
-    const size = useButtonSize(sizes)
+    const size = useMediaQuery(sizes, 'middle')
     const [linesRef, lines] = useLargeButtonLines(text, false)
-    const [open, anchorEl, onOpen, onClose] = usePopover()
+    const { open, anchorEl, onOpen, onClose } = usePopover()
 
     const styles = useStyles()
     return <>
@@ -58,7 +58,7 @@ export const RibbonDropDownButton = (props: RibbonDropDownButtonProps) => {
             onClose={onClose}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         >
-            {open && children}
+            {open && children && children(onClose)}
         </Popover>
     </>
 }
@@ -103,8 +103,8 @@ const useStyles = makeStyles(theme => ({
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            paddingLeft: ONE_LINE_BUTTON_TEXT_PADDING,
-            paddingRight: ONE_LINE_BUTTON_TEXT_PADDING,
+            paddingLeft: ONE_LINE_ITEM_TEXT_PADDING,
+            paddingRight: ONE_LINE_ITEM_TEXT_PADDING,
         },
     },
     large: {

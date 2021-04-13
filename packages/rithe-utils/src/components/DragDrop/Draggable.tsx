@@ -1,24 +1,27 @@
+/* eslint-disable react/prop-types */
 import React, { ReactElement, useEffect, useRef } from "react"
 import useShallow from "../../hooks/useShallow"
-import { DragDropCoordinate, useDragDropObserver } from "./DragDropContext"
+import { DragDropEvent, useDragDropObserver } from "./DragDropContext"
 
 export interface DraggableProps {
     payload: any,
     deadzone?: number,
-    onStart?: (coordinate: DragDropCoordinate) => void,
-    onMove?: (coordinate: DragDropCoordinate) => void,
-    onEnd?: (coordinate: DragDropCoordinate) => void,
+    onStart?: (event: DragDropEvent) => void,
+    onMove?: (event: DragDropEvent) => void,
+    onEnd?: (event: DragDropEvent) => void,
     children: ReactElement,
 }
 
-export const Draggable = (props: DraggableProps) => {
+export const Draggable = React.forwardRef<HTMLElement, DraggableProps>((props, forwardRef) => {
     const { deadzone = 5, onStart, onMove, onEnd, children } = props
     const payload = useShallow(props.payload)
 
     const dragDropObserver = useDragDropObserver()
-    const ref = useRef<HTMLElement>()
+    const ref = useRef<HTMLElement | null>(null)
 
     const downRef = useRef<[number, number] | null>(null)
+    const targetRef = useRef<EventTarget | null>(null)
+    const rectRef = useRef<DOMRect | null>(null)
     const draggingRef = useRef(false)
 
     // start
@@ -26,16 +29,19 @@ export const Draggable = (props: DraggableProps) => {
         const element = ref.current
         if (!element) return
         if (!(element instanceof HTMLElement)) return
-        const listener = ({ clientX, clientY, pageX, pageY, screenX, screenY }: DragDropCoordinate) => {
+        const listener = (e: MouseEvent | TouchEvent) => {
+            const event = createEvent(e)
             if (deadzone === 0) {
-                dragDropObserver.start({ clientX, clientY, pageX, pageY, screenX, screenY }, payload)
-                onStart && onStart({ clientX, clientY, pageX, pageY, screenX, screenY })
+                dragDropObserver.start(event, payload)
+                onStart && onStart(event)
                 draggingRef.current = true
             }
-            downRef.current = [clientX, clientY]
+            downRef.current = [event.clientX, event.clientY]
+            targetRef.current = e.target
+            rectRef.current = event.sourceRect
         }
         const mouseListener = (e: MouseEvent) => listener(e)
-        const touchListener = (e: TouchEvent) => listener(e.touches[0])
+        const touchListener = (e: TouchEvent) => listener(e)
         element.addEventListener('mousedown', mouseListener, { passive: true })
         element.addEventListener('touchstart', touchListener, { passive: true })
         return () => {
@@ -46,22 +52,23 @@ export const Draggable = (props: DraggableProps) => {
 
     // move
     useEffect(() => {
-        const listener = ({ clientX, clientY, pageX, pageY, screenX, screenY }: DragDropCoordinate) => {
-            if (!downRef.current) return
+        const listener = (e: MouseEvent | TouchEvent) => {
+            if (!downRef.current || !rectRef.current) return
             window.getSelection()?.empty()
+            const event = createEvent(e, downRef.current, targetRef.current, rectRef.current)
             if (!draggingRef.current) {
-                if (Math.pow(clientX - downRef.current[0], 2) + Math.pow(clientY - downRef.current[1], 2) > Math.pow(deadzone, 2)) {
-                    dragDropObserver.start({ clientX, clientY, pageX, pageY, screenX, screenY }, payload)
-                    onStart && onStart({ clientX, clientY, pageX, pageY, screenX, screenY })
+                if (Math.pow(event.deltaX, 2) + Math.pow(event.deltaY, 2) > Math.pow(deadzone, 2)) {
+                    dragDropObserver.start(event, payload)
+                    onStart && onStart(event)
                     draggingRef.current = true
                 }
             } else {
-                dragDropObserver.move({ clientX, clientY, pageX, pageY, screenX, screenY })
-                onMove && onMove({ clientX, clientY, pageX, pageY, screenX, screenY })
+                dragDropObserver.move(event)
+                onMove && onMove(event)
             }
         }
         const mouseListener = (e: MouseEvent) => listener(e)
-        const touchListener = (e: TouchEvent) => listener(e.touches[0])
+        const touchListener = (e: TouchEvent) => listener(e)
         window.addEventListener('mousemove', mouseListener, { passive: true })
         window.addEventListener('touchmove', touchListener, { passive: true })
 
@@ -73,15 +80,19 @@ export const Draggable = (props: DraggableProps) => {
 
     // end
     useEffect(() => {
-        const listener = ({ clientX, clientY, pageX, pageY, screenX, screenY }: DragDropCoordinate) => {
-            if (!draggingRef.current) return
-            dragDropObserver.end({ clientX, clientY, pageX, pageY, screenX, screenY })
-            onEnd && onEnd({ clientX, clientY, pageX, pageY, screenX, screenY })
-            draggingRef.current = false
+        const listener = (e: MouseEvent | TouchEvent) => {
+            if (!downRef.current || !rectRef.current) return
+            if (draggingRef.current) {
+                const event = createEvent(e, downRef.current, targetRef.current, rectRef.current)
+                dragDropObserver.end(event)
+                onEnd && onEnd(event)
+                draggingRef.current = false
+            }
             downRef.current = null
+            rectRef.current = null
         }
         const mouseListener = (e: MouseEvent) => listener(e)
-        const touchListener = (e: TouchEvent) => listener(e.touches[0])
+        const touchListener = (e: TouchEvent) => listener(e)
         window.addEventListener('mouseup', mouseListener, { passive: true })
         window.addEventListener('touchend', touchListener, { passive: true })
         window.addEventListener('touchcancel', touchListener, { passive: true })
@@ -93,5 +104,36 @@ export const Draggable = (props: DraggableProps) => {
         }
     }, [dragDropObserver, onEnd])
 
-    return React.cloneElement(children, { ref: ref })
+    return React.cloneElement(children, {
+        ref: (instance: HTMLElement | null) => {
+            ref.current = instance
+            if (typeof forwardRef === 'function') {
+                forwardRef(ref.current)
+            } else if (forwardRef !== null) {
+                forwardRef.current = ref.current
+            }
+        }
+    })
+})
+Draggable.displayName = 'Draggable'
+
+function createEvent(e: MouseEvent | TouchEvent): DragDropEvent
+function createEvent(e: MouseEvent | TouchEvent, initClient: [number, number], source: EventTarget | null, rect: DOMRect): DragDropEvent
+function createEvent(e: MouseEvent | TouchEvent, initClient?: [number, number], source?: EventTarget | null, rect?: DOMRect): DragDropEvent {
+    const { clientX, clientY, pageX, pageY, screenX, screenY } = (e as TouchEvent).touches ? (e as TouchEvent).targetTouches[0] : e as MouseEvent
+    const { altKey, ctrlKey, metaKey, shiftKey } = e
+    const deltaX = initClient ? clientX - initClient[0] : 0
+    const deltaY = initClient ? clientY - initClient[1] : 0
+    const sourceTarget = source ?? null
+    const sourceRect = rect ?? (e.currentTarget as HTMLElement).getBoundingClientRect()
+    return {
+        clientX, clientY,
+        pageX, pageY,
+        screenX, screenY,
+        deltaX, deltaY,
+        altKey, ctrlKey, metaKey, shiftKey,
+        target: e.target,
+        sourceTarget,
+        sourceRect,
+    }
 }
